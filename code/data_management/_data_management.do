@@ -7,23 +7,29 @@ set matsize 1000
 
 cd "C:/LocalProjects/FDI_panel"
 global codeDir "code/data_management"
-
-** create output folders
-capture mkdir "output/data_management"
-capture mkdir "output/data_management/figures"
-capture mkdir "output/data_management/tables"
-capture mkdir "output/data_management/log"
-
 global figureDir "output/data_management/figures"
 global tableDir "output/data_management/tables"
 global logDir "output/data_management/log"
 
+** create output folders
+capture mkdir "output/data_management"
+capture mkdir $figureDir
+capture mkdir $tableDir
+capture mkdir $logDir
+    
+do "$codeDir/isoStandard.do"
+    
 ** import data
-do "$codeDir/import_OECD.do"
-do "$codeDir/import_UNCTAD.do"
-do "$codeDir/import_eurostat.do"
-/*
-** basic data cleaning
-do "$codeDir/clean_OECD.do"
-do "$codeDir/clean_UNCTAD.do"
-do "$codeDir/clean_eurostat.do"
+do "$codeDir/eurostat_to_dta.do"
+do "$codeDir/eurostat_varlist.do"
+do "$codeDir/eurostat_ind_agg.do"
+
+do "$codeDir/OECD_to_dta.do"
+do "$codeDir/OECD_varlist.do"
+do "$codeDir/OECD_ind_agg.do"
+do "$codeDir/OECD_combine_isic3_isic4.do"
+
+do "$codeDir/combine_OECD_eurostat_activities.do"
+
+** remove temporary files
+!rmdir "processed_data/temp" /q /s // to delete nonempty folders need to use shell commands

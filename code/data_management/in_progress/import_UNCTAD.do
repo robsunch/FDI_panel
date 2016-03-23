@@ -4,11 +4,11 @@ UNCTAD
 
 */
 
-include project_paths
+log close _all
 log using "$logDir/import_UNCTAD.smcl", replace
 
 clear all
-local fileList : dir "source_data/FDI/UNCTAD/" files "webdiaeia2014d3_*.xls", respectcase
+local fileList : dir "source_data/UNCTAD/" files "webdiaeia2014d3_*.xls", respectcase
 tempfile inflows outflows instock outstock
 foreach f in `fileList' {
 	local ctyCode = subinstr("`f'",".xls","",.)
@@ -67,8 +67,8 @@ foreach f in `fileList' {
 			ren A reportCtyName
 			
 			count if reportCtyName==".."
-			if `r(N)' > 0 {
-				disp "Some reporting country is .. for `ctyCode', check."
+			if `r(N)' > 0 & `r(N)' < _N {
+				disp "Some but not all reporting country is .. for `ctyCode', check."
 				error 1
 				}		
 			
@@ -135,8 +135,8 @@ foreach f in `fileList' {
 					}
 				
 				count if ctyName_o==".."
-				if `r(N)'>0 {
-					disp "some origin country is .. for `sheetName' of country `ctyCode', check."
+				if `r(N)'>0  & `r(N)'<_N {
+					disp "some but not all origin country is .. for `sheetName' of country `ctyCode', check."
 					error 1
 					}
 				
@@ -157,8 +157,8 @@ foreach f in `fileList' {
 					}
 				
 				count if ctyName_d==".."
-				if `r(N)'>0 {
-					disp "some destination country is .. for `sheetName' of country `ctyCode', check."
+				if `r(N)'>0 & `r(N)'<_N {
+					disp "some but not all destination country is .. for `sheetName' of country `ctyCode', check."
 					error 1
 					}	
 				
@@ -203,10 +203,10 @@ foreach f in `fileList' {
 
 
 clear
-local fileList : dir "${PATH_IN_DATA}/" files "UNCTAD_raw_*.dta", respectcase
+local fileList : dir "processed_data/temp/" files "UNCTAD_raw_*.dta", respectcase
 foreach f in `fileList' {
-	append using "${PATH_IN_DATA}/`f'"
-	erase "${PATH_IN_DATA}/`f'"
+	append using "processed_data/temp/`f'"
+	erase "processed_data/temp/`f'"
 	}
 
 ** destring
@@ -215,7 +215,10 @@ foreach x of varlist stock flow {
 	replace `x' = "" if `x'==".."
 	}
 destring stock flow, replace
-drop if missing(flow) & missing(stock)	
+tab ctyName_o ctyName_d if reportCtyName==".."
+drop if missing(flow) & missing(stock)	// countries with missing names are dropped here too
 
 compress
-save "${PATH_IN_DATA}/UNCTAD_raw.dta", replace
+save "processed_data/UNCTAD_raw.dta", replace
+
+log close _all

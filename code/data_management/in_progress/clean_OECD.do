@@ -1,14 +1,21 @@
+***************************************
+** this do-file cleans OECD_FDI_raw.dta
+***************************************
+
+log close _all
+log using "$logDir/clean_OECD.smcl", replace
+
 *********************
 ** standardize iso code
 *********************
-use iso3_* countryName_* using "ProcessedData/oecd_fdi.dta", clear
+use iso3_* countryName_* using "processed_data/oecd_fdi.dta", clear
 stack iso3_o countryName_o iso3_d countryName_d, into(iso3 countryName) clear
 drop _stack
 duplicates drop
 ren countryName countryName_oecd
-merge m:1 iso3 using "ProcessedData/isoStandard.dta"
+merge m:1 iso3 using "processed_data/isoStandard.dta"
 sort _merge iso3
-export excel using "ProcessedData/merge_country_lists.xlsx", sheet(check_oecd_iso3) sheetreplace firstrow(variables)
+export excel using "processed_data/merge_country_lists.xlsx", sheet(check_oecd_iso3) sheetreplace firstrow(variables)
 *** the only important discrepancy is Romania (ROM instead of ROU)
 
 
@@ -17,19 +24,19 @@ export excel using "ProcessedData/merge_country_lists.xlsx", sheet(check_oecd_is
 *** and non Euro area
 ****************************************
 *** EUR to USD exchange rate
-import excel date euroExchRate using "${PATH_IN_DATA}/Misc/DEXUSEU.xls", clear cellrange(a15:b30)
+import excel date euroExchRate using "source_data/Misc/DEXUSEU.xls", clear cellrange(a15:b30)
 gen year = year(date)
 tempfile euroExchRate
 save `euroExchRate', replace
 
 *** Euro fixed rates
-import excel using "${PATH_IN_DATA}/Misc/euroFixedRate.xlsx", clear firstrow
+import excel using "source_data/Misc/euroFixedRate.xlsx", clear firstrow
 gen year_of_adoption = year(date_of_adoption)
 tempfile euroFixedRates
 save `euroFixedRates', replace
 
 *** World Bank official exchange rates
-import excel using "${PATH_IN_DATA}/Misc/pa.nus.fcrf_Indicator_en_excel_v2.xls", sheet("Data") cellrange(a3:bf261) firstrow clear
+import excel using "source_data/misc/pa.nus.fcrf_Indicator_en_excel_v2.xls", sheet("Data") cellrange(a3:bf261) firstrow clear
 drop Indicator* CountryName
 ren CountryCode iso3
 quietly ds iso3, not
@@ -54,7 +61,7 @@ keep iso3 year exchRate fixedRate
 tempfile exchRate
 save `exchRate', replace
 
-use "ProcessedData/oecd_fdi.dta", clear
+use "processed_data/oecd_fdi.dta", clear
 foreach x in o d {
 	replace iso3_`x' = "ROU" if iso3_`x'=="ROM"
 	}
@@ -94,12 +101,12 @@ drop exchRate fixedRate
 replace oecd_out_sales = oecd_out_sales/1000 if year==2007 & iso3_o=="DEU"
 replace oecd_out_fin_sales = oecd_out_fin_sales/1000 if year==2007 & iso3_o=="DEU"
 
-save "ProcessedData/oecd_fdi.dta", replace
+save "processed_data/oecd_fdi.dta", replace
 
 **************************************
 **** adjust for financial sector FDI for sales ****
 **************************************
-use "ProcessedData/oecd_fdi.dta", clear
+use "processed_data/oecd_fdi.dta", clear
 
 *** inward sales for year<=2007
 preserve
@@ -139,7 +146,7 @@ restore
 *** first adjust for inward sales (before 2007)
 merge m:1 iso3_d year using `world_in_nonfin_share', nogen
 ren iso3_d iso3
-merge m:1 iso3 year using "ProcessedData/nonfin_output_share.dta", keep(master match) ///
+merge m:1 iso3 year using "processed_data/nonfin_output_share.dta", keep(master match) ///
 	keepusing(nonfin_output_share) nogen
 
 display as text _n _n "Adjust inward MP sales before 2007 for the financial sector" _n
@@ -174,7 +181,7 @@ ren iso3 iso3_d
 *** next adjust for outward sales for all years
 merge m:1 iso3_o year using `world_out_nonfin_share', nogen
 ren iso3_o iso3
-merge m:1 iso3 year using "ProcessedData/nonfin_output_share.dta", keep(master match) ///
+merge m:1 iso3 year using "processed_data/nonfin_output_share.dta", keep(master match) ///
 	keepusing(nonfin_output_share) nogen
 
 display as text _n _n "Adjust outward MP sales for the financial sector" _n
@@ -222,4 +229,6 @@ esttab . using "`outputPath'", append cells("mean sd count min p1 p10 p25 p50 p7
 drop share_in_sales share_out_sales
 		
 compress
-save "ProcessedData/oecd_fdi.dta", replace
+save "processed_data/oecd_fdi.dta", replace
+
+log close _all

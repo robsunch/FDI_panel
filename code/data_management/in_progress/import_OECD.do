@@ -4,28 +4,30 @@
 **
 *******************************************************************
 
-include project_paths
-log using "${PATH_OUT_DATA}/log/`1'.log", replace
+log close _all
+log using "$logDir/import_OECD.smcl", replace
+
+capture mkdir "processed_data/OECD"
 
 *** import ISIC 4 MNE activities by sector (total v.s. financial), world total (2007-2013)
-insheet using "${PATH_IN_DATA}/FDI/OECD/AMNE_OUT4_world_total.csv", names clear
+insheet using "source_data/OECD/AMNE_OUT4_world_total.csv", names clear
 keep if var=="TUR" & ind=="C64-66"
 ren cou iso3_o
 keep iso3_o ind year value
 ren value world_out_fin_sales
 label var world_out_fin_sales "ISIC4 Sector C64-66, Mil LCU"
-save "${PATH_OUT_DATA}/OECD/world_out_fin_sales_after07.dta", replace
+save "processed_data/OECD/world_out_fin_sales_after07.dta", replace
 
-insheet using "${PATH_IN_DATA}/FDI/OECD/AMNE_OUT4_world_total.csv", names clear
+insheet using "source_data/OECD/AMNE_OUT4_world_total.csv", names clear
 keep if var=="TUR" & ind=="C9999"
 ren cou iso3_o
 keep iso3_o ind year value
 ren value world_out_tot_sales
 label var world_out_tot_sales "ISIC4 Sector C9999, Mil LCU"
-save "${PATH_OUT_DATA}/OECD/world_out_tot_sales_after07.dta", replace
+save "processed_data/OECD/world_out_tot_sales_after07.dta", replace
 
 *** import ISIC 4 MNE activities aggregates (2007-2013)
-insheet using "${PATH_IN_DATA}/FDI/OECD/AMNE_OUT4_main_sectors.csv", names clear
+insheet using "source_data/OECD/AMNE_OUT4_main_sectors.csv", names clear
 keep if var=="TUR" & ind=="C9999" // TOTAL BUSINESS SECTOR (sec B to S excl. O)
 ren (part partnercountry cou declaringcountry value flagcodes) ///
 	(iso3_d countryName_d iso3_o countryName_o oecd_out4_sales oecd_out4_sales_flag)
@@ -34,7 +36,7 @@ label var oecd_out4_sales "ISIC4 Sector C9999, Mil LCU"
 tempfile out4
 save `out4', replace
 
-insheet using "${PATH_IN_DATA}/FDI/OECD/AMNE_IN4_main_sectors.csv", names clear
+insheet using "source_data/OECD/AMNE_IN4_main_sectors.csv", names clear
 keep if var=="TUR" & ind=="C9994" // TOTAL ACTIVITY (sec B to N excl. K)
 ren (part partnercountry cou declaringcountry value flagcodes) ///
 	(iso3_o countryName_o iso3_d countryName_d oecd_in4_sales oecd_in4_sales_flag)
@@ -47,7 +49,7 @@ tempfile amne_isic4
 save `amne_isic4', replace
 
 *** import ISIC3 MNE activities aggregates (1985-2013)
-insheet using "${PATH_IN_DATA}/FDI/OECD/FATS_OUT3_main_sectors.csv", names clear
+insheet using "source_data/OECD/FATS_OUT3_main_sectors.csv", names clear
 keep if var=="TURN" & inlist(serv,9999,6895)
 ren (part partnercountries cou country value flagcodes) ///
 	(iso3_d countryName_d iso3_o countryName_o oecd_out3_sales oecd_out3_sales_flag)
@@ -60,7 +62,7 @@ label var oecd_out3_fin_sales "ISIC3 Sector 6895, Mil LCU"
 tempfile fats_out3
 save `fats_out3', replace
 
-insheet using "${PATH_IN_DATA}/FDI/OECD/FATS_IN3_main_sectors.csv", names clear
+insheet using "source_data/OECD/FATS_IN3_main_sectors.csv", names clear
 keep if var=="TURN" & inlist(serv,9999,6895)
 ren (part partnercountries cou country value flagcodes) ///
 	(iso3_o countryName_o iso3_d countryName_d oecd_in3_sales oecd_in3_sales_flag)
@@ -116,7 +118,7 @@ save `oecd_sales', replace
 *************
 ** FDI flows
 *************
-insheet using "${PATH_IN_DATA}/FDI/OECD/FDI_FLOW_PARTNER.csv", clear
+insheet using "source_data/OECD/FDI_FLOW_PARTNER.csv", clear
 keep if flow=="IN" // FDI inflows
 drop typeoffdi currency
 
@@ -136,7 +138,7 @@ label var oecd_in_flow "Mil USD"
 tempfile oecd_in_flow
 save `oecd_in_flow', replace
 
-insheet using "${PATH_IN_DATA}/FDI/OECD/FDI_FLOW_PARTNER.csv", clear
+insheet using "source_data/OECD/FDI_FLOW_PARTNER.csv", clear
 keep if flow=="OUT" // FDI outflows
 drop typeoffdi currency
 preserve
@@ -158,7 +160,7 @@ save `oecd_flow', replace
 *****************
 ** FDI stocks
 *****************
-insheet using "${PATH_IN_DATA}/FDI/OECD/FDI_POSITION_PARTNER.csv", clear
+insheet using "source_data/OECD/FDI_POSITION_PARTNER.csv", clear
 keep if flow=="IN" // inward FDI stocks
 drop typeoffdi currency
 preserve
@@ -176,7 +178,7 @@ tempfile oecd_in_stock
 label var oecd_in_stock "Mil USD"
 save `oecd_in_stock', replace
 
-insheet using "${PATH_IN_DATA}/FDI/OECD/FDI_POSITION_PARTNER.csv", clear
+insheet using "source_data/OECD/FDI_POSITION_PARTNER.csv", clear
 keep if flow=="OUT" // outward FDI stocks
 drop typeoffdi currency
 preserve
@@ -203,7 +205,7 @@ merge 1:1 iso3_o iso3_d year using `oecd_flow', update nogen
 merge 1:1 iso3_o iso3_d year using `oecd_sales', update nogen
 
 compress
-save "${PATH_OUT_DATA}/OECD/OECD_FDI_raw.dta", replace
+save "processed_data/OECD_FDI_raw.dta", replace
 
 
 

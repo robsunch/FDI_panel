@@ -3,12 +3,12 @@
 ** FDI flows and FDI stocks data
 *****************************************************
 
-include project_paths
-log using "${PATH_OUT_DATA}/log/`1'.log", replace
+log close _all
+log using "$logDir/import_eurostat.smcl", replace
 
 ** temporary directory structure
-capture mkdir "${PATH_OUT_DATA}/Temp"
-capture mkdir "${PATH_OUT_DATA}/Temp/fats_96"
+capture mkdir "processed_data/temp"
+capture mkdir "processed_data/temp/fats_96"
 
 program drop _all
 program checkMiss
@@ -22,7 +22,7 @@ end
 *** dictionary files
 ****************
 foreach x in geo indic_sb indic_bp nace_r2 nace_r1 {
-	insheet `x' `x'_des using "${PATH_IN_DATA}/FDI/eurostat/dic/`x'.dic", tab clear
+	insheet `x' `x'_des using "source_data/eurostat/dic/`x'.dic", tab clear
 	tempfile `x'
 	save ``x'', replace
 }
@@ -31,10 +31,10 @@ foreach x in geo indic_sb indic_bp nace_r2 nace_r1 {
 ** FATS tables
 **************
 *** fats_96
-capture mkdir "${PATH_OUT_DATA}/Temp/fats_96/"
-local fileList : dir "${PATH_IN_DATA}/FDI/eurostat/fats_96/" files "fats_*.tsv"
+capture mkdir "processed_data/temp/fats_96/"
+local fileList : dir "source_data/eurostat/fats_96/" files "fats_*.tsv"
 foreach f in `fileList' {
-	insheet using "${PATH_IN_DATA}/FDI/eurostat/fats_96/`f'", tab clear
+	insheet using "source_data/eurostat/fats_96/`f'", tab clear
 	local fileName = subinstr("`f'",".tsv",".dta",.)
 	
 	if "`f'" ~= "fats_de.tsv" {
@@ -73,13 +73,13 @@ foreach f in `fileList' {
 		reshape wide value, i(nace_r1 indic_sb geo c_ctrl) j(year) string
 	}
 
-	save "${PATH_OUT_DATA}/Temp/fats_96/`fileName'", replace
+	save "processed_data/temp/fats_96/`fileName'", replace
 }
 
-local fileList : dir "${PATH_IN_DATA}/FDI/eurostat/" files "fats_*.tsv"
+local fileList : dir "source_data/eurostat/" files "fats_*.tsv"
 foreach f in `fileList' {
 	local fileName = subinstr("`f'",".tsv",".dta",.)
-	insheet using "${PATH_IN_DATA}/FDI/eurostat/`f'", tab clear
+	insheet using "source_data/eurostat/`f'", tab clear
 	quietly ds v1, not
 	local yearList = r(varlist)
 	split v1, parse(",") gen(v1_)
@@ -94,17 +94,17 @@ foreach f in `fileList' {
 		}
 	ren v1_4 geo
 	drop in 1
-	save "${PATH_OUT_DATA}/Temp/`fileName'", replace
+	save "processed_data/temp/`fileName'", replace
 }
 
 **********************************
 ** eurostat FDI flows and stocks with ROW
 **********************************
 ** tec tables
-local fileList : dir "${PATH_IN_DATA}/FDI/eurostat/" files "tec*.tsv"
+local fileList : dir "source_data/eurostat/" files "tec*.tsv"
 foreach f in `fileList' {
 	local fileName = subinstr("`f'",".tsv",".dta",.)
-	insheet using "${PATH_IN_DATA}/FDI/eurostat/`f'", tab clear
+	insheet using "source_data/eurostat/`f'", tab clear
 	quietly ds v1, not
 	local yearList = r(varlist)
 	split v1, parse(",") gen(v1_)
@@ -120,14 +120,14 @@ foreach f in `fileList' {
 	ren v1_4 geo
 	drop in 1
 	duplicates report
-	save "${PATH_OUT_DATA}/Temp/`fileName'", replace
+	save "processed_data/temp/`fileName'", replace
 }
 
 ** bop_fdi tables
-local fileList : dir "${PATH_IN_DATA}/FDI/eurostat/" files "bop_fdi_*.tsv"
+local fileList : dir "source_data/eurostat/" files "bop_fdi_*.tsv"
 foreach f in `fileList' {
 	local fileName = subinstr("`f'",".tsv",".dta",.)
-	insheet using "${PATH_IN_DATA}/FDI/eurostat/`f'", tab clear
+	insheet using "source_data/eurostat/`f'", tab clear
 	quietly ds v1, not
 	local yearList = r(varlist)
 	split v1, parse(",") gen(v1_)
@@ -153,14 +153,14 @@ foreach f in `fileList' {
 			
 	drop in 1
 	duplicates report
-	save "${PATH_OUT_DATA}/Temp/`fileName'", replace
+	save "processed_data/temp/`fileName'", replace
 }
 
 
 *****************
 *** inward sales
 *****************
-use if indic_sb=="V12110" & nace_r2=="B-N_S95_X_K" using "${PATH_OUT_DATA}/Temp/fats_g1b_08.dta", clear
+use if indic_sb=="V12110" & nace_r2=="B-N_S95_X_K" using "processed_data/temp/fats_g1b_08.dta", clear
 // INDUSTRY: Total business economy; repair of computers, personal and household goods; except financial and insurance activities
 // VARIABLE: Turnover or gross premiums written
 drop nace_r2 indic_sb
@@ -176,7 +176,7 @@ ren (value2 value1 geo c_ctrl) (eurostat_in_sales_flag eurostat_in_sales iso2_d 
 tempfile eurostat_in_sales_08
 save `eurostat_in_sales_08', replace
 
-use if indic_sb=="V12110" & nace_r1=="C-K_X_J" using "${PATH_OUT_DATA}/Temp/fats_g1b_03.dta", clear
+use if indic_sb=="V12110" & nace_r1=="C-K_X_J" using "processed_data/temp/fats_g1b_03.dta", clear
 // INDUSTRY: C-K_X_J	Business economy - Industry and services (except financial intermediation)
 // VARIABLE: Turnover or gross premiums written
 drop nace_r1 indic_sb
@@ -193,11 +193,11 @@ tempfile eurostat_in_sales_03
 save `eurostat_in_sales_03', replace
 
 *** fats 96 tables
-local fileList : dir "${PATH_OUT_DATA}/Temp/fats_96/" files "fats_*.dta"
+local fileList : dir "processed_data/temp/fats_96/" files "fats_*.dta"
 foreach f in `fileList' {
 	local iso2 = subinstr(subinstr("`f'",".dta","",.),"fats_","",.)
 	if "`f'"~="fats_ie.dta" & "`f'"~="fats_de.dta" {
-		use if indic_sb=="V12110" & nace_r1=="C-K_X_J" using "${PATH_OUT_DATA}/Temp/fats_96/`f'", clear
+		use if indic_sb=="V12110" & nace_r1=="C-K_X_J" using "processed_data/temp/fats_96/`f'", clear
 		drop nace_r1 indic_sb
 		reshape long value, i(geo c_ctrl) j(year)
 		split value, parse(" ")
@@ -207,7 +207,7 @@ foreach f in `fileList' {
 		ren (value2 value1 geo c_ctrl) (eurostat_in_sales_flag eurostat_in_sales iso2_d iso2_o)
 		}
 	else {
-		use if indic_sb=="V12110" & length(nace_r1)==1 & nace_r1~="J" using "${PATH_OUT_DATA}/Temp/fats_96/`f'", clear
+		use if indic_sb=="V12110" & length(nace_r1)==1 & nace_r1~="J" using "processed_data/temp/fats_96/`f'", clear
 		** sectors: C D E G H I K
 		reshape long value, i(geo c_ctrl nace_r1) j(year)
 		split value, parse(" ")
@@ -244,7 +244,7 @@ save `eurostat_in_sales', replace
 *****************
 *** outward sales
 *****************
-use if indic_bp=="TUR" & nace_r1=="A-O_X_L" using "${PATH_OUT_DATA}/Temp/fats_out1.dta", clear
+use if indic_bp=="TUR" & nace_r1=="A-O_X_L" using "processed_data/temp/fats_out1.dta", clear
 // INDUSTRY: A-O_X_L All NACE activities (except public administration; activities of households and extra-territorial organizations)
 // VARIABLE: Turnover - Million ECU/EUR
 drop nace_r1 indic_bp
@@ -261,7 +261,7 @@ ren (value2 value1 geo partner) (eurostat_out_sales_flag eurostat_out_sales iso2
 tempfile eurostat_out_sales_04
 save `eurostat_out_sales_04', replace
 
-use if indic_bp=="TUR" & nace_r1=="J" using "${PATH_OUT_DATA}/Temp/fats_out1.dta", clear
+use if indic_bp=="TUR" & nace_r1=="J" using "processed_data/temp/fats_out1.dta", clear
 drop nace_r1 indic_bp
 reshape long value, i(geo partner) j(year) string
 split value, parse(" ") // flags are separated by a space
@@ -276,7 +276,7 @@ ren (value2 value1 geo partner) (eurostat_out_fin_sales_flag eurostat_out_fin_sa
 tempfile eurostat_out_fin_sales_04
 save `eurostat_out_fin_sales_04', replace
 
-use if indic_bp=="TUR" & nace_r1=="A-O_X_L" using "${PATH_OUT_DATA}/Temp/fats_out2.dta", clear
+use if indic_bp=="TUR" & nace_r1=="A-O_X_L" using "processed_data/temp/fats_out2.dta", clear
 // INDUSTRY: A-O_X_L All NACE activities (except public administration; activities of households and extra-territorial organizations)
 // VARIABLE: Turnover - Million ECU/EUR
 drop nace_r1 indic_bp
@@ -293,7 +293,7 @@ ren (value2 value1 geo partner) (eurostat_out_sales_flag eurostat_out_sales iso2
 tempfile eurostat_out_sales_07
 save `eurostat_out_sales_07', replace
 
-use if indic_bp=="TUR" & nace_r1=="J" using "${PATH_OUT_DATA}/Temp/fats_out2.dta", clear
+use if indic_bp=="TUR" & nace_r1=="J" using "processed_data/temp/fats_out2.dta", clear
 drop nace_r1 indic_bp
 reshape long value, i(geo partner) j(year) string
 split value, parse(" ") // flags are separated by a space
@@ -308,7 +308,7 @@ ren (value2 value1 geo partner) (eurostat_out_fin_sales_flag eurostat_out_fin_sa
 tempfile eurostat_out_fin_sales_07
 save `eurostat_out_fin_sales_07', replace
 
-use if indic_bp=="TUR" & nace_r2=="B-S_X_O" using "${PATH_OUT_DATA}/Temp/fats_out2_r2.dta", clear
+use if indic_bp=="TUR" & nace_r2=="B-S_X_O" using "processed_data/temp/fats_out2_r2.dta", clear
 // INDUSTRY: B-S_X_O Industry, construction and services (except public administration, defense, compulsory social security)
 // VARIABLE: Turnover - Million ECU/EUR
 drop nace_r2 indic_bp
@@ -323,7 +323,7 @@ ren (value2 value1 geo partner) (eurostat_out_sales_flag eurostat_out_sales iso2
 tempfile eurostat_out_sales_10
 save `eurostat_out_sales_10', replace
 
-use if indic_bp=="TUR" & nace_r2=="K" using "${PATH_OUT_DATA}/Temp/fats_out2_r2.dta", clear
+use if indic_bp=="TUR" & nace_r2=="K" using "processed_data/temp/fats_out2_r2.dta", clear
 drop nace_r2 indic_bp
 reshape long value, i(geo partner) j(year) string
 split value, parse(" ") // flags are separated by a space
@@ -362,7 +362,7 @@ save `eurostat_sales', replace
 ** inward flow and stocks by main countries
 ** TEC tables
 **********************************
-use "${PATH_OUT_DATA}/Temp/tec00049.dta", clear
+use "processed_data/temp/tec00049.dta", clear
 reshape long value, i(geo partner) j(year)
 split value, parse(" ") // flags are separated by a space
 checkMiss
@@ -373,7 +373,7 @@ keep iso2_d iso2_o year eurostat_in_flow1_flag eurostat_in_flow1
 tempfile eurostat_in_flow1
 save `eurostat_in_flow1', replace
 
-use "${PATH_OUT_DATA}/Temp/tec00051.dta", clear
+use "processed_data/temp/tec00051.dta", clear
 reshape long value, i(geo partner) j(year)
 split value, parse(" ") // flags are separated by a space
 checkMiss
@@ -388,7 +388,7 @@ save `eurostat_in_stock1', replace
 ** outward flow and stocks by main countries
 **********************************
 
-use "${PATH_OUT_DATA}/Temp/tec00053.dta", clear
+use "processed_data/temp/tec00053.dta", clear
 reshape long value, i(geo partner) j(year)
 split value, parse(" ") // flags are separated by a space
 checkMiss
@@ -400,7 +400,7 @@ keep iso2_o iso2_d year eurostat_out_flow1_flag eurostat_out_flow1
 tempfile eurostat_out_flow1
 save `eurostat_out_flow1', replace
 
-use "${PATH_OUT_DATA}/Temp/tec00052.dta", clear
+use "processed_data/temp/tec00052.dta", clear
 reshape long value, i(geo partner) j(year)
 split value, parse(" ") // flags are separated by a space
 checkMiss
@@ -420,7 +420,7 @@ save `eurostat_stock_flow1', replace // EU inflow/outflow with rest of the world
 *****************************************
 ** BOP tables
 *****************************************
-use if nace_r2=="TOT_FDI" & inlist(post,"505","555") using "${PATH_OUT_DATA}/Temp/bop_fdi_flow_r2.dta", clear
+use if nace_r2=="TOT_FDI" & inlist(post,"505","555") using "processed_data/temp/bop_fdi_flow_r2.dta", clear
 // All FDI activities, 505 for outward and 555 for inward
 reshape long value, i(geo partner post) j(year)
 split value, parse(" ") // flags are separated by a space
@@ -443,7 +443,7 @@ ren (geo partner) (iso2_o iso2_d)
 tempfile eurostat_out_flow2_r2
 save `eurostat_out_flow2_r2', replace
 
-use if nace_r1=="TOT_FDI" & inlist(post,"505","555") using "${PATH_OUT_DATA}/Temp/bop_fdi_flows.dta", clear
+use if nace_r1=="TOT_FDI" & inlist(post,"505","555") using "processed_data/temp/bop_fdi_flows.dta", clear
 reshape long value, i(geo partner post) j(year)
 split value, parse(" ") // flags are separated by a space
 checkMiss
@@ -465,7 +465,7 @@ ren (geo partner) (iso2_o iso2_d)
 tempfile eurostat_out_flow2_r1
 save `eurostat_out_flow2_r1', replace
 
-use if nace_r2=="TOT_FDI" & inlist(post,"505","555") using "${PATH_OUT_DATA}/Temp/bop_fdi_pos_r2.dta", clear
+use if nace_r2=="TOT_FDI" & inlist(post,"505","555") using "processed_data/temp/bop_fdi_pos_r2.dta", clear
 reshape long value, i(geo partner post) j(year)
 split value, parse(" ") // flags are separated by a space
 checkMiss
@@ -490,7 +490,7 @@ save `eurostat_out_stock2_r2', replace
 restore
 
 
-use if nace_r1=="TOT_FDI" & inlist(post,"505","555") using "${PATH_OUT_DATA}/Temp/bop_fdi_pos.dta", clear
+use if nace_r1=="TOT_FDI" & inlist(post,"505","555") using "processed_data/temp/bop_fdi_pos.dta", clear
 reshape long value, i(geo partner post) j(year)
 split value, parse(" ") // flags are separated by a space
 checkMiss
@@ -540,9 +540,9 @@ merge 1:1 iso2_d iso2_o year using `eurostat_stock_flow1', nogen
 merge 1:1 iso2_o iso2_d year using `eurostat_sales', nogen
 
 compress
-save "${PATH_OUT_DATA}/eurostat/eurostat_FDI_raw.dta", replace
+save "processed_data/eurostat_FDI_raw.dta", replace
 
 ** remove temporary files
-!rmdir "${PATH_OUT_DATA}/Temp" /s /q // to delete nonempty folders need to use shell commands
+!rmdir "processed_data/temp/*" /q // to delete nonempty folders need to use shell commands
 
 
