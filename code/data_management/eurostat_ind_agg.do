@@ -52,8 +52,8 @@ checkMiss
 destring value1, replace
 ren (value1 value2) (value flag)
 reshape wide value flag, i(geo c_ctrl year) j(varName) string
-ren value* *
-ren flag* flag_*
+ren value* *_totXfin
+ren flag* flag_*_totXfin
 
 tempfile fats_g1b_08
 save `fats_g1b_08', replace
@@ -70,8 +70,8 @@ checkMiss
 destring value1, replace
 ren (value1 value2) (value flag)
 reshape wide value flag, i(geo c_ctrl year) j(varName) string
-ren value* *
-ren flag* flag_*
+ren value* *_totXfin
+ren flag* flag_*_totXfin
 
 tempfile fats_g1b_03
 save `fats_g1b_03', replace
@@ -122,8 +122,8 @@ foreach f in `fileList' {
 merge 1:1 geo c_ctrl year varName using `reshaped_sum', update nogen
     
 reshape wide value flag, i(geo c_ctrl year) j(varName) string
-ren value* *
-ren flag* flag_*
+ren value* *_totXfin
+ren flag* flag_*_totXfin
 
 append using `fats_g1b_08'
 append using `fats_g1b_03'
@@ -166,8 +166,8 @@ foreach f in fats_out1 fats_out2 {
     destring value1, replace
     ren (value1 value2) (value flag)
     reshape wide value flag, i(geo partner year) j(varName) string
-    ren value* *
-    ren flag* flag_*
+    ren value* *_tot
+    ren flag* flag_*_tot
     merge 1:1 geo partner year using ``f'_fin', nogen
     tempfile `f'
     save ``f'', replace
@@ -202,8 +202,8 @@ checkMiss
 destring value1, replace
 ren (value1 value2) (value flag)
 reshape wide value flag, i(geo partner year) j(varName) string
-ren value* *
-ren flag* flag_*
+ren value* *_tot
+ren flag* flag_*_tot
 merge 1:1 geo partner year using `fats_out2_r2_fin', nogen
 tempfile fats_out2_r2
 save `fats_out2_r2', replace

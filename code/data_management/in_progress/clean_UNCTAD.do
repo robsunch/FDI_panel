@@ -14,7 +14,7 @@ file close _all
 file open myfile using "`outputPath'", write replace
 file write myfile "This file records information for the cleaning of the UNCTAD bilateral FDI data." _n
 
-import excel using "ProcessedData/merge_country_lists.xlsx", sheet("UNCTAD_to_iso3_finish") clear firstrow
+import excel using "processed_data/merge_country_lists.xlsx", sheet("UNCTAD_to_iso3_finish") clear firstrow
 keep ctyName iso3
 drop if missing(iso3)
 tempfile ctyCode
@@ -117,4 +117,4 @@ ren (stock* flow*) (UNCTAD_out_stock* UNCTAD_out_flow*)
 merge 1:1 iso3_o iso3_d year using `inwardFDI', nogen
 
 compress
-save "ProcessedData/UNCTAD_FDI.dta", replace
+save "processed_data/UNCTAD_FDI.dta", replace

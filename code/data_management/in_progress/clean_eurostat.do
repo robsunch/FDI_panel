@@ -10,7 +10,7 @@ log using "${PATH_OUT_DATA}/log/`1'.log", replace
 
 
 *** EUR to USD exchange rate
-import excel date exchRate using "SourceData/Misc/DEXUSEU.xls", clear cellrange(a15:b30)
+import excel date exchRate using "source_data/misc/DEXUSEU.xls", clear cellrange(a15:b30)
 gen year = year(date)
 tempfile euroExchRate
 save `euroExchRate', replace
@@ -110,7 +110,7 @@ foreach x in out in {
 drop exchRate	
 
 compress
-save "ProcessedData/eurostat_FDI.dta", replace
+save "processed_data/eurostat_FDI.dta", replace
 
 *************************************
 *** adjust outward sales for the financial sector
@@ -118,7 +118,7 @@ save "ProcessedData/eurostat_FDI.dta", replace
 file open myfile using "`outputPath'", write append
 file write myfile _n _n "Adjust outward sales for the financial sector" _n
 
-use "ProcessedData/nonfin_output_share.dta", clear
+use "processed_data/nonfin_output_share.dta", clear
 egen maxYr = max(year), by(iso3)
 keep if year==maxYr
 keep iso3 nonfin_output_share
@@ -130,7 +130,7 @@ gen year = 2012
 tempfile nonfin_2012
 save `nonfin_2012', replace
 
-use "ProcessedData/nonfin_output_share.dta", clear
+use "processed_data/nonfin_output_share.dta", clear
 keep if year>=2007
 append using `nonfin_2012'
 fillin iso3 year
@@ -139,7 +139,7 @@ keep iso3 year nonfin_output_share
 tempfile nonfin_output_share_0712
 save `nonfin_output_share_0712', replace
 
-use "ProcessedData/eurostat_FDI.dta", clear
+use "processed_data/eurostat_FDI.dta", clear
 
 *** outward sales for all years ***
 preserve
@@ -160,8 +160,8 @@ restore
 
 merge m:1 iso2_o year using `world_out_nonfin_share', keep(master match) nogen
 ren iso2_o iso2
-merge m:1 iso2 using "ProcessedData/isoStandard.dta", keep(master match) keepusing(iso3) nogen
-merge m:1 iso3 year using "ProcessedData/nonfin_output_share.dta", keep(master match) ///
+merge m:1 iso2 using "processed_data/isoStandard.dta", keep(master match) keepusing(iso3) nogen
+merge m:1 iso3 year using "processed_data/nonfin_output_share.dta", keep(master match) ///
 	keepusing(nonfin_output_share) nogen
 
 gen eurostat_out_sales_nonfin = eurostat_out_sales

@@ -24,13 +24,13 @@ export excel using "processed_data/merge_country_lists.xlsx", sheet(check_oecd_i
 *** and non Euro area
 ****************************************
 *** EUR to USD exchange rate
-import excel date euroExchRate using "source_data/Misc/DEXUSEU.xls", clear cellrange(a15:b30)
+import excel date euroExchRate using "source_data/misc/DEXUSEU.xls", clear cellrange(a15:b30)
 gen year = year(date)
 tempfile euroExchRate
 save `euroExchRate', replace
 
 *** Euro fixed rates
-import excel using "source_data/Misc/euroFixedRate.xlsx", clear firstrow
+import excel using "source_data/misc/euroFixedRate.xlsx", clear firstrow
 gen year_of_adoption = year(date_of_adoption)
 tempfile euroFixedRates
 save `euroFixedRates', replace

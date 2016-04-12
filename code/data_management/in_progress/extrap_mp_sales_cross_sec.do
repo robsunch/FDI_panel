@@ -2,13 +2,13 @@
 ** consolidate FDI statistics from three sources
 ** and impute using cross-section variation
 **
-** input:	ProcessedData/eurostat_FDI.dta
+** input:	processed_data/eurostat_FDI.dta
 **		.../oecd_fdi.dta
 **		.../UNCTAD_bilateral_FDI.dta
-**		SourceData/Ramondo-appendix-data/appendix-dataset.dta
+**		source_data/Ramondo-appendix-data/appendix-dataset.dta
 **
-** output:	ProcessedData/reporter_oecd_eurostat.dta
-**			ProcessedData/extrap_mp_sales_avg_begin_year_end_year.dta
+** output:	processed_data/reporter_oecd_eurostat.dta
+**			processed_data/extrap_mp_sales_avg_begin_year_end_year.dta
 **			Output/StataLog/clean_n_checking/extrap_mp_sales_cross_sec.smcl
 **			Output/tables/clean_n_checking/extrap_mp_sales_cross_sec.xlsx
 **
@@ -40,10 +40,10 @@ capture rm "`excelPath'"
 ** combine HK and CN in OECD and UNCTAD
 **************************************
 ** Eurostat
-use "ProcessedData/eurostat_fdi.dta", clear
+use "processed_data/eurostat_fdi.dta", clear
 foreach x in o d {
 	ren iso2_`x' iso2
-	merge m:1 iso2 using "ProcessedData/isoStandard.dta", keepusing(iso2 iso3) keep(match) nogen
+	merge m:1 iso2 using "processed_data/isoStandard.dta", keepusing(iso2 iso3) keep(match) nogen
 	ren (iso2 iso3) (iso2_`x' iso3_`x')
 	}
 drop if iso3_o=="HKG" | iso3_d=="HKG"
@@ -52,10 +52,10 @@ tempfile eurostat_fdi
 save `eurostat_fdi', replace
 
 ** OECD
-use "ProcessedData/oecd_fdi.dta", clear
+use "processed_data/oecd_fdi.dta", clear
 foreach x in o d {
 	ren iso3_`x' iso3
-	merge m:1 iso3 using "ProcessedData/isoStandard.dta", keepusing(iso3) keep(match) nogen
+	merge m:1 iso3 using "processed_data/isoStandard.dta", keepusing(iso3) keep(match) nogen
 	ren iso3 iso3_`x'
 	}	
 drop *flag countryName*
@@ -93,10 +93,10 @@ tempfile oecd_fdi
 save `oecd_fdi', replace
 
 ** UNCTAD data
-use "ProcessedData/UNCTAD_bilateral_FDI.dta", clear
+use "processed_data/UNCTAD_bilateral_FDI.dta", clear
 foreach x in o d {
 	ren iso3_`x' iso3
-	merge m:1 iso3 using "ProcessedData/isoStandard.dta", keepusing(iso3) keep(match) nogen
+	merge m:1 iso3 using "processed_data/isoStandard.dta", keepusing(iso3) keep(match) nogen
 	ren iso3 iso3_`x'
 	}
 drop *notes *source
@@ -142,7 +142,7 @@ save "Temp/consolidated_fdi.dta", replace
 ********************************************
 ** construct the sample of reporting countries
 ********************************************
-use "ProcessedData/oecd_fdi.dta", clear
+use "processed_data/oecd_fdi.dta", clear
 egen nonmiss_in = rownonmiss(oecd_in*sales oecd_in*sales)
 keep if nonmiss_in > 0
 keep iso3_d
@@ -150,7 +150,7 @@ ren iso3_d iso3
 tempfile oecd_report1
 save `oecd_report1', replace
 
-use "ProcessedData/oecd_fdi.dta", clear
+use "processed_data/oecd_fdi.dta", clear
 egen nonmiss_out = rownonmiss(oecd_out*sales oecd_out*sales)
 keep if nonmiss_out > 0
 keep iso3_o
@@ -162,18 +162,18 @@ replace iso3 = "ROU" if iso3=="ROM"
 tempfile oecd_report
 save `oecd_report', replace
 
-use if ~missing(eurostat_in_sales_nonfin) using "ProcessedData/eurostat_fdi.dta", clear
+use if ~missing(eurostat_in_sales_nonfin) using "processed_data/eurostat_fdi.dta", clear
 keep iso2_d
 ren iso2_d iso2
 tempfile eurostat_report1
 save `eurostat_report1', replace
 
-use if ~missing(eurostat_out_sales) using "ProcessedData/eurostat_fdi.dta", clear
+use if ~missing(eurostat_out_sales) using "processed_data/eurostat_fdi.dta", clear
 keep iso2_o
 ren iso2_o iso2
 append using `eurostat_report1'
 duplicates drop
-merge 1:1 iso2 using "ProcessedData/isoStandard.dta", keep(match) nogen
+merge 1:1 iso2 using "processed_data/isoStandard.dta", keep(match) nogen
 keep iso3
 tempfile eurostat_report
 save `eurostat_report', replace
@@ -190,7 +190,7 @@ gen eurostat_report= _merge==3
 drop _merge
 
 export excel using "`excelPath'", sheetreplace sheet("report") firstrow(variables)
-save "ProcessedData/reporter_oecd_eurostat.dta", replace
+save "processed_data/reporter_oecd_eurostat.dta", replace
 
 
 *** generate a list of partners
@@ -430,7 +430,7 @@ replace imputed_sales_cross_sec = exp(temp_log_sales) if impute_sales_3==1
 drop temp* log*
 
 compress
-save "ProcessedData/extrap_mp_sales_cs_`begin_year'_`end_year'.dta", replace
+save "processed_data/extrap_mp_sales_cs_`begin_year'_`end_year'.dta", replace
 
 log close _all
 

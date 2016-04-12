@@ -12,13 +12,10 @@ local data_out = "processed_data/OECD"
 local outputPath = "$tableDir/OECD_combine_isic3_isic4.csv"
 capture rm "`outputPath'"
 
-*** Euro fixed rates for SVN
-import excel using "source_data/misc/euroFixedRate.xlsx", clear firstrow
-gen year_of_adoption = year(date_of_adoption)
-quietly sum fixedRate if iso3=="SVN"
-local fixedRate_SVN = `r(mean)'
-tempfile euroFixedRate
-save `euroFixedRate', replace
+*** EUR to USD exchange rate
+use iso3 fixedRate if iso3=="SVN" using "processed_data/exchRate.dta", clear
+quietly sum fixedRate
+local fixedRate_SVN = `r(mean)' // for SVN
 
 *** compare outward MP
 use using "`data_in'/AMNE_OUT4_bilat_tot.dta", clear
@@ -70,6 +67,18 @@ esttab . using "`outputPath'", append cell("mean sd min p10 p25 p50 p75 p90 max 
 *** combine the two data sets
 *** before 2007 (including 2007) use isic3 ; after 2007 use isic4
 **************************************************
+use "`data_in'/AMNE_OUT4_world_tot_fin.dta", clear // note for outward world total/fin, data is in a separate table
+ren (*C6466 *C9999) (*fin *tot)
+replace iso3_d = "WORLD"
+preserve
+keep iso3* year *fin
+tempfile AMNE_OUT4_world_fin
+save `AMNE_OUT4_world_fin', replace
+restore
+keep iso3* year *tot
+tempfile AMNE_OUT4_world_tot
+save `AMNE_OUT4_world_tot', replace
+
 use if year<=2007 using "`data_in'/FATS_OUT3_bilat_tot_fin.dta", clear
 ren *_ind6895 *_fin
 ren *_ind9999 *_tot
@@ -79,10 +88,21 @@ save `before07', replace
 use if year>=2008 using "`data_in'/AMNE_OUT4_bilat_tot.dta", clear
 ren *_C9999 *_tot
 append using `before07'
+merge 1:1 iso3_o iso3_d year using `AMNE_OUT4_world_fin', update
+estpost tabulate year _merge, elabels
+esttab using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
+    title("Merge update with AMNE_OUT4_world_fin") ///
+    eqlabels(, lhs("year \ merge"))
+drop _merge
+merge 1:1 iso3_o iso3_d year using `AMNE_OUT4_world_tot', update
+esttab using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
+    title("Merge update with AMNE_OUT4_world_tot") ///
+    eqlabels(, lhs("year \ merge"))
+drop _merge
+
 sort iso3_o iso3_d year
 compress
 save "`data_out'/activity_out.dta", replace
-
 
 *** compare inward MP
 use using "`data_in'/AMNE_IN4_bilat_tot.dta", clear
@@ -105,6 +125,8 @@ save `before07', replace
 use if year>=2008 using "`data_in'/AMNE_IN4_bilat_tot.dta", clear
 ren (*_C9999 *_C9994) (*_tot *_totXfin)
 append using `before07'
+
+
 sort iso3_o iso3_d year
 compress
 save "`data_out'/activity_in.dta", replace

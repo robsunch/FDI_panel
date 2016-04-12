@@ -22,9 +22,9 @@ end
 *** dictionary files
 ****************
 foreach x in geo indic_sb indic_bp nace_r2 nace_r1 {
-	insheet `x' `x'_des using "source_data/eurostat/dic/`x'.dic", tab clear
-	tempfile `x'
-	save ``x'', replace
+    insheet `x' `x'_des using "source_data/eurostat/dic/`x'.dic", tab clear
+    tempfile `x'
+    save ``x'', replace
 }
 
 **************
@@ -34,67 +34,67 @@ foreach x in geo indic_sb indic_bp nace_r2 nace_r1 {
 capture mkdir "processed_data/temp/fats_96/"
 local fileList : dir "source_data/eurostat/fats_96/" files "fats_*.tsv"
 foreach f in `fileList' {
-	insheet using "source_data/eurostat/fats_96/`f'", tab clear
-	local fileName = subinstr("`f'",".tsv",".dta",.)
-	
-	if "`f'" ~= "fats_de.tsv" {
-		quietly ds v1, not
-		local yearList = r(varlist)
-		split v1, parse(",") gen(v1_)
-		drop v1
-		foreach x in `yearList' {
-			local yr = `x'[1]
-			ren `x' value`yr'
-			}
-		foreach x of varlist v1_1 - v1_3 {
-			local xName = `x'[1]
-			ren `x' `xName'
-			}
-		ren v1_4 geo
-		drop in 1
-	}
-	else {
-		quietly ds v1, not
-		local ctyList = r(varlist)
-		split v1, parse(",") gen(v1_)
-		drop v1
-		foreach x in `ctyList' {
-			local cty = `x'[1]
-			ren `x' value`cty'
-			}
-		
-		foreach x of varlist v1_1 - v1_3 {
-			local xName = `x'[1]
-			ren `x' `xName'
-			}
-		ren v1_4 year
-		drop in 1
-		reshape long value, i(nace_r1 indic_sb geo year) j(c_ctrl) string
-		reshape wide value, i(nace_r1 indic_sb geo c_ctrl) j(year) string
-	}
+    insheet using "source_data/eurostat/fats_96/`f'", tab clear
+    local fileName = subinstr("`f'",".tsv",".dta",.)
+    
+    if "`f'" ~= "fats_de.tsv" {
+        quietly ds v1, not
+        local yearList = r(varlist)
+        split v1, parse(",") gen(v1_)
+        drop v1
+        foreach x in `yearList' {
+            local yr = `x'[1]
+            ren `x' value`yr'
+            }
+        foreach x of varlist v1_1 - v1_3 {
+            local xName = `x'[1]
+            ren `x' `xName'
+            }
+        ren v1_4 geo
+        drop in 1
+    }
+    else {
+        quietly ds v1, not
+        local ctyList = r(varlist)
+        split v1, parse(",") gen(v1_)
+        drop v1
+        foreach x in `ctyList' {
+            local cty = `x'[1]
+            ren `x' value`cty'
+            }
+        
+        foreach x of varlist v1_1 - v1_3 {
+            local xName = `x'[1]
+            ren `x' `xName'
+            }
+        ren v1_4 year
+        drop in 1
+        reshape long value, i(nace_r1 indic_sb geo year) j(c_ctrl) string
+        reshape wide value, i(nace_r1 indic_sb geo c_ctrl) j(year) string
+    }
 
-	save "processed_data/temp/fats_96/`fileName'", replace
+    save "processed_data/temp/fats_96/`fileName'", replace
 }
 
 local fileList : dir "source_data/eurostat/" files "fats_*.tsv"
 foreach f in `fileList' {
-	local fileName = subinstr("`f'",".tsv",".dta",.)
-	insheet using "source_data/eurostat/`f'", tab clear
-	quietly ds v1, not
-	local yearList = r(varlist)
-	split v1, parse(",") gen(v1_)
-	drop v1
-	foreach x in `yearList' {
-		local yr = `x'[1]
-		ren `x' value`yr'
-		}
-	foreach x of varlist v1_1 - v1_3 {
-		local xName = `x'[1]
-		ren `x' `xName'
-		}
-	ren v1_4 geo
-	drop in 1
-	save "processed_data/temp/`fileName'", replace
+    local fileName = subinstr("`f'",".tsv",".dta",.)
+    insheet using "source_data/eurostat/`f'", tab clear
+    quietly ds v1, not
+    local yearList = r(varlist)
+    split v1, parse(",") gen(v1_)
+    drop v1
+    foreach x in `yearList' {
+        local yr = `x'[1]
+        ren `x' value`yr'
+        }
+    foreach x of varlist v1_1 - v1_3 {
+        local xName = `x'[1]
+        ren `x' `xName'
+        }
+    ren v1_4 geo
+    drop in 1
+    save "processed_data/temp/`fileName'", replace
 }
 
 **********************************
@@ -103,57 +103,57 @@ foreach f in `fileList' {
 ** tec tables
 local fileList : dir "source_data/eurostat/" files "tec*.tsv"
 foreach f in `fileList' {
-	local fileName = subinstr("`f'",".tsv",".dta",.)
-	insheet using "source_data/eurostat/`f'", tab clear
-	quietly ds v1, not
-	local yearList = r(varlist)
-	split v1, parse(",") gen(v1_)
-	drop v1
-	foreach x in `yearList' {
-		local yr = `x'[1]
-		ren `x' value`yr'
-		}
-	foreach x of varlist v1_1 - v1_3 {
-		local xName = `x'[1]
-		ren `x' `xName'
-		}
-	ren v1_4 geo
-	drop in 1
-	duplicates report
-	save "processed_data/temp/`fileName'", replace
+    local fileName = subinstr("`f'",".tsv",".dta",.)
+    insheet using "source_data/eurostat/`f'", tab clear
+    quietly ds v1, not
+    local yearList = r(varlist)
+    split v1, parse(",") gen(v1_)
+    drop v1
+    foreach x in `yearList' {
+        local yr = `x'[1]
+        ren `x' value`yr'
+        }
+    foreach x of varlist v1_1 - v1_3 {
+        local xName = `x'[1]
+        ren `x' `xName'
+        }
+    ren v1_4 geo
+    drop in 1
+    duplicates report
+    save "processed_data/temp/`fileName'", replace
 }
 
 ** bop_fdi tables
 local fileList : dir "source_data/eurostat/" files "bop_fdi_*.tsv"
 foreach f in `fileList' {
-	local fileName = subinstr("`f'",".tsv",".dta",.)
-	insheet using "source_data/eurostat/`f'", tab clear
-	quietly ds v1, not
-	local yearList = r(varlist)
-	split v1, parse(",") gen(v1_)
-	drop v1
-	foreach x in `yearList' {
-		local yr = `x'[1]
-		ren `x' value`yr'
-		}
-	if regexm("`f'","pos") {		
-		foreach x of varlist v1_1 - v1_4 {
-			local xName = `x'[1]
-			ren `x' `xName'
-			}
-		ren v1_5 geo
-		}
-	else {
-		foreach x of varlist v1_1 - v1_5 {
-			local xName = `x'[1]
-			ren `x' `xName'
-			}
-		ren v1_6 geo
-		}
-			
-	drop in 1
-	duplicates report
-	save "processed_data/temp/`fileName'", replace
+    local fileName = subinstr("`f'",".tsv",".dta",.)
+    insheet using "source_data/eurostat/`f'", tab clear
+    quietly ds v1, not
+    local yearList = r(varlist)
+    split v1, parse(",") gen(v1_)
+    drop v1
+    foreach x in `yearList' {
+        local yr = `x'[1]
+        ren `x' value`yr'
+        }
+    if regexm("`f'","pos") {        
+        foreach x of varlist v1_1 - v1_4 {
+            local xName = `x'[1]
+            ren `x' `xName'
+            }
+        ren v1_5 geo
+        }
+    else {
+        foreach x of varlist v1_1 - v1_5 {
+            local xName = `x'[1]
+            ren `x' `xName'
+            }
+        ren v1_6 geo
+        }
+            
+    drop in 1
+    duplicates report
+    save "processed_data/temp/`fileName'", replace
 }
 
 
@@ -177,7 +177,7 @@ tempfile eurostat_in_sales_08
 save `eurostat_in_sales_08', replace
 
 use if indic_sb=="V12110" & nace_r1=="C-K_X_J" using "processed_data/temp/fats_g1b_03.dta", clear
-// INDUSTRY: C-K_X_J	Business economy - Industry and services (except financial intermediation)
+// INDUSTRY: C-K_X_J    Business economy - Industry and services (except financial intermediation)
 // VARIABLE: Turnover or gross premiums written
 drop nace_r1 indic_sb
 reshape long value, i(geo c_ctrl) j(year)
@@ -195,42 +195,42 @@ save `eurostat_in_sales_03', replace
 *** fats 96 tables
 local fileList : dir "processed_data/temp/fats_96/" files "fats_*.dta"
 foreach f in `fileList' {
-	local iso2 = subinstr(subinstr("`f'",".dta","",.),"fats_","",.)
-	if "`f'"~="fats_ie.dta" & "`f'"~="fats_de.dta" {
-		use if indic_sb=="V12110" & nace_r1=="C-K_X_J" using "processed_data/temp/fats_96/`f'", clear
-		drop nace_r1 indic_sb
-		reshape long value, i(geo c_ctrl) j(year)
-		split value, parse(" ")
-		drop value
-		replace value1 = "" if value1==":"
-		destring value1, replace
-		ren (value2 value1 geo c_ctrl) (eurostat_in_sales_flag eurostat_in_sales iso2_d iso2_o)
-		}
-	else {
-		use if indic_sb=="V12110" & length(nace_r1)==1 & nace_r1~="J" using "processed_data/temp/fats_96/`f'", clear
-		** sectors: C D E G H I K
-		reshape long value, i(geo c_ctrl nace_r1) j(year)
-		split value, parse(" ")
-		drop value indic_sb
-		replace value1 = "" if value1==":"
-		destring value1, replace
-		fillin geo c_ctrl nace_r1 year
-		egen anymiss = total(value1==.), by(geo c_ctrl year)
-		keep if anymiss==0
-		collapse (sum) value1, by(geo c_ctrl year)
-		ren (value1 geo c_ctrl) (eurostat_in_sales iso2_d iso2_o)
-		}
-	tempfile reshaped_`iso2'
-	save `reshaped_`iso2'', replace
-}	
+    local iso2 = subinstr(subinstr("`f'",".dta","",.),"fats_","",.)
+    if "`f'"~="fats_ie.dta" & "`f'"~="fats_de.dta" {
+        use if indic_sb=="V12110" & nace_r1=="C-K_X_J" using "processed_data/temp/fats_96/`f'", clear
+        drop nace_r1 indic_sb
+        reshape long value, i(geo c_ctrl) j(year)
+        split value, parse(" ")
+        drop value
+        replace value1 = "" if value1==":"
+        destring value1, replace
+        ren (value2 value1 geo c_ctrl) (eurostat_in_sales_flag eurostat_in_sales iso2_d iso2_o)
+        }
+    else {
+        use if indic_sb=="V12110" & length(nace_r1)==1 & nace_r1~="J" using "processed_data/temp/fats_96/`f'", clear
+        ** sectors: C D E G H I K
+        reshape long value, i(geo c_ctrl nace_r1) j(year)
+        split value, parse(" ")
+        drop value indic_sb
+        replace value1 = "" if value1==":"
+        destring value1, replace
+        fillin geo c_ctrl nace_r1 year
+        egen anymiss = total(value1==.), by(geo c_ctrl year)
+        keep if anymiss==0
+        collapse (sum) value1, by(geo c_ctrl year)
+        ren (value1 geo c_ctrl) (eurostat_in_sales iso2_d iso2_o)
+        }
+    tempfile reshaped_`iso2'
+    save `reshaped_`iso2'', replace
+}   
 
 clear
 foreach f in `fileList' {
-	local iso2 = subinstr(subinstr("`f'",".dta","",.),"fats_","",.)
-	if "`iso2'" ~= "sum" {
-		append using `reshaped_`iso2''
-		}
-	}
+    local iso2 = subinstr(subinstr("`f'",".dta","",.),"fats_","",.)
+    if "`iso2'" ~= "sum" {
+        append using `reshaped_`iso2''
+        }
+    }
 merge 1:1 iso2_o iso2_d year using `reshaped_sum', update nogen
 
 append using `eurostat_in_sales_03'
@@ -431,7 +431,7 @@ drop value
 ren (value2 value1) (flow_flag flow)
 reshape wide flow flow_flag, i(geo partner year) j(post) string
 ren (flow505 flow555 flow_flag505 flow_flag555) ///
-	(eurostat_out_flow2_r2 eurostat_in_flow2_r2 eurostat_out_flow2_r2_flag eurostat_in_flow2_r2_flag)
+    (eurostat_out_flow2_r2 eurostat_in_flow2_r2 eurostat_out_flow2_r2_flag eurostat_in_flow2_r2_flag)
 preserve
 keep geo partner year eurostat_in_*
 ren (geo partner) (iso2_d iso2_o)
@@ -453,7 +453,7 @@ drop value
 ren (value2 value1) (flow_flag flow)
 reshape wide flow flow_flag, i(geo partner year) j(post) string
 ren (flow505 flow555 flow_flag505 flow_flag555) ///
-	(eurostat_out_flow2_r1 eurostat_in_flow2_r1 eurostat_out_flow2_r1_flag eurostat_in_flow2_r1_flag)
+    (eurostat_out_flow2_r1 eurostat_in_flow2_r1 eurostat_out_flow2_r1_flag eurostat_in_flow2_r1_flag)
 preserve
 keep geo partner year eurostat_in_*
 ren (geo partner) (iso2_d iso2_o)
@@ -475,7 +475,7 @@ drop value
 ren (value2 value1) (stock_flag stock)
 reshape wide stock stock_flag, i(geo partner year) j(post) string
 ren (stock505 stock555 stock_flag505 stock_flag555) ///
-	(eurostat_out_stock2_r2 eurostat_in_stock2_r2 eurostat_out_stock2_r2_flag eurostat_in_stock2_r2_flag)
+    (eurostat_out_stock2_r2 eurostat_in_stock2_r2 eurostat_out_stock2_r2_flag eurostat_in_stock2_r2_flag)
 preserve
 keep geo partner year eurostat_in_* 
 ren (geo partner) (iso2_d iso2_o)
@@ -500,7 +500,7 @@ drop value
 ren (value2 value1) (stock_flag stock)
 reshape wide stock stock_flag, i(geo partner year) j(post) string
 ren (stock505 stock555 stock_flag505 stock_flag555) ///
-	(eurostat_out_stock eurostat_in_stock eurostat_out_stock_flag eurostat_in_stock_flag)
+    (eurostat_out_stock eurostat_in_stock eurostat_out_stock_flag eurostat_in_stock_flag)
 preserve
 keep geo partner year eurostat_in_* 
 ren (geo partner) (iso2_d iso2_o)
@@ -517,19 +517,19 @@ restore
 *** combine BOP tables
 clear
 forvalues i = 1/2 {
-	use `eurostat_in_flow2_r`i''
-	merge 1:1 iso2_o iso2_d year using `eurostat_out_flow2_r`i'', nogen
-	merge 1:1 iso2_o iso2_d year using `eurostat_in_stock2_r`i'', nogen
-	merge 1:1 iso2_o iso2_d year using `eurostat_out_stock2_r`i'', nogen
-	tempfile eurostat_stock_flow2_r`i'
-	save `eurostat_stock_flow2_r`i'', replace
+    use `eurostat_in_flow2_r`i''
+    merge 1:1 iso2_o iso2_d year using `eurostat_out_flow2_r`i'', nogen
+    merge 1:1 iso2_o iso2_d year using `eurostat_in_stock2_r`i'', nogen
+    merge 1:1 iso2_o iso2_d year using `eurostat_out_stock2_r`i'', nogen
+    tempfile eurostat_stock_flow2_r`i'
+    save `eurostat_stock_flow2_r`i'', replace
 }
 
 use `eurostat_stock_flow2_r2', clear
 merge 1:1 iso2_o iso2_d year using `eurostat_stock_flow2_r1', nogen
 tempfile eurostat_stock_flow2
 save `eurostat_stock_flow2', replace
-	
+    
 *****************************
 ** merge flows and stocks from TEC
 ** and BOP tables

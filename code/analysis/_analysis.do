@@ -17,4 +17,4 @@ capture mkdir $figureDir
 capture mkdir $tableDir
 capture mkdir $logDir
 
-do "$codeDir/activity_oecd_vs_eurostat.do"
+do "$codeDir/total_activity_trends.do"

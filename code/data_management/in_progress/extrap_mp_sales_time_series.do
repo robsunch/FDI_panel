@@ -2,12 +2,12 @@
 ** consolidate FDI statistics from three sources
 ** and extrapolates to year 2012
 **
-** input:	ProcessedData/eurostat_FDI.dta
+** input:	processed_data/eurostat_FDI.dta
 **		.../oecd_fdi.dta
 **		.../UNCTAD_bilateral_FDI.dta
-**		SourceData/Ramondo-appendix-data/appendix-dataset.dta
+**		source_data/Ramondo-appendix-data/appendix-dataset.dta
 **
-** output:	ProcessedData/reporter_oecd_eurostat.dta
+** output:	processed_data/reporter_oecd_eurostat.dta
 **			Temp/consolidate_fdi.dta
 **			Temp/impute_oecd_in_sales.dta
 **			Temp/impute_oecd_out_sales.dta
@@ -15,8 +15,8 @@
 **			Temp/impute_eurostat_out_sales.dta
 **			Temp/impute_out_from_in_sales.dta
 **			Temp/pair_id_list.dta
-**			ProcessedData/imputed_sales_time.dta
-**			ProcessedData/imputed_sales_cross_sec.dta
+**			processed_data/imputed_sales_time.dta
+**			processed_data/imputed_sales_cross_sec.dta
 **			
 **
 ***************************************************
@@ -43,10 +43,10 @@ local startYear = 1995
 ** combine HK and CN in OECD and UNCTAD
 **************************************
 ** Eurostat
-use "ProcessedData/eurostat_fdi.dta", clear
+use "processed_data/eurostat_fdi.dta", clear
 foreach x in o d {
 	ren iso2_`x' iso2
-	merge m:1 iso2 using "ProcessedData/isoStandard.dta", keepusing(iso2 iso3) keep(match) nogen
+	merge m:1 iso2 using "processed_data/isoStandard.dta", keepusing(iso2 iso3) keep(match) nogen
 	ren (iso2 iso3) (iso2_`x' iso3_`x')
 	}
 drop if iso3_o=="HKG" | iso3_d=="HKG"
@@ -55,10 +55,10 @@ tempfile eurostat_fdi
 save `eurostat_fdi', replace
 
 ** OECD
-use "ProcessedData/oecd_fdi.dta", clear
+use "processed_data/oecd_fdi.dta", clear
 foreach x in o d {
 	ren iso3_`x' iso3
-	merge m:1 iso3 using "ProcessedData/isoStandard.dta", keepusing(iso3) keep(match) nogen
+	merge m:1 iso3 using "processed_data/isoStandard.dta", keepusing(iso3) keep(match) nogen
 	ren iso3 iso3_`x'
 	}	
 drop *flag countryName*
@@ -96,10 +96,10 @@ tempfile oecd_fdi
 save `oecd_fdi', replace
 
 ** UNCTAD data
-use "ProcessedData/UNCTAD_bilateral_FDI.dta", clear
+use "processed_data/UNCTAD_bilateral_FDI.dta", clear
 foreach x in o d {
 	ren iso3_`x' iso3
-	merge m:1 iso3 using "ProcessedData/isoStandard.dta", keepusing(iso3) keep(match) nogen
+	merge m:1 iso3 using "processed_data/isoStandard.dta", keepusing(iso3) keep(match) nogen
 	ren iso3 iso3_`x'
 	}
 drop *notes *source
@@ -146,7 +146,7 @@ save "Temp/consolidated_fdi.dta", replace
 ********************************************
 ** construct the sample of reporting countries
 ********************************************
-use "ProcessedData/oecd_fdi.dta", clear
+use "processed_data/oecd_fdi.dta", clear
 egen nonmiss_in = rownonmiss(oecd_in*sales oecd_in*sales)
 keep if nonmiss_in > 0
 keep iso3_d
@@ -154,7 +154,7 @@ ren iso3_d iso3
 tempfile oecd_report1
 save `oecd_report1', replace
 
-use "ProcessedData/oecd_fdi.dta", clear
+use "processed_data/oecd_fdi.dta", clear
 egen nonmiss_out = rownonmiss(oecd_out*sales oecd_out*sales)
 keep if nonmiss_out > 0
 keep iso3_o
@@ -166,18 +166,18 @@ replace iso3 = "ROU" if iso3=="ROM"
 tempfile oecd_report
 save `oecd_report', replace
 
-use if ~missing(eurostat_in_sales_nonfin) using "ProcessedData/eurostat_fdi.dta", clear
+use if ~missing(eurostat_in_sales_nonfin) using "processed_data/eurostat_fdi.dta", clear
 keep iso2_d
 ren iso2_d iso2
 tempfile eurostat_report1
 save `eurostat_report1', replace
 
-use if ~missing(eurostat_out_sales) using "ProcessedData/eurostat_fdi.dta", clear
+use if ~missing(eurostat_out_sales) using "processed_data/eurostat_fdi.dta", clear
 keep iso2_o
 ren iso2_o iso2
 append using `eurostat_report1'
 duplicates drop
-merge 1:1 iso2 using "ProcessedData/isoStandard.dta", keep(match) nogen
+merge 1:1 iso2 using "processed_data/isoStandard.dta", keep(match) nogen
 keep iso3
 tempfile eurostat_report
 save `eurostat_report', replace
@@ -194,7 +194,7 @@ gen eurostat_report= _merge==3
 drop _merge
 
 export excel using "`excelPath'", sheetreplace sheet("report") firstrow(variables)
-save "ProcessedData/reporter_oecd_eurostat.dta", replace
+save "processed_data/reporter_oecd_eurostat.dta", replace
 
 
 *** generate a list of partners
@@ -219,14 +219,14 @@ save `years', replace
 
 *** Step b
 use "Temp/partner_list.dta"
-merge 1:1 iso3 using "ProcessedData/reporter_oecd_eurostat.dta", nogen
+merge 1:1 iso3 using "processed_data/reporter_oecd_eurostat.dta", nogen
 ren iso3 iso3_o
 foreach x in oecd eurostat {
 	ren `x'_report `x'_report_out
 	replace `x'_report_out = 0 if missing(`x'_report_out)
 	}
 cross using "Temp/partner_list.dta"
-merge m:1 iso3 using "ProcessedData/reporter_oecd_eurostat.dta", nogen
+merge m:1 iso3 using "processed_data/reporter_oecd_eurostat.dta", nogen
 ren iso3 iso3_d
 foreach x in oecd eurostat {
 	ren `x'_report `x'_report_in
@@ -341,7 +341,7 @@ label var imputed_sales "final imputed sales step b-3"
 label var out_sales_1 "imputed outward sales step b-2"
 label var in_sales_1 "imputed inward sales step b-1"
 
-save "ProcessedData/imputed_sales_time.dta", replace
+save "processed_data/imputed_sales_time.dta", replace
 
 
 /*
@@ -395,7 +395,7 @@ corr temp log_out_sales_extrap log_out_sales
 gen imputed_sales = exp(log_out_sales_extrap)
 replace imputed_sales = exp(temp) if missing(imputed_sales)
 	
-save "ProcessedData/imputed_sales_cross_sec.dta", replace
+save "processed_data/imputed_sales_cross_sec.dta", replace
 
 */
 
