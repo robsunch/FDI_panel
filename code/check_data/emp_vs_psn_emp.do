@@ -36,7 +36,7 @@ foreach x1 in es oecd {
 }
 
 estpost sum diff_*_in_emp_2, detail
-esttab . using "`csvPath'", append cells("mean sd count min p1 p10 p25 p50 p75 p90 p99 max") noobs ///
+esttab . using "`csvPath'", append cells("mean sd count min p1 p5 p10 p25 p50 p75 p90 p95 p99 max") noobs ///
     title("Summary stats for difference of employment and person employed")
     
 log close _all

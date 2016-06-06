@@ -95,7 +95,7 @@ gen diff_in_nonfin = oecd_in4_sales / (oecd_in3_tot_sales - oecd_in3_fin_sales) 
 gen diff_out = oecd_out4_sales / oecd_out3_tot_sales - 1
 
 estpost sum diff* if _merge==3, detail
-esttab . using "`outputPath'", append cells("mean sd count min p1 p10 p25 p50 p75 p90 p99 max") noobs ///
+esttab . using "`outputPath'", append cells("mean sd count min p1 p5 p10 p25 p50 p75 p90 p95 p99 max") noobs ///
 		title("Summary stats for difference of MNE sales between ISIC3 and ISIC4 aggregates")
 */
 

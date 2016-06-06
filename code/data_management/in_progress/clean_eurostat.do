@@ -202,7 +202,7 @@ ren iso2 iso2_o
 
 gen share_out_sales = eurostat_out_sales_nonfin / eurostat_out_sales
 estpost sum share_out_sales, detail
-esttab . using "`outputPath'", append cells("mean sd count min p1 p10 p25 p50 p75 p90 p99 max") noobs ///
+esttab . using "`outputPath'", append cells("mean sd count min p1 p5 p10 p25 p50 p75 p90 p95 p99 max") noobs ///
 		title("Summary stats for nonfinancial outward sales in total sales")
 drop share_out_sales
 ren  eurostat_in_sales eurostat_in_sales_nonfin

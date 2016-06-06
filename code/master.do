@@ -3,7 +3,10 @@
 ****************************************
 clear all
 
-cd "C:/LocalProjects/FDI_panel"
+** global cdDir "C:/LocalProjects/FDI_panel"
+global cdDir "C:/Users/robsunch/Dropbox/Projects/FDI_panel"
+cd $cdDir
+
 !rmdir output /q /s
 
 !mkdir output

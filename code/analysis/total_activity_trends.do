@@ -52,19 +52,19 @@ foreach direc in in out {
     ren iso3_`x' iso3
     merge m:1 iso3 using "processed_data/activity_reporting_OECD_eurostat.dta", nogen
     keep if (report_oecd_`direc'==1 | report_es_`direc'==1)
+       
+    *** use world total reported by countries
     if "`direc'" == "in" {
         drop *out* report_*
         keep if inlist(iso3_`rev_x',"WRX","WRT")
         replace iso3_`rev_x' = "_" + iso3_`rev_x'
         ds iso3_o iso3 year, not
         reshape wide `r(varlist)', i(iso3 year) j(iso3_`rev_x') string
-        des, full
     }
     else {
         keep if inlist(iso3_`rev_x',"WRX")
         keep *out* iso3 iso3_d year
         ren *out* *out*_WRX
-        des, full
     }
     
     merge 1:1 iso3 year using "processed_data/agg_extrap.dta", nogen keep(master match)

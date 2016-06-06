@@ -26,7 +26,6 @@ merge m:1 iso3 using "processed_data/activity_reporting_OECD_eurostat.dta", ///
 ren iso3 iso3_o
 
 *** coverage ***
-/*
 foreach x in in out {
     if "`x'"=="in" {
         local rev_x out
@@ -66,7 +65,6 @@ foreach x in in out {
     restore
 
 }
-*/
 
 *** difference in varibales
 foreach x in n_emp n_ent rev n_psn_emp {
@@ -85,12 +83,11 @@ foreach x in n_emp n_ent rev n_psn_emp {
 }
 
 estpost summarize diff_in_* if report_es_in==1 & report_oecd_in==1, detail
-esttab . using "`csvPath'", append cells("mean sd count min p1 p10 p25 p50 p75 p90 p99 max") noobs ///
+esttab . using "`csvPath'", append cells("mean sd count min p1 p5 p10 p25 p50 p75 p90 p95 p99 max") noobs ///
     title("Summary stats for difference of inward variables between OECD and Eurostat (divide using average)")
 
 drop diff_in_*
 
-** preserve
 foreach x in n_emp n_ent rev n_psn_emp {
     foreach s in oecd es {
         replace `s'_in_`x'_totXfin = . if `s'_in_`x'_totXfin <= 0
@@ -104,13 +101,7 @@ foreach x in n_emp n_ent rev n_psn_emp {
         title("Percentage Differences in inward `x' between OECD and ES > 0.5")
 }
 estpost summarize diff_in_* if report_es_in==1 & report_oecd_in==1, detail
-esttab . using "`csvPath'", append cells("mean sd count min p1 p10 p25 p50 p75 p90 p99 max") noobs ///
+esttab . using "`csvPath'", append cells("mean sd count min p1 p5 p10 p25 p50 p75 p90 p95 p99 max") noobs ///
     title("Summary stats for difference of inward variables between OECD and Eurostat (divide using average) - exclude nonpositive values of either source")
-
-sort iso3_d iso3_o year
-browse iso3_o year es_in_rev* oecd_in_rev* if iso3_d=="HUN"
-** restore
-
-
-    
+   
 log close _all

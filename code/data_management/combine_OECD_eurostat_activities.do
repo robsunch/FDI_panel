@@ -351,6 +351,15 @@ esttab . using "`outputPath'", append main(mean) aux(count) nogap nostar ///
     title("mean (N) growth rates - Germany - after 2007 adjustment")       
 drop gr_* id_pair
   
+estpost tabulate year if iso3_o==iso3_d, elabels missing
+esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
+    title("Cases where home country is the same as host country")
+estpost tabulate iso3_o if iso3_o==iso3_d, elabels missing
+esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
+    title("Cases where home country is the same as host country")
+    
+drop if iso3_o==iso3_d
+  
 compress
 sort iso3_o iso3_d year
 save "processed_data/activity_OECD_eurostat_combined.dta", replace

@@ -224,7 +224,7 @@ file close myfile
 gen share_in_sales = oecd_in_sales_nonfin / oecd_in_sales
 gen share_out_sales = oecd_out_sales_nonfin / oecd_out_sales
 estpost sum share_in_sales share_out_sales, detail
-esttab . using "`outputPath'", append cells("mean sd count min p1 p10 p25 p50 p75 p90 p99 max") noobs ///
+esttab . using "`outputPath'", append cells("mean sd count min p1 p5 p10 p25 p50 p75 p90 p95 p99 max") noobs ///
 		title("Summary stats for nonfinancial sales in total sales")	
 drop share_in_sales share_out_sales
 		

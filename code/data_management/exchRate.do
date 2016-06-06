@@ -6,9 +6,28 @@
 local outputPath = "$tableDir/exchRate.csv"
 capture rm "`outputPath'"
 
-*** EUR to USD exchange rate
-import excel date euroExchRate using "source_data/misc/DEXUSEU.xls", clear cellrange(a15:b30)
-gen year = year(date)
+*** ECU/EUR to USD exchange rate
+insheet using "source_data/misc/ert_bil_eur_a.tsv", clear case tab
+quietly ds v1, not
+foreach x in `r(varlist)' {
+    capture confirm numeric variable `x'
+    if ~_rc {
+        local newName = "euroExchRate" + string(`x'[1])
+    }
+    else {
+        local newName = "euroExchRate" + `x'[1]
+    }
+    ren `x' `newName'
+}
+
+split v1, parse(",")    
+keep if v13=="USD" & v11=="AVG"
+ren v13 currency
+drop v*
+destring euroExchRate*, ignore(":") replace
+reshape long euroExchRate, i(currency) j(year)
+drop currency
+label var euroExchRate "EUR/ECU exchange rate - yearly average"
 tempfile euroExchRate
 save `euroExchRate', replace
 
@@ -81,11 +100,6 @@ label var lcu "Currency (historical for EMU countries)"
 sort iso3 year
 compress
 save "processed_data/exchRate.dta", replace
-
-*** infer the methods of OECD and Eurostat exchange (or conversion) rates
-gen temp = fixedRate / exchRate_wdi 
-gen diff_temp_pwt = temp / exchRate_wdi - 1
-gen diff_temp_oecd = temp / exchRate_oecd - 1
 
 
 
