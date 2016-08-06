@@ -35,9 +35,9 @@ capture mkdir $logDir
 ** do "$codeDir/UNCTAD_clean.do"
 
 ** ** combine different sources
-** do "$codeDir/combine_OECD_es_unctad_flow_stock.do"
-** do "$codeDir/OECD_combine_isic3_isic4.do"
-** do "$codeDir/combine_OECD_eurostat_activities.do"
+do "$codeDir/combine_OECD_es_unctad_flow_stock.do"
+do "$codeDir/OECD_combine_isic3_isic4.do"
+do "$codeDir/combine_OECD_eurostat_activities.do"
 
 ** ** additional aggregate data
 ** do "$codeDir/world_klems.do" // total output data from World Klems

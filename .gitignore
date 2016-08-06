@@ -1,12 +1,5 @@
-## Data Files
-*.dta
-*.mat
-*.xlsx
-*.xls
-*.csv
-
 ## intermediate ouput
-processed_data
+processed_data/
 output/
 
 ## source data

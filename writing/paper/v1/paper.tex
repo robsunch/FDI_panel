@@ -1,0 +1,2833 @@
+%2multibyte Version: 5.50.0.2960 CodePage: 65001
+% define the absolute path for table fragments
+
+\documentclass[notitlepage,11pt]{article}%
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{color}
+\usepackage{geometry}
+\usepackage[onehalfspacing]{setspace}
+\usepackage{hyperref}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{caption}
+\usepackage{tabularx}
+\usepackage{graphicx}%
+\setcounter{MaxMatrixCols}{30}
+%TCIDATA{OutputFilter=latex2.dll}
+%TCIDATA{Version=5.50.0.2960}
+%TCIDATA{Codepage=65001}
+%TCIDATA{CSTFile=aer.cst}
+%TCIDATA{Created=Tuesday, July 23, 2013 22:04:26}
+%TCIDATA{LastRevised=Tuesday, August 02, 2016 09:49:56}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=BibTeX}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Standard LaTeX\Blank - Standard LaTeX Article">}
+%TCIDATA{Language=American English}
+%TCIDATA{ComputeDefs=
+%$\lambda$
+%}
+%BeginMSIPreambleData
+\providecommand{\U}[1]{\protect\rule{.1in}{.1in}}
+%EndMSIPreambleData
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{assumption}{Assumption}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\noindent \textbf{#1.} }{\  \rule{0.5em}{0.5em}}
+\renewcommand{\bibAnnoteFile}[1]{\IfFileExists{#1}{\begin{quotation}\noindent \texts c{Key:} #1\\
+\textsc{Annotation:}\  \input{#1}\end{quotation}}{}}
+\renewcommand{\bibAnnote}[2]{\begin{quotation}\noindent \textsc{Key:} #1\\
+\textsc{Annotation:}\ #2\end{quotation}}
+\newcommand \fnote[1]{\captionsetup{font=small}\caption*{#1}}
+\geometry{left=1.5in,right=1.5in,top=1.5in,bottom=1.5in}
+\RequirePackage{threeparttable}
+\RequirePackage{booktabs}
+\makeatletter
+\def\input@path{{C:/Users/robsunch/Dropbox/Projects/FactorIntensity/Writing/paper/v6/}}
+\makeatother
+\graphicspath{{C:/Users/robsunch/Dropbox/Projects/FactorIntensity/Writing/paper/v6/figures/}}
+\begin{document}
+
+\title{The Factor Bias in Multinational Production and the Labor Share}
+\author{Chang Sun%
+%TCIMACRO{\TeXButton{thanks}{\thanks
+%{I thank Gene Grossman, Oleg Itskhoki, Eduardo Morales, Ezra Oberfield, Steve Redding and Esteban Rossi-Hansberg for helpful discussions.
+%I thank Natalia Ramondo for generously providing her data on multinational production.
+%Financial support from the International Economics Section at Princeton University
+%is greatly appreciated.}}}%
+%BeginExpansion
+\thanks
+{I thank Gene Grossman, Oleg Itskhoki, Eduardo Morales, Ezra Oberfield, Steve Redding and Esteban Rossi-Hansberg for helpful discussions.
+I thank Natalia Ramondo for generously providing her data on multinational production.
+Financial support from the International Economics Section at Princeton University
+is greatly appreciated.}%
+%EndExpansion
+\\\emph{Preliminary and Incomplete}}
+\maketitle
+
+\begin{abstract}
+How does multinational production (MP) affect the distribution of income
+between capital and labor? This paper argues that multinational firms can
+affect the labor shares in the host countries because their affiliates have
+different capital intensity from the local firms. I first document two
+empirical regularities: multinational affiliates' capital intensity is
+positively correlated with their home countries' capital abundance, and large
+firms are more capital intensive. I then incorporate two novel mechanisms into
+an otherwise standard multi-country general equilibrium trade and MP model to
+rationalize the empirical patterns. Calibrating the model to both firm-level
+and aggregate moments of 37 countries, I conduct counterfactual analysis and
+find that in the past decade, the increase in multinational activities leads
+to sizable reduction in the labor shares. The increase in MP activities not
+only explains a large fraction of the average decline in the labor shares, but
+also explains its variation across countries.
+
+\end{abstract}
+
+\section{Introduction}
+
+Multinational firms have been playing an increasingly prominent role in the
+global economy. The ratio of multinational sales to world GDP increased from
+23\% in 1990 to 54\% in 2008 (author's calculation based on numbers in Table
+I.5, \cite{unctad_world_2011}). Policy makers worldwide, especially those in
+developing countries, are interested in attracting more multinational
+production (MP) since multinational firms usually have more advanced
+production technologies and might benefit the host countries in various ways
+(\cite{javorcik_does_2004}, \cite{harrison_trade_2010}). Following this line
+of thinking, the new generation of quantitative models of MP studies its
+implications focusing on the heterogeneity in firm's Hicks-neutral
+productivity (e.g., \cite{arkolakis_innovation_2013},
+\cite{tintelnot_global_2014}). The heterogeneity in factor usage of MP,
+however, has received little attention, in spite of the large heterogeneity
+between multinational firms and local firms in the host country.
+
+To examine the implication of the factor bias of MP on aggregate outcomes
+especially the division of income between capital owners and workers (a.k.a,
+the labor shares), I document two empirical regularities about the
+capital-labor ratio of firms in 22 countries, including multinationals and
+local firms. First, within the same country of production and industry, firms
+originating from capital abundant countries are more capital intensive, which
+I refer to as the "technology origin" effect in this paper. Second, larger
+firms are more capital intensive, which I refer to as the size effect.
+Multinational firms can bring technologies of different factor bias into the
+host countries either because their technologies have different technology
+origins, or because they are larger firms that use more capital-intensive
+production techniques.
+
+Building on the technology origin and size effects, I develop a multi-country
+general equilibrium model of MP and trade where firms are heterogenous not
+only in their sizes but also in their capital-labor ratios. The model
+introduces two novel mechanisms to match the two empirical regularities,
+respectively. To match the technology origin effect, I allow the firm make
+endogenous choices of production techniques from a menu of technologies with
+different capital- and labor-augmenting productivities. To match the
+correlation between firm size and capital intensity, I assume technologies are
+capital-biased, i.e., more productive technologies use relatively more capital
+than labor.\footnote{See \cite{burstein_international_2015} for a similar idea
+applied to firms' skill intensities.} At the same time, the structure of the
+model is rich enough to match aggregate statistics such as the bilateral MP
+and trade shares. Therefore, the model can be disciplined by both firm level
+and aggregate level statistics, and it is well suited to study the impact of
+MP on factor prices and income shares through multinational firms' factor bias.
+
+The model has rich implications for understanding the distributional
+consequences of MP liberalization, both analytically and quantitatively. After
+a reduction in inward MP frictions, the size effect reduces the relative
+demand for labor (thus the equilibrium labor shares) because the increased
+activity of large (multinational) firms shifts the distribution of firms
+towards large and capital-intensive ones. The "technology origin" effect leads
+to a change in the relative demand for labor because multinational firms
+originating from countries with different capital abundance use inherently
+different technology in terms of capital intensity. The technology origin
+effect tends to reduce the labor shares in capital-scarce countries while
+increase the labor shares in capital-abundant ones.
+
+To understand how MP liberalization has impacted the labor shares in recent
+years, I parameterize a 37-country version of the model to exactly match,
+among other moments of the data, the firm-level technology origin effect and
+size effect and aggregate MP and trade shares in 1996-2001. I then perform
+counterfactual analyses to study the effect of a reduction in MP frictions
+such that the MP shares match those in a later period, 2006-2011. Over the
+decade, many countries in my sample, especially the less-developed Eastern
+European countries, saw large increases in inward MP activities. Associated
+with the influx of multinational activities, the average country's labor share
+declined by 1.4 percentage points, which is comparable to the average decline
+of labor shares in the data (1.8 percentage points). At the same time, the
+predicted changes in labor shares also explain the differential pace of labor
+share decline in the data. The predicted and realized values are positively
+correlated, and the predicted values explain about 19\% of the variation in
+the data.
+
+My paper contributes to a large literature on international technology
+diffusion through multinational production. (\cite{ramondo_trade_2013},
+\cite{arkolakis_innovation_2013}, \cite{tintelnot_global_2014}) In these
+papers, technologies are modeled as Hicks-neutral productivities which can be
+used in production locations other than the home country. This paper differs
+from the previous literature by introducing factor bias as an additional
+dimension of the technology. Since multinational technologies have different
+factor bias than the local technologies, MP not only impacts the efficiency of
+production, but also alters the relative demand for factors, thus the income shares.
+
+The technology origin effect in the paper is closely related to the recent
+literature on directed technical change (\cite{acemoglu_patterns_2003};
+\cite{acemoglu_labor-_2003}; \cite{acemoglu_offshoring_2012}) and an earlier
+empirical literature on "inappropriate technology"
+(\cite{mason_observations_1973}, \cite{morley_limited_1977}), which tries to
+test whether multinational firms from advanced countries are using
+"inappropriately" capital-intensive production technologies in the developing
+countries. The key insight from the two literatures is that technologies are
+catered to the factor prices in the country where they are most likely to be
+applied. As a theoretical contribution, I embed the idea of endogenous
+technology choice in a quantitative model of multinational production to
+rationalize the technology origin effect in the data. On the empirical front,
+comparing to the case studies in the 1970s, I use a much better firm level
+dataset and better econometric techniques to provide evidence supporting the
+"inappropriate technology" hypothesis.
+
+The exploration of the size effect, on the other hand, contributes to the
+literature on the implication of factor-biased productivities. In a recent
+paper, \cite{burstein_international_2015} argue that trade liberalization
+leads to an increase in skill-premium because more productive firms are more
+skill intensive and trade reallocate factors towards more productive firms
+within sectors, which they refer to as the "skill-biased productivity"
+mechanism. Though it is well known that larger firms are more capital
+intensive (see \cite{bernard_firms_2007}), previous research has not
+considered the implication of the "capital-biased productivity" mechanism in a
+setting of global firms. I embed this mechanism into a multi-country, general
+equilibrium trade and MP model and quantify its importance in understanding
+the distributional consequences of trade and MP liberalizations.
+
+The counterfactual analyses show MP liberalization is crucial in understanding
+the global decline of labor shares. \cite{karabarbounis_global_2014} document
+a global decline in the labor shares in the past three decades and argue the
+global trend can be explained by the decline in the prices of investment
+goods. However, as \cite{oberfield_micro_2014} point out, mechanisms that work
+solely through factor prices cannot account for the labor share's decline if
+the elasticity of substitution between capital and labor is estimated using
+their more micro-based approach. According to their analysis for US
+manufacturing sector since 1970, the bias of technical change within
+industries has increased and accounts for most of the decline in the labor
+share. My paper can be viewed as a further attempt to understand the technical
+change caused by forces of globalization. The technology origin effect and the
+size effect are both important in understanding the direction of technical
+change in countries hosting a lot of multinational production.
+
+The predictions from the quantitative model are quite different from an old
+literature on capital flows and income distribution (see
+\cite{caves_multinational_2007} for a summary). That literature views MP as a
+reallocation of capital: a net outflow (inflow) of capital can cause a
+relative increase (decline) of capital rewards in the country of study.
+However, as is shown in the paper, the factor bias of multinational firms can
+lead to changes in the labor shares without net flows of capital. This also
+shows the importance of using information on bilateral MP sales rather than
+just the net flow of capital to predict the effect of MP on income distribution.
+
+My paper also contributes to a small but growing literature on firm's
+heterogeneity in input usage. Following the seminal work by Melitz (2003), the
+literature has focused much on firms' heterogeneity in their Hicks-neutral
+productivities. The recent literature has acknowledged firms' heterogeneity in
+other dimensions such as input usage.\footnote{See, for example,
+\cite{crozet_firm-level_2013}, \cite{joaquin_blaum_non-homothetic_2015} and
+\cite{burstein_international_2015}. Meanwhile, a different but related
+literature tries to empirically estimate factor-augmenting productivities
+using techniques developed by \cite{olley_dynamics_1996}. See
+\cite{ulrich_doraszelski_measuring_2015} and
+\cite{hongsong_zhang_non-neutral_2015} for example.} I show that the capital
+intensity of the firm is systematically correlated with its home country's
+capital abundance and its own size. The quantitative model rationalizes both
+empirical regularities and can be used to understand the distributional
+consequences of MP. Of course, multinational firms may differ from domestic
+firms in their relative usage of other inputs, such as skill intensity, which
+my data unfortunately cannot speak to. However, my quantitative framework can
+be used to analyze the impact of MP on the skill premium when data permits.
+
+The remainder of the paper is organized as follows. In Section 2, I document
+two empirical regularities that are consistent with the technology origin
+effect and capital-biased productivity. I develop my model of firms'
+technology choices, trade and MP decisions in the next section. I then
+calibrate the model and perform counterfactual analysis in sections 4 and 5. I
+conclude in Section 6. Proofs and additional results relegated to the appendix.
+
+\section{Empirical Regularities\label{sec:empirical_regularities}}
+
+In this section, I explore the determinants of firm's capital intensity using
+the Orbis database which covers firms, including multinationals, from many
+countries. I document two empirical regularities focusing on firms within a
+narrowly-defined industry. First, firms' capital intensity is positively
+correlated with their home countries' capital abundance, which I refer to as
+the "technology origin effect". Second, large firms are more capital
+intensive, which I refer to as the "size effects".
+
+\subsection{Firm-level Data}
+
+To explore the determinants of firm's capital intensity, I use Orbis, the
+global firm level database maintained by Bureau van Dijk (BvD). The database
+covers balance sheet and income statement information for millions of firms
+all around the world. Moreover, it provides a unique opportunity to examine
+multinational firms' capital intensity since BvD records ownership links
+between firms and identifies the "Global Ultimate Owner" (GUO) of a firm when
+there is sufficient information to construct the "ownership tree" of the firm.
+For the data I downloaded from the database, the majority of the ownership
+links are updated in 2013, and I use the balance sheet data in 2012 for the
+analysis since the 2013 data from many countries had not been collected by BvD
+at the time of my study.
+
+Before any statistical analyses, I clean the data in several steps to (1)
+exclude firms with missing or abnormal values in total assets, employment and
+wage bill (2) exclude multinational affiliates located in or originating from
+tax havens (3) drop host-country-industry cells and home countries with too
+few observations. The detailed steps can be found in the online appendix.
+
+The data cleaning procedures leave me with more than 2.6 million firms from 23
+host and 24 home countries.\footnote{I define the "home" country of a
+multinational affiliate to be the country of its GUO and the home country of a
+firm not belonging to any multinational group to simply be where it operates.}
+I identify a multinational affiliate if the nationality of the firm's GUO is
+different from where the firm operates. Among the 2.6 million firms, about
+60,000 belong to a multinational group while approximately 40,000 are in a
+foreign country. As expected, large and developed countries such as the United
+States and Germany are home to a large number of multinational firms in the
+data. However, the data also covers multinationals from less-developed
+countries such as Romania, Bulgaria and the Czech Republic. Detailed industry
+codes (four-digit NACE Revision 2) allow me to focus on variation within
+narrowly-defined industries. Together with firms operating only domestically,
+the dataset provides a good opportunity to explore the heterogeneity in
+capital intensity, especially that of multinational firms.
+
+\subsection{Technology Origin Effect}
+
+In this subsection I document the technology origin effect: firms originating
+from capital-abundant countries are more capital intensive compared to firms
+from labor-abundant countries, conditional on operating in the same host
+country and industry. The key assumption is within a narrowly-defined
+industry, firms operating in the same country face the same factor prices so
+any residual differences in capital intensity reflect different factor biases
+in their technologies. The idea of comparing firms producing in the same
+country but with different home countries dates back to the "inappropriate
+technology" literature in the 1970s (\cite{mason_observations_1973},
+\cite{morley_limited_1977}). Equipped with a much larger and richer dataset, I
+run the following regression%
+\[
+\log\left(  \frac{K_{f}}{wL_{f}}\right)  =\delta_{s\left(  f\right)  \times
+l\left(  f\right)  }+\beta\log\left(  \frac{K_{i\left(  f\right)  }%
+}{hL_{i\left(  f\right)  }}\right)  +X_{f}+\varepsilon_{f}.
+\]
+
+
+In the above regression, $K_{f}/wL_{f}$ is the capital-labor ratio of firm
+$f$, while $s\left(  f\right)  $, $l\left(  f\right)  $ and $i\left(
+f\right)  $ refer to the sector, host country and home country of the firm,
+respectively. To construct the capital-labor ratio, I use the wage bill
+instead of the number of employees, to control for different worker skills
+across firms. \footnote{For the practice of using the wage bill to measure the
+efficiency units of labor, see, for example, \cite{hsieh_misallocation_2009}.
+As discussed in the calibration section, using wage bill as a measure of labor
+also makes my estimate of the elasticity of substitution between capital and
+labor comparable to that estimated in \cite{oberfield_micro_2014}.} I control
+for the substitution between $K$ and $L$ due to factor prices and the
+differences of technologies across industries using the
+producing-country-industry fixed effects $\delta_{s\left(  f\right)  \times
+l\left(  f\right)  }$.\footnote{In principle, the industry-country specific
+fixed effects also allow industry-country specific factor prices, which is
+assumed away in my quantitative model but allowed in the reduced form
+exercises.} The key independent variable is the ratio of capital stock to
+human capital $K_{i\left(  f\right)  }/hL_{i\left(  f\right)  }$, a measure of
+the firm's home country capital abundance.\footnote{This variable is
+constructed using data on real capital stock, an index of average human
+capital and total employment from Penn World Table 8.0. I adjust the total
+employment by human capital in order to better measure the efficiency units of
+labor in each country, and also try to be consistent with the use of wage bill
+on the left-hand side of the equation. Note that I use wage to adjust labor
+for the dependent variable to account for the heterogeneity in the skill of
+work force across firms within a production country while I adjust for the
+average skill of workers in the home country using the PWT human capital
+measure. I cannot use wage in each country to replace $h$ since factor prices
+can differ across countries due to different factor abundance. In this case,
+it is not proper to think of the factor price to be a good adjustment factor
+for the quality of the factor, which is exactly the case in the parameterized
+model.}%
+
+%TCIMACRO{\TeXButton{tech_origin}{\input{tables/tech_origin.tex}}}%
+%BeginExpansion
+\input{tables/tech_origin.tex}%
+%EndExpansion
+
+
+Table \ref{tab:tech_origin} shows the technology origin effect $\beta$ is
+positive and is of both statistical and economic significance. As is shown in
+the baseline specification of column 1, the elasticity of firms' capital
+intensity with respect to the capital abundance of the home country is 0.244,
+with a standard error of 0.044.\footnote{To address potential correlation of
+the error term among firms from the same home or host country, I cluster the
+standard errors at both the home and host country level.} This means
+conditional on the producing country and industry, a firm originating from US
+is 33\% more capital intensive than a firm originating from Bulgaria, one of
+the least capital abundant countries in my sample.
+
+In columns 2-4, I show the results are not simply driven by selection bias.
+Since more productive firms are more capital intensive
+(\cite{bernard_firms_2007}, also see the "size effect" in the next subsection)
+and there are likely selection into multinational production and into the
+Orbis database, the technology origin effect in column 1 might be
+over-estimated if either (1) the barrier to invest in foreign countries are
+larger for multinational firms from capital-abundant countries so they are a
+more selected group of firms or (2) small firms from capital-abundant
+countries are more likely to be missing in the data. I address this problem by
+controlling for different proxies of firms' size and productivity. Columns 2
+and 3 control for the firm's revenue and material cost per dollar of wage
+bill, respectively. The technology origin effect is approximately the same and
+still significant at 5\% level. In column 4, I focus on subsidiaries of
+multinational firms, including subsidiaries in their home countries. The
+sample consists of mostly large firms and is less likely to subject to
+selection bias caused by the Orbis database. Again, I find the coefficient to
+be positive and its magnitude to be close to the baseline specification in
+column 1.
+
+In columns 5 and 6, I show the results are not driven by the possibility that
+multinational subsidiaries from more capital abundant countries have access to
+cheaper loans. One key assumption of the empirical test is that firms
+producing in the same host country face the same factor prices, or,
+conditional on the host country fixed effect, the factor prices are not
+correlated with home country capital abundance. With the firm-level data at
+hand, I construct a firm-level measure of borrowing rate, defined as 2009-2013
+average of interest paid per dollar of total liability. I also use the
+debt-to-equity ratio as an additional control for the firm's access to
+external financing. Controlling the two firm-level measures of financing costs
+reduces the technology origin effect a little but still leaves the
+coefficients significant and economically meaningful.
+
+The results are robust to alternative definitions of "technology origin"
+countries. In the main specifications, I use the Global Ultimate Owner (GUO)
+to define the home country of a multinational affiliate. In the data, the GUO
+can be at the very top of the "ownership tree" and may not have much direct
+interaction with the affiliate. Alternatively, I can look at controlling
+shareholders\footnote{A controlling shareholder is a shareholder that has the
+majority of shares of the affiliate in a particular layer.} within a certain
+number of layers and also require the shareholders to be in the same industry
+as the affiliates. The results can be found in \ref{tab:alter_tech_origin}%
+\ and are largely unchanged.
+
+In Table \ref{tab:tech_origin_by_ind}, I perform the regression in Column (4)
+of Table \ref{tab:tech_origin} for each industry separately. Clearly, there is
+heterogeneity across industries but the majority of the coefficients are
+positive. For the largest two industries, manufacturing and wholesale/retail,
+the technology origin effects are estimated to be positive and significant.
+The results for wholesale/retail sector also suggests that the technology
+origin effect is not only driven by quality specialization (firms from rich
+countries produce higher quality goods thus are more capital intensive) since
+\cite{nir_jaimovich_trading_2015} recently show that labor intensity, if
+anything, is positively correlated with service quality in the retail industry.%
+
+%TCIMACRO{\TeXButton{tech_origin_by_ind}{\input{tables/tech_origin_by_ind.tex}%
+%}}%
+%BeginExpansion
+\input{tables/tech_origin_by_ind.tex}%
+%EndExpansion
+
+
+To summarize, firm-level evidence reveals that firms from capital abundant
+countries are more capital-intensive thus the "technology origin" of the firm
+is an important determinant of firm's capital intensity. This pattern is
+clearly missing in models with only heterogeneity in the Hicks-neutral
+productivities but it is consistent with the old literature of "inappropriate
+technology".(\cite{mason_observations_1973}, \cite{morley_limited_1977}) As
+discussed in section \ref{sec:model}, a natural explanation is that firms
+develop technologies that are more "appropriate" domestically since in
+expectation they produce most of the goods there. \ 
+
+\subsection{Size Effect}
+
+The second empirical regularity reveals a positive correlation between firm's
+size and capital-labor ratio. I estimate the elasticity of firm's
+capital-labor ratio with respect to its size, measured by revenue. I use
+revenue as a measure of firm size because measures such as total assets and
+labor are used to calculate the left-hand variable and measurement errors can
+cause mechanical correlations. The previous section reveals that the
+technology origin plays a crucial role in determining the capital-labor ratio,
+so in Table \ref{tab:rev_coef} I control for home country fixed effect when
+estimating the elasticity whenever possible. In all regressions, I also
+include host-country-industry fixed effects to control for capital intensity
+differences induced by factor price differences across countries and
+technology differences between sectors. In practice, I control for the
+interaction of the two sets of fixed effects to isolate the size effect within
+a host-country, home-country and industry cell.
+
+Column 1-3 in Table \ref{tab:rev_coef} estimate the elasticity for
+non-multinational firms, multinational firms and all firms, respectively.
+Since the sample in Column 1 only contains local firms, their home and host
+countries are the same so I only control for country-industry fixed effects.
+Despite the differences in the samples, all three regressions give similar
+estimates. The elasticity of firm's capital-labor ratio with respect to its
+size is between 0.05 and 0.07, indicating that larger firms are using more
+capital-intensive production techniques.%
+
+%TCIMACRO{\TeXButton{rev_coef}{\input{tables/rev_coef.tex}}}%
+%BeginExpansion
+\input{tables/rev_coef.tex}%
+%EndExpansion
+
+
+Table \ref{tab:rev_coef_by_ind} shows the corresponding estimates by sectors
+where sectors are defined similarly as in Table \ref{tab:tech_origin_by_ind}.
+The elasticity is clearly heterogeneous across industries. However, the
+estimates are typically between 0.01 and 0.1. In the calibration, I pick the
+number estimated using the subsample of multinational firms, which is a
+central value in the range of industry-specific estimates.%
+
+%TCIMACRO{\TeXButton{rev_coef_by_ind}{\input{tables/rev_coef_by_ind.tex}}}%
+%BeginExpansion
+\input{tables/rev_coef_by_ind.tex}%
+%EndExpansion
+
+
+\section{Model\label{sec:model}}
+
+In this section, I introduce two novel mechanisms into an otherwise standard
+multi-country general equilibrium MP and trade model
+(\cite{arkolakis_innovation_2013}, henceforth ARRY) to rationalize the two
+empirical regularities. The first mechanism allows firms to choose a pair of
+capital- and labor-augmenting productivity endogenously before they make MP
+decisions, which induces them to cater their technology to domestic factor
+prices. The second mechanism is a form of technology-capital complementarity.
+I assume the capital- and labor-augmenting productivities increase at
+different paces with the overall efficiency of the firm such that more
+advanced technologies are more capital intensive in the fashion of Burstein
+and Vogel (2015). I refer to the second mechanism as "capital-biased
+productivity" (CBP henceforth). Though the general model with CBP delivers no
+analytical gravity equations, the special case without CBP generates similar
+expressions for trade and MP shares as in ARRY despite the new mechanism of
+endogenous technology choice. This allows me to highlight the technology
+origin effect and characterize and the impact of multinational production in a
+two-region (North and South) special case.
+
+\subsection{Environment}
+
+There are $N$ countries and each country $i$ is endowed with two factors of
+production, capital $K_{i}$ and labor $L_{i}$. There is only one sector with a
+continuum of firms, each producing a different variety and engaging in
+monopolistic competition. Consumers have CES preferences so demand for a
+particular variety available in country $i$ is%
+\[
+q\left(  \omega\right)  =\frac{X_{i}}{P_{i}^{1-\sigma}}p\left(  \omega\right)
+^{-\sigma},\omega\in\Omega_{i},
+\]
+where $X_{i}$ is the total expenditure and $\Omega_{i}$ is the set of
+varieties available in country $i$. The price index $P_{i}$ is%
+\[
+P_{i}=\left(  \int_{\omega\in\Omega_{i}}p_{i}\left(  \omega\right)
+^{1-\sigma}d\omega\right)  ^{1/\left(  1-\sigma\right)  }.
+\]
+
+
+A firm pays an entry cost $F_{ei}$ to headquarter in country $i$. To introduce
+endogenous choice of technology, I assume that at the same time of entry, the
+firm develops a production technique characterized by a pair of capital- and
+labor-augmenting productivities $\left(  a,b\right)  $ from a "technology
+menu". The technology menu is a set $\Theta\equiv\left\{  \left(  a,b\right)
+|\theta\left(  a,b\right)  \leq1\right\}  $ where function $\theta$ is
+strictly increasing and continuously differentiable in $\left(  a,b\right)  $.
+Its frontier captures the trade-off between choosing a technology with high
+capital-augmenting productivity and a technology with high labor-augmenting productivity.
+
+In the quantitative exercises, I use the "CES" technology menu from
+\cite{caselli_world_2006} (also see \cite{oberfield_micro_2014}) where%
+\[
+\theta\left(  a,b\right)  =\left[  a^{1-\eta}+b^{1-\eta}\right]  ^{1/\left(
+1-\eta\right)  }.
+\]
+The parameter $\eta$ governs the shape of the technology frontier thus the
+trade-off between capital- and labor-augmenting productivities. Since both
+factor-augmenting productivities reduce the marginal cost, a firm always
+chooses $\left(  a,b\right)  $ on the technology frontier $\theta\left(
+a,b\right)  =1$. This means a firm has to trade off between technologies with
+high-$a$ or high-$b$. The larger the $\eta$, the less a firm has to sacrifice
+one factor-augmenting productivity for the other. When $\eta\rightarrow
+-\infty$, the trade-off is the strongest and the technology menu collapses to
+a singleton $\left(  a,b\right)  =\left(  1,1\right)  $.
+
+\subsection{The firm's problem}
+
+The timing of a firm's decisions is as follows. First, they pay a fixed cost
+of $F_{ei}$ to headquarter in country $i$ and choose a technique $\left(
+a,b\right)  \in\Theta$. Second, they draw a Hicks-neutral "core productivity"
+from a Pareto distribution%
+\[
+\phi\sim F_{i}\left(  \phi\right)  =1-\left(  \phi/\phi_{\min}\right)  ^{-k}.
+\]
+After $\phi$ is realized, the firm has to decide which market to serve. The
+firm can serve the market by producing in any country and then export to the
+destination country. Regardless of the production location, the firm has to
+pay $F_{n}$ units of marketing costs to access market $n$. Finally, the
+location specific Hicks-neutral productivities $\mathbf{z}=\left(  z_{1}%
+,z_{2},\dots,z_{N}\right)  $ are drawn from independent Frechet
+distributions\footnote{In the online appendix, I consider the case of
+multivariate Frechet distributions where the productivity draws are correlated
+across countries. However, that version of the model is observationally
+equivalent to the version described here. Therefore, given the data we observe
+(MP and trade shares), there is no loss of generality to assume independent
+productivity draws.}%
+\[
+z_{l}\sim\exp\left(  -T_{il}z^{-\theta}\right)  \text{, }l=1,\dots,N\text{,}%
+\]
+and the firm decides from which production country to serve a particular
+market that they have access to.
+
+The structure of the two-tier productivity draws is borrowed from ARRY. It
+allows for rich patterns of MP and trade. To serve a foreign market, a firm
+can either export from the home country, or produce in the destination market
+and sell locally, or produce in a third country and export from there ("bridge
+MP"). Despite the richness of the model, it still generates analytical
+gravity-type of expressions for MP and trade volumes under certain
+assumptions, which are useful for deriving analytical insights in section
+\ref{sec:toe_theory}.
+
+Firm in country $l$ produces using capital and labor according to the CES
+production function%
+\[
+q=\phi z_{l}\left(  \lambda_{k}^{1/\varepsilon}\left(  a\phi^{-\xi/2}K\right)
+^{\frac{\varepsilon-1}{\varepsilon}}+\left(  1-\lambda_{k}\right)
+^{1/\varepsilon}\left(  b\phi^{\xi/2}L\right)  ^{\frac{\varepsilon
+-1}{\varepsilon}}\right)  ^{\frac{\varepsilon}{\varepsilon-1}},\xi\in\left(
+0,2\right)  ,
+\]
+where $\lambda_{k}$ is a parameter to adjust capital share for all firms and
+$\varepsilon$ is the elasticity of substitution between capital and labor. The
+two new mechanisms to generate heterogeneous capital intensity can be seen
+from the capital- and labor-augmenting productivities $a\phi^{-\xi/2}$ and
+$b\phi^{\xi/2}$. First, firms can optimally choose $\left(  a,b\right)  $
+which is the endogenous technology choice mechanism. Second, the "core
+productivity" adjusts these terms differently, with elasticities $-\xi/2$ and
+$\xi/2$, respectively. To further understand these terms, I can rewrite the
+production function and put the core productivity $\phi$ inside the
+parathenses so that the full capita- and labor-augmenting productivities
+become%
+\begin{equation}
+\left(  a\phi^{1-\xi/2},b\phi^{1+\xi/2}\right)  . \label{full_factor_aug_prod}%
+\end{equation}
+Thus, when $\xi\in\left(  0,2\right)  $, both productivities increase with
+$\phi$ but the labor-augmenting productivity increases relatively more.
+Combining with an elasticity $\varepsilon$ below one, which is the case in my
+calibration, firms with higher overall efficiency are more capital intensive
+due to the second mechanism. I refer to it as "capital-biased productivity",
+similar to the "skill-biased productivity" studied in
+\cite{burstein_international_2015}.
+
+The marginal cost to produce one unit of goods in country $l$ becomes%
+\[
+C_{l}\left(  \phi,\mathbf{z},a,b\right)  =\frac{1}{\phi z_{l}}\left(
+\lambda_{k}\left(  \frac{r_{l}}{a\phi^{-\xi/2}}\right)  ^{1-\varepsilon
+}+\left(  1-\lambda_{k}\right)  \left(  \frac{w_{l}}{b\phi^{\xi/2}}\right)
+^{1-\varepsilon}\right)  ^{1/\left(  1-\varepsilon\right)  },
+\]
+which not only depends on the factor-augmenting productivities but also
+depends on the factor prices $\left(  r_{l},w_{l}\right)  $ in the production
+country. To serve market $n$ from country $l$, the firm also incurs iceberg
+trade and MP costs%
+\[
+C_{iln}\left(  \phi,\mathbf{z},a,b\right)  =\gamma_{il}C_{l}\left(
+\phi,\mathbf{z},a,b\right)  \tau_{ln},
+\]
+where $\gamma_{il}$ and $\tau_{ln}$ are iceberg MP and trade costs that
+captures the friction in MP and trade, respectively. When a technology
+originating from country $i$ is applied in a foreign country $l$, it becomes
+less efficient and its marginal cost is scaled by $\gamma_{il}$. It is a
+convenient way to capture various impediments that multinationals
+face.\footnote{Many quantitative MP models adopt the iceburg MP costs. See
+\cite{arkolakis_innovation_2013}, \cite{ramondo_trade_2013} and
+\cite{tintelnot_global_2014}.} In the calibration, I discipline all the
+bilateral costs with data on MP and trade.
+
+The firm's problem can be summarized into three stages
+
+\begin{enumerate}
+\item Entry and technology choice $\left(  a,b\right)  ;$
+
+\item The core productivity $\phi$ is realized and the firm decides which
+markets to serve by paying the marketing costs;
+
+\item The country specific productivities $z$ is realized and firm decide
+where to produce and how to serve each market.
+\end{enumerate}
+
+The firm's problem can be solved backwards from the last stage. Given
+technology choice $\left(  a,b\right)  $ and the set of markets that it has
+access to, the firm chooses the country with the lowest cost of production%
+\[
+l=\arg\min_{m}C_{imn}\left(  \phi,\mathbf{z},a,b\right)  .
+\]
+Using the property of Frechet distribution, one can integrate over the
+distribution of $z$ and obtain the the expected operating profit from market
+$n$ at the second stage%
+\[
+\pi_{i\cdot n}\left(  \phi,a,b\right)  =\frac{\tilde{\sigma}^{1-\sigma}X_{n}%
+}{\sigma P_{n}^{1-\sigma}}\Gamma\left(  \frac{\theta-\sigma+1}{\theta}\right)
+\phi^{\sigma-1}\Psi_{in}\left(  \phi,a,b\right)  ^{\frac{\sigma-1}{\theta}}%
+\]
+where $\tilde{\sigma}\equiv\sigma/\left(  \sigma-1\right)  $, $\Gamma\left(
+\cdot\right)  $ is the gamma function, $X_{n}$ is the total absorption in
+market $n$, and $\Psi_{in}\left(  \phi,a,b\right)  $ is a term that summarizes
+the profitability of market $n$ (for detailed derivations, see the online
+appendix). Specifically,
+\[
+\Psi_{in}\left(  \phi,a,b\right)  \equiv\sum_{l}T_{il}\zeta_{iln}\left(
+\phi,a,b\right)  ^{-\theta},
+\]
+where I define $\xi_{iln}\left(  \phi,a,b\right)  \equiv C_{l}\left(
+\phi,\mathbf{z},a,b\right)  \phi z_{l}$ as the marginal cost normalized by
+core productivity $\phi$ and country-specific productivity $z_{l}$, which
+depends on the marginal cost of combined factors and trade and MP frictions.
+Therefore, the profitability term $\Psi_{in}$ summarizes how (1) the
+innovation capacity $T_{il}$ (2) input costs in all potential production
+locations and (3) MP and trade frictions govern the expected profit in a
+destination market at the second stage.
+
+In the second stage, the firm chooses the markets that it will serve. Given
+the expected operating profit in the last stage, a firm enters market $n$ if
+and only if the expected profit from that market is larger than the $F$ units
+of marketing costs, paid using the composite good available in the destination
+market $n$%
+\[
+\pi_{i\cdot n}\left(  \phi,a,b\right)  \geq P_{n}F.
+\]
+
+
+Under the assumption $\xi<2$, a higher core productivity $\phi$ implies both
+higher capital- and labor-augmenting productivity thus lower marginal costs in
+all countries (see expressions \ref{full_factor_aug_prod}). Thus, we have the
+following lemma
+
+\begin{lemma}
+There exists a unique cutoff $\phi_{in}^{\ast}\geq\phi_{\min}$ such that for
+$\phi\geq\phi_{in}^{\ast}$ the firm enters market $n$ and it does not if
+$\phi<\phi_{in}^{\ast}$.
+\end{lemma}
+
+Unlike \cite{arkolakis_innovation_2013}, however, there is no closed-form
+expression for $\phi_{in}^{\ast}$ since $\phi$ affects the marginal cost not
+only through the overall efficiency but also through the factor bias. When I
+shut down the capital-biased productivity mechanism and set $\xi=0$, I recover
+closed-form expression for $\phi_{in}^{\ast}$ and thus other aggregate
+variables such as the trade and MP shares.
+
+In the first stage, the firm chooses the optimal technology $\left(
+a,b\right)  $ by maximizing the expected global profit%
+\[
+E_{\phi}\left[  \pi_{i}\left(  \phi,a,b\right)  \right]  \equiv E_{\phi
+}\left[  \sum_{n}S_{in}\left(  \phi\right)  \left(  \pi_{i\cdot n}\left(
+\phi,a,b\right)  -P_{n}F\right)  \right]
+\]
+where $S_{in}\left(  \phi\right)  $ indicates whether the firm decides to
+serve market $n$ in the second stage%
+\[
+S_{in}\left(  \phi\right)  \equiv\mathbf{1}\left[  \pi_{i\cdot n}\left(
+\phi,a,b\right)  \geq P_{n}F\right]  .
+\]
+It is clear that all firms from the same home country will face the same
+technology choice problem in the first stage. In equilibrium the optimal
+technology is home-country specific $\left(  a_{i},b_{i}\right)  $, which
+determines the technology origin effects. This result comes from the timing
+assumption that firms choose $\left(  a,b\right)  $ before any productivity
+shocks are realized. It is the simplest way to allow firms to choose
+technology endogenously since the only information that the firm has when
+choosing $\left(  a,b\right)  $ is the location of its headquarter $i$.
+However, together with additional structure on the MP costs, it can help to
+match the technology origin effect as I observe in the data.
+
+\subsection{Aggregation and equilibrium}
+
+In this subsection, I derive expressions for aggregate variables and define
+the general equilibrium of the model. The expressions are useful for the
+calibration and those in a special case without the CBP mechanism ($\xi=0$)
+can be used to study the technology origin effect analytically.
+
+Similar to Burstein and Vogel (2015), there is no analytical gravity equation
+due to the capital-biased productivity in this model (this can be seen from
+the zero cutoff profit condition). Aggregate variables can only be expressed
+in terms of integrations of firm level variables over the distribution of core
+productivity $\phi$. Conditional on $\phi$ and the firm entering market $n$,
+the probability that country $l$ becomes the lowest cost production location
+is (see Appendix A for derivation)%
+\[
+\psi_{iln}\left(  \phi,a,b\right)  \equiv\frac{T_{il}\zeta_{iln}\left(
+\phi,a,b\right)  ^{-\theta}}{\sum_{m}T_{im}\zeta_{imn}\left(  \phi,a,b\right)
+^{-\theta}},
+\]
+and the expected sales from country $l$ to $n$ by affiliates owned by country
+$i$ firms%
+\[
+X_{iln}\left(  \phi\right)  =\sigma\psi_{iln}\left(  \phi\right)  \pi_{i\cdot
+n}\left(  \phi\right)  .
+\]
+
+
+The aggregate sales is an integration over all firms headquartered in country
+$i$%
+\[
+X_{iln}=M_{i}\int S_{in}\left(  \phi\right)  X_{iln}\left(  \phi\right)
+dF_{i}\left(  \phi\right)  .
+\]
+I define trade shares as the ratio of goods produced in country $l$ sold to
+market $n$ by firms headquartered all around the world to the total absorption
+in country $n$%
+\[
+\lambda_{ln}^{T}=\frac{\sum_{i}X_{iln}}{\sum_{i,l}X_{iln}}.
+\]
+And the MP shares as the share of output produced in country $l$ by firms
+headquartered in country $i$ in the total output of country $l$%
+\[
+\lambda_{il}^{M}=\sum_{n}X_{iln}/Y_{l},
+\]
+where $Y_{l}\equiv\sum_{i,n}X_{iln}$ is the total output.
+
+Consumers in market $n$ can purchase goods produced by firms from all
+different origins thus the price index is%
+\begin{equation}
+P_{n}^{1-\sigma}=\tilde{\sigma}^{1-\sigma}\Gamma\left(  \frac{\theta-\sigma
++1}{\theta}\right)  \sum_{i}M_{i}\int S_{in}\left(  \phi\right)  \phi
+^{\sigma-1}\Psi_{in}\left(  \phi\right)  ^{\frac{\sigma-1}{\theta}}%
+dF_{i}\left(  \phi\right)  . \label{price_index}%
+\end{equation}
+
+
+\textbf{General} \textbf{Equilibrium} An equilibrium of the model is a vector
+of $\left\{  \left(  a_{i},b_{i}\right)  ,r_{i},w_{i},P_{i},X_{i}%
+,M_{i}\right\}  $ such that
+
+\begin{enumerate}
+\item Firms choose optimal technologies to maximize global expected profit%
+\[
+\left(  a_{i},b_{i}\right)  =\arg\max_{\left(  a,b\right)  \in\Theta}E_{\phi
+}\left[  \pi_{i}\left(  \phi,a,b\right)  \right]
+\]
+
+
+\item Net profit is non-positive due to free entry%
+\[
+E_{\phi}\left[  \pi_{i}\left(  \phi,a,b\right)  \right]  -P_{i}F_{ei}\leq0
+\]
+and $E_{\phi}\left[  \pi_{i}\left(  \phi,a,b\right)  \right]  -P_{i}F_{ei}=0$
+when $M_{i}>0$.
+
+\item Capital and labor markets clear%
+\begin{align*}
+K_{i}  &  =\frac{1}{\tilde{\sigma}}\sum_{j,n}M_{j}\int S_{jn}\left(
+\phi\right)  X_{jin}\left(  \phi\right)  \frac{\kappa_{ji}\left(  \phi\right)
+}{r_{i}}dF_{j}\left(  \phi\right) \\
+L_{i}  &  =\frac{1}{\tilde{\sigma}}\sum_{j,n}M_{j}\int S_{jn}\left(
+\phi\right)  X_{jin}\left(  \phi\right)  \frac{1-\kappa_{ji}\left(
+\phi\right)  }{w_{i}}dF_{j}\left(  \phi\right)
+\end{align*}
+where $\kappa_{ji}\left(  \phi\right)  $ is the capital share of firms
+producing in $i$ from country $j$%
+\[
+\kappa_{ji}\left(  \phi\right)  =\frac{\frac{\lambda_{k}}{1-\lambda_{k}%
+}\left(  \frac{a_{i}}{b_{i}}\right)  ^{\varepsilon-1}\left(  \frac{r_{l}%
+}{w_{l}}\right)  ^{1-\varepsilon}\phi^{\xi\left(  1-\varepsilon\right)  }%
+}{\frac{\lambda_{k}}{1-\lambda_{k}}\left(  \frac{a_{i}}{b_{i}}\right)
+^{\varepsilon-1}\left(  \frac{r_{l}}{w_{l}}\right)  ^{1-\varepsilon}\phi
+^{\xi\left(  1-\varepsilon\right)  }+1}.
+\]
+
+
+\item Goods market clear%
+\[
+X_{i}+\Delta_{i}=r_{i}K_{i}+w_{i}L_{i}+P_{i}\sum_{j}M_{j}F_{ji}E_{\phi}\left(
+S_{ji}\left(  \phi\right)  \right)  +M_{i}P_{i}F_{ei}%
+\]
+where $\Delta_{i}$ is the exogenous current account surplus which I allow in
+the quantitative exercise.
+
+\item Price index satisfies equation (\ref{price_index}).
+\end{enumerate}
+
+\subsection{Determinants of capital intensity}
+
+The model has rich implications for firm's capital intensity. Consider an
+affiliate producing in country $l$ from country $i$. Solving the optimal input
+usage problem I obtain%
+\[
+\frac{K_{il}\left(  \phi\right)  }{L_{il}\left(  \phi\right)  }=\frac
+{\lambda_{k}}{1-\lambda_{k}}\left(  \frac{a_{i}}{b_{i}}\right)  ^{\varepsilon
+-1}\phi^{\xi\left(  1-\varepsilon\right)  }\left(  \frac{r_{l}}{w_{l}}\right)
+^{-\varepsilon}.
+\]
+Thus, a firm's capital intensity can be decomposed into the technology origin
+effect $\left(  a_{i}/b_{i}\right)  ^{\varepsilon-1}$, a firm productivity
+effect $\phi^{\xi\left(  1-\varepsilon\right)  }$ and the usual factor price
+effect $\left(  r_{l}/w_{l}\right)  ^{-\varepsilon}$. One can view the choice
+of $\left(  a_{i},b_{i}\right)  $ as the \emph{extensive substitution} between
+capital and labor since the firm would respond to factor prices by optimizing
+its technology choice in the first stage. Correspondingly, I call the usual
+factor price effect $\left(  r_{l}/w_{l}\right)  ^{-\varepsilon}$ the
+\emph{intensive substitution }since firms can adjust its capital intensity
+after the technology $\left(  a_{i},b_{i}\right)  $ is chosen (see Oberfield
+and Raval (2014)).
+
+It is also clear from this equation that multinational firm data is crucial
+for the identification of the intensive and extensive substitution. If we only
+have local firms in multiple countries, the home and production countries are
+always identical for each firm, and thus it is impossible to separately
+identify the two margins of substitution. In this situation, the differences
+in factor prices $\left(  r_{i},w_{i}\right)  $ leads firms to choose
+different capital-labor ratio both because of the intensive substitution term
+and its impact on the ex-ante technology choice $\left(  a_{i},b_{i}\right)
+$. However, when we have data on multinational firms, it is possible to
+separate the two margins because the dataset contains firms with $i\neq l$.
+
+\subsection{Technology origin effect \label{sec:toe_theory}}
+
+Under simplifying assumptions, I obtain sharper analytical results about the
+technology origin effect. To highlight this mechanism, I assume there is no
+capital-biased productivity in this subsection, i.e., $\xi=0$. Thus, there is
+no heterogeneity in capital intensity between firms due to different $\phi$.
+In this case, the only difference between my model and ARRY is that there are
+two factors in my model and the firm can also choose $\left(  a,b\right)  $ ex
+ante. Thus I restore all expressions for aggregate variables in ARRY (see the
+online appendix). However, even with this assumption, the equilibrium in this
+multi-country model is still hard to characterize. To obtain sharper
+analytical results, I make the following additional assumptions
+
+\begin{enumerate}
+\item The world consists of two regions, North and South. Each region has a
+number of symmetric countries. All Northern countries have endowments $\left(
+K_{N},L_{N}\right)  $ while the endowments of the Southern countries are
+$\left(  K_{S},L_{S}\right)  $. The North is more capital abundant
+$K_{N}/L_{N}>K_{S}/L_{S}.$
+
+\item Entry costs $F_{ei}$ and market access costs $F_{i}$ are the same within
+each region.
+
+\item MP and trade costs are symmetric%
+\begin{align*}
+\gamma_{ii}  &  =1,\gamma_{il}=\gamma>1\text{ for }i\neq l,\\
+\tau_{ll}  &  =1,\tau_{ln}=\tau>1\text{ for }l\neq n.
+\end{align*}
+
+
+\item Trade balances $\Delta_{i}$ are the same within each region.
+
+\item The intensive and extensive elasticities of substitution satisfy the
+restriction $\varepsilon+\eta<2$.
+\end{enumerate}
+
+The last assumption ensures that the extensive substitution force is not too
+strong for the firm to produce with only one input. Values of $\varepsilon$
+and $\eta$ in my calibration satisfy this restriction and the sum is way below 2.
+
+Under these additional assumptions, the model predicts a technology origin
+effect - firms from the North choose a technology $\left(  a_{N},b_{N}\right)
+$ that is more capital intensive than the Southern technology $\left(
+a_{S},b_{S}\right)  $. The intuition comes from the fact that bilateral MP
+costs are greater than one. It implies that production in other countries is
+less efficient than that in the home country. Therefore, when choosing optimal
+technology, firms give more weight to the expected revenue obtained from
+producing in the home market. Firms originating in capital-abundant countries
+will choose a more capital-intensive technology and vice versa for firms from
+labor-abundant countries. The result resonates with the market size effect in
+\cite{acemoglu_patterns_2003}, but is derived in a model of multinational
+production where the barriers to MP play a crucial role.
+
+With these simplifying assumptions, the following proposition characterizes
+the partial equilibrium technology origin effect given factor prices:
+
+\begin{proposition}
+[Technology Origin Effect]\label{prop1} Assume foreign trade and MP costs
+satisfy $\gamma\geq\tau>1$ or $\tau=\infty,\gamma>1$;
+
+Then in a symmetric equilibrium (all equilibrium objects are the same within
+each region)
+
+\begin{enumerate}
+\item the North has relatively cheap capital $r_{N}/w_{N}<r_{S}/w_{S}$
+
+\item an optimal technology chosen by a Northern firm $\left(  a_{N}%
+,b_{N}\right)  $ must be more capital-intensive than one chosen by a Southern
+firm $\left(  a_{S},b_{S}\right)  $%
+\[
+\frac{K\left(  r_{l},w_{l};a_{N},b_{N}\right)  }{L\left(  r_{l},w_{l}%
+;a_{N},b_{N}\right)  }\geq\frac{K\left(  r_{l},w_{l};a_{S},b_{S}\right)
+}{L\left(  r_{l},w_{l};a_{S},b_{S}\right)  }.
+\]
+In terms of the factor augmenting productivities, $a_{N}/b_{N}\leq a_{S}%
+/b_{S}$ when capital and labor are complements ($\varepsilon<1$) and
+$a_{N}/b_{N}\geq a_{S}/b_{S}$ when capital and labor are substitutes
+($\varepsilon>1$).
+
+\item Northern firms enjoy a cost advantage in the North while Southern firms
+enjoy a cost advantage in the South%
+\begin{align*}
+C\left(  r_{N},w_{N};a_{N},b_{N}\right)   &  \leq C\left(  r_{N},w_{N}%
+;a_{S},b_{S}\right)  ,\\
+C\left(  r_{S},w_{S};a_{S},b_{S}\right)   &  \leq C\left(  r_{S},w_{S}%
+;a_{N},b_{N}\right)  .
+\end{align*}
+
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+See appendix.
+\end{proof}
+
+The model also provides a supply-side explanation for the fact that firms
+invest relatively more in countries with income levels similar to their home
+country (\cite{fajgelbaum_linder_2014}). When $\xi=0$, the normalized marginal
+cost $\zeta_{iln}\left(  \phi,a_{i},b_{i}\right)  $ no longer depends on
+$\phi$ and can be written as%
+\[
+\xi_{iln}\left(  a_{i},b_{i}\right)  =\gamma_{il}C_{l}\left(  a_{i}%
+,b_{i}\right)  \tau_{ln}\text{.}%
+\]
+Similar to the iceberg MP cost $\gamma_{il}$, the middle term $C_{l}\left(
+a_{i},b_{i}\right)  $ is also home-host country specific. Though the exogenous
+MP costs $\gamma_{il}$ are symmetric (same for within-region MP and
+cross-region MP), the endogenous choice of $\left(  a_{i},b_{i}\right)  $
+leads to differences in $C_{l}\left(  a_{i},b_{i}\right)  $ for within-region
+MP and cross-region MP because of the mismatch between technologies and factor
+prices between the two regions. This creates an endogenous barrier of MP
+between the North and the South, which provides a supply-side explanation for
+the fact that there is relatively more investment between countries with
+similar level of development (\cite{fajgelbaum_linder_2014}).
+
+Part 1 of the proposition establishes that the scarce factor is indeed more
+expensive, which is consistent with the prediction from a one-sector,
+two-factor, closed-economy model, despite the complication of technology
+choice, trade and MP. The intuition of the result can be illustrated as
+follows. Suppose the South has a relatively lower capital rental rate. Then
+Southern firms will adopt a relatively capital-intensive technology according
+to Lemma \ref{prop1}. Moreover, since firms do not incur the MP cost at home,
+there are relatively more Southern firms operating in the South. These two
+results establish that, at the extensive margins (choices of technology and
+location of production), relative demand for capital is higher in the South.
+The intensive substitution further strengthens the relative demand for capital
+in the South. This, however, contradicts the factor market clearing conditions.
+
+What is the impact of MP in a world where firms develop technologies that
+cater to domestic prices as in \ref{prop1}? The following proposition states
+that the relative prices $r/w$ diverge after MP liberalization under
+additional assumption.
+
+\begin{proposition}
+\label{prop3}Assume
+
+\begin{enumerate}
+\item trade is frictionless $\tau=1$,
+
+\item the restriction $\varepsilon<k/\left(  1-\rho\right)  +1$ is satisfied
+
+\item optimal technology choice is unique
+\end{enumerate}
+
+Then if MP becomes frictionless (from $\gamma>1$ to $\gamma=1$), the relative
+factor prices $r/w$ in the two regions will diverge.
+\end{proposition}
+
+\begin{proof}
+See appendix.
+\end{proof}
+
+The intuition for the proposition comes from the fact that the "total
+elasticity" of substitution is a combination of the extensive and the
+intensive\ elasticities of substitution. The liberalization in MP eliminates
+the home-market effect in technology choice, and all firms adopt the same
+technology. The extensive substitution no longer adjusts factor prices. When
+the "total" elasticity of substitution drops, to make the factor markets clear
+in both regions, the relative factor prices have to diverge.
+
+The results on factor prices contrast with those in \cite{helpman_simple_1984}
+which predict that multinational activities lead to an expansion of the factor
+price equalization (FPE) set and thus can make the relative factor prices
+converge. The \cite{helpman_simple_1984} model focuses on vertical FDI and the
+separation of production and headquarter services adds another "sector" into
+the economy. This causes the expansion of the FPE set since now the country
+rich in capital can substitute into the most capital-intensive sector -
+headquarter services. My model studies horizontal FDI only and the possibility
+that firms tailor their technology to their global investment opportunities
+leads technology to diverge when there are barriers to MP. Thus, compared to
+the case where MP is frictionless, the "total elasticity" is larger in the
+frictional world and the required factor prices to clear the factor markets
+are less different across regions.
+
+\section{Calibration}
+
+To understand the quantitative importance of the technology origin effect and
+capital-biased productivities, I calibrate the model to match both firm-level
+and 1996-2001 aggregate data for 37 countries including both developed and
+developing countries, which represent 91\% of world GDP, 95\% of world inward
+FDI stocks and 99\% of world outward FDI stocks in my data source.
+
+I estimate the technology origin effect and the firm size effect on firms'
+capital intensity to discipline the shape of the technology menu $\eta$ and
+the capital-biased productivity parameter $\xi$. The model also suggests a
+firm-level regression for estimating the usual elasticity of (intensive)
+substitution $\varepsilon$. I target the other parameters of the model (trade
+costs and MP costs) to aggregate moments so that the trade and MP shares are
+perfectly matched. Since the calibration involves firm-level statistics
+(regression coefficients) which cannot be obtained using numerical
+integration, I use simulated method of moments to calibrate the model. I then
+discuss the model's fit in terms of additional statistics that I do not
+target, with a focus on the factor prices since they are also the main outcome
+variables I examine in the counterfactuals.
+
+\subsection{Parameters calibrated without solving the model}
+
+Two of the parameters are calibrated without solving the model. For the demand
+elasticity $\sigma$, I simply follow ARRY and calibrate the demand elasticity
+$\sigma$ to be 4, which is a common value in the literature (see also
+\cite{bernard_plants_2003}). For the elasticity of substitution in the CES
+production function, I directly estimate it from the structural equation of
+firm's relative demand for capital and labor%
+\[
+\frac{K_{f}}{L_{f}}=\phi^{\left(  1-\varepsilon\right)  \xi}\left(
+\frac{a_{i}}{b_{i}}\right)  ^{\varepsilon-1}\left(  \frac{r_{l}}{w_{l}%
+}\right)  ^{-\varepsilon},
+\]
+where $f$ is an affiliate, and $i$ and $l$ denote the home and host countries
+as before. According to the model, both the core productivity $\phi$ and the
+endogenous choice of technology $\left(  a_{i},b_{i}\right)  $ are specific to
+a parent firm. Therefore I can control these unobservables with a parent firm
+fixed effect. The extent to which the affiliates adjust their capital-labor
+ratio across production locations $l$ is then informative about the intensive
+substitution $\varepsilon$.
+
+In practice, I follow \cite{oberfield_micro_2014} and run the following
+regression for multinational affiliates%
+\[
+\log\left(  \frac{r_{l\left(  f\right)  }K_{f}}{wL_{f}}\right)  =\left(
+1-\varepsilon\right)  \log\left(  \frac{r_{l\left(  f\right)  }}{w_{l\left(
+f\right)  }}\right)  +\delta_{g\left(  f\right)  \times s\left(  f\right)
+}+u_{f}\text{,}%
+\]
+where $l\left(  f\right)  ,g\left(  f\right)  $ and $s\left(  f\right)  $
+denote the host country, parent firm and industry of an affiliate. There are
+several differences between the estimation equation and the structural
+equation implied by the model. First, the model abstracts from multiple
+industries so here I add industry fixed effects to control for technology
+differences across industries. Second, I use the total wage bill reported by
+the affiliate $wL_{f}$ instead of multiplying country-level average wage
+$w_{l}$ with the number of employees of the affiliate $L_{f}$ to control for
+worker skill differences across affiliates. Finally, since the host-country
+rental rate (backed out using the labor share data from
+\cite{karabarbounis_global_2014}) appears both on the left- and right-hand
+side of the equation, I instrument $\log\left(  r_{l\left(  f\right)
+}/w_{l\left(  f\right)  }\right)  $ with endowment $\log\left(  K_{l\left(
+f\right)  }/L_{l\left(  f\right)  }\right)  $ to avoid mechanical correlation
+caused by measurement error in $r_{l\left(  f\right)  }$.
+
+Another issue with this regression is that the data lacks a measure of real
+capital stock $K_{f}$. I construct a host-country-specific asset deflator and
+then deflate firms' total assets using the deflator. The asset deflator
+assumes the firm's capital stock has been growing at a constant rate (same as
+that of the national aggregate capital stock) for a 10-year period. Together
+with a constant growth rate of investment prices and deflation rate, I can
+derive an expression for the asset deflator (see the appendix for detailed
+derivation and data used in each component). I also experiment with different
+assumptions on firms' ages and the estimated elasticity does not vary much
+(see Table \ref{tab:elas_int}). My preferred IV estimate is%
+\[
+\widehat{\log\left(  \frac{r_{l\left(  f\right)  }K_{f}}{wL_{f}}\right)
+}=\underset{\underset{\left(  0.108\right)  }{0.453}}{\left(
+\widehat{1-\varepsilon}\right)  }\log\left(  \frac{r_{l\left(  f\right)  }%
+}{w_{l\left(  f\right)  }}\right)  +\delta_{g\left(  f\right)  \times s\left(
+f\right)  },
+\]
+which suggests the intensive elasticity of substitution is 0.547 with a
+standard error 0.108. The first stage is strong with an F statistic 80.2. The
+estimate is well in line with those in Oberfield and Raval (2014) who use a
+similar cross-sectional approach to identify $\varepsilon$.
+
+\subsection{Parameters calibrated to match endogenous outcomes from the model}
+
+All the other parameters of the model, $\gamma_{il}$, $\tau_{ln}$, $k$,
+$\theta$, $\eta$, $\xi$, $\lambda_{k}$ are calibrated to match endogenous
+outcomes from the model, which I describe in the rest of this subsection. The
+location parameter of the Frechet distribution $T_{il}$ cannot be separately
+identified from the iceberg MP costs using the moments I target so I normalize
+$T_{il}$ to 1 for all $i$ and $l$. I also normalize the lower bound of the
+core productivity $\phi_{\min}$ and the marketing costs $F$ to 1. The entry
+costs $F_{ei}$ affects the mass of firms in each country, which does not have
+any clear empirical counterparts. Together with the normalization of $F$,
+$F_{ei}$ will determine the probability of firms serving its home market: if
+$F_{ei}$ is high, there are few firms compete in the domestic market and a
+large fraction of the entrants will serve the domestic market. This again has
+no clear empirical counterparts and I simply assume this fraction is 0.7 in
+all the countries in my sample. Experimenting with lower values, I find the
+normalization does not affect the calibration of other parameters and the
+counterfacutals much.\footnote{Results are available upon requests.} I pick a
+relatively high number such that I do not need to simulate too many firms to
+generate a large enough panel in the simulated method of moments procedures,
+minimizing the computational burden.
+
+\textbf{Trade and MP shares: }I target the trade and MP costs $\left\{
+\tau_{ln},\gamma_{il}\right\}  $ to the trade and MP shares $\left\{
+\lambda_{ln}^{T},\lambda_{il}^{M}\right\}  $ (see equation ), normalizing the
+domestic costs $\tau_{ii}$ and $\gamma_{ii}$ to 1. I obtain the trade flows
+$X_{\cdot ln}$ from BACI and the MP sales $X_{il\cdot}$ from
+\cite{ramondo_multinational_2015}. For countries with missing nonfinancial
+total output $Y_{l}$ I extrapolate their GDP using a log-linear equation. All
+country pairs in my sample have positive bilateral trade flows while some of
+them have zero MP sales. I simply assign MP costs $\gamma_{il}$ to be infinity
+for these countries. Detailed data sources and the extrapolation results can
+be found in the online appendix.
+
+\textbf{Average labor share: }The parameter $\lambda_{k}$ is common across
+countries and determines the average labor share. The higher \ $\lambda_{k}$
+is, the lower the labor shares. Among the sample countries, the average labor
+share is 0.52, and I target $\lambda_{k}$ to match this number. The calibrated
+$\lambda_{k}$ is 0.298.
+
+\textbf{Restricted and Unrestricted Trade Elasticities}: As is shown in
+\cite{arkolakis_innovation_2013}, the Pareto shape parameter $k$ and the
+Frechet shape parameter $\theta$ are well disciplined by the "unrestricted"
+and "restricted" trade elasticities, respectively. The "restricted" trade
+elasticity $\beta^{r}$ is estimated using the three-way sales%
+\[
+\log X_{iln}=\delta_{il}+\delta_{in}-\beta^{r}\tau_{ln}+u_{iln}.
+\]
+In ARRY, $\beta^{r}$ equals the Frechet shape parameter $\theta$ regardless of
+other model parameters. In my model, because of the CBP mechanism, there is no
+analytical gravity and $\beta^{r}$ can be different from $\theta$. I use the
+estimate $\hat{\beta}^{r}=10.9$ from ARRY but calibrate my model such that the
+estimated $\hat{\beta}^{r}$ using the model generated three-way sales
+$X_{iln}$ and calibrated $\tau_{ln}$ matches 10.9. The "unrestricted" trade
+elasticity $\beta^{u}$ is estimated using the usual two-way trade flows%
+\[
+\log X_{\cdot ln}=\delta_{l}+\delta_{n}-\beta^{u}\tau_{ln}+u_{ln}.
+\]
+Again I use the empirical estimate $\hat{\beta}^{u}=4.3$ from ARRY and ensure
+that $\beta^{u}$ estimated using data $X_{\cdot ln}$ and calibrated $\tau
+_{ln}$ matches 4.3. The calibrated $\theta$ is 10.927, very close to
+$\hat{\beta}^{r}$, which suggests that $\beta^{r}$ still pins down $\theta$
+tightly despite the complication of the CBP mechanism. The calibrated $k$ is
+4.184, which is also very close to the calibrated value in ARRY (4.0).
+
+\textbf{Technology origin effect and size effect:} As discussed before, the
+elasticity of extensive substitution $\eta$ governs the shape of the
+technology menu thus the strength of the technology origin effect; the
+parameter $\xi$ governs how the core productivity $\phi$ affects capital- and
+labor-augmenting productivities differently, thus determines the size effect.
+In section \ref{sec:empirical_regularities}, I run different specifications to
+check the robustness of the two effects. In my calibration, I pick one set of
+estimates and check sensitivity of the calibration and counterfactuals later.
+Particularly, I use the estimates based on (1) the multinational subsample and
+(2) affiliates whose home and host countries are all in my 37 country sample:%
+\begin{equation}
+\log\left(  \frac{K_{f}}{wL_{f}}\right)  =\delta_{s\left(  f\right)  \times
+l\left(  f\right)  }+\underset{\left(  0.108\right)  }{0.274}\log\left(
+\frac{K_{i\left(  f\right)  }}{hL_{i\left(  f\right)  }}\right)
++\underset{\left(  0.0143\right)  }{0.0575}\log\left(  X_{f}\right)
++\varepsilon_{f}, \label{firm_level_reg}%
+\end{equation}
+where $X_{f}$ is the affiliate's revenue.
+
+Different from previous moments, the TOE and size effect are regression
+coefficients from an affiliate level dataset. Therefore, for each guess of
+model parameters, I solve for the general equilibrium variables and then
+simulate a panel of multinational affiliates (see details in the next
+subsection). I then run the above regression in the simulated data and adjust
+parameters $\eta$ and $\xi$ to match the two regression coefficients. The
+calibrated value of $\eta$ is 0.693 and the value of $\xi$ is 0.658 as shown
+in Table \ref{tab:calib_baseline}.%
+
+%TCIMACRO{\TeXButton{calib_baseline}{\input{tables/calib_baseline.tex}}}%
+%BeginExpansion
+\input{tables/calib_baseline.tex}%
+%EndExpansion
+
+
+\subsection{Algorithm}
+
+The general equilibrium model involves six equilibrium variables $\left(
+\delta_{i},r_{i},w_{i},P_{i},X_{i},M_{i}\right)  $ for each country where I
+define $\delta_{i}$ to be%
+\[
+\delta_{i}\equiv\left(  \varepsilon-1\right)  \log\left(  a_{i}/b_{i}\right)
+\text{.}%
+\]
+Since a firm always chooses $\left(  a_{i},b_{i}\right)  $ on the technology
+frontier $\theta\left(  a_{i},b_{i}\right)  =1$, I can express $a_{i},b_{i}$
+as functions of $\delta_{i}$. As is shown in Table \ref{tab:calib_baseline}, I
+need to calibrate $2N\left(  N-1\right)  $ parameters of trade and MP costs,
+$N$ parameters of entry costs $F_{ei}$ and five additional parameters $\left(
+\eta,\xi,k,\rho,\lambda_{k}\right)  $ by solving the model.
+
+I calibrate the model with a two-loop procedure. Given a set of outer loop
+parameters $\left(  \eta,\xi,k,\theta,\lambda_{k}\right)  $, I iterate over
+guesses of $\left(  \delta_{i},r_{i},w_{i},P_{i},X_{i},M_{i},F_{ei}\right)  $
+and the trade and MP costs $\left\{  \tau_{ln},\gamma_{il}\right\}  $ such
+that (1) all equilibrium conditions are satisfied and (2) trade and MP shares
+are exactly the same as those in the data and (3) the probability of a firm
+serving its domestic country is 0.7 in all countries. Note that to solve this
+inner loop, I need to perform numerical integrations to obtain aggregate
+variables such as sales and factor demand. I use a 20-node Gauss--Legendre
+quadrature to obtain high precision. Given the large number of parameters, I
+use an adjustment approach (also see \cite{burstein_international_2015}) to
+reduce the computational burden. Intuitively, I increase prices if there are
+excess demands, increase trade and MP costs if the trade and MP shares are too
+high, and increase $F_{ei}$ if the probability of a firm serving its domestic
+country is higher than 0.7. The detailed algorithm can be found in the online appendix.
+
+The outer loop iterates over guesses of $\left(  \eta,\xi,k,\theta,\lambda
+_{k}\right)  $ until the five corresponding moments are exactly matched. The
+labor shares are the most straightforward to calculate. The restricted and
+unrestricted trade elasticities are estimated using $X_{iln},X_{\cdot ln}$ and
+calibrated $\tau_{ln}$ obtained from the inner loop. To obtain the technology
+origin effect and size effect from the model, I simulate 20,000 firms in each
+country. Each firm is characterized by its home country $i$, its core
+productivity $\phi$ and a vector of productivity shocks $\mathbf{z}$. Firms
+choose the markets to serve and from which country to serve a particular
+market according to the model. Thus, for each firm, I can determine the size
+of their affiliate in each country $l$. In the end, I obtain a panel of firms.
+Similar to the data, some of the firms are multinationals while some only
+operate in their domestic countries. I run the firm-level regression
+\ref{firm_level_reg} and estimate the two coefficients using the simulated
+data for the same set of home and host countries. The outer loop again uses an
+intuitive adjustment approach as the inner loop. The entire calibration
+typically takes from one hour to ten hours on a 20-core cluster, based on the
+choice of the initial guesses.
+
+\subsection{Model Fit}
+
+The calibration produces thousands of iceberg trade and MP costs $\gamma_{il}$
+and $\tau_{ln}$. Figure \ref{fig:gravity} plots the calibrated log values
+against log of distance between countries. As expected, there is a strong
+correlation between the iceberg costs and distance. There also seems to be
+more variation in the trade costs than the MP costs. One reason why the
+average MP cost seem to be smaller than the average trade cost is that for
+country pairs with zero bilateral MP sales I set $\gamma_{il}=\infty$ and they
+are not represented on the graph, while in my sample all bilateral trade flows
+are positive and very small trade flows can imply very large trade costs
+$\tau_{ln}$.%
+
+%TCIMACRO{\TeXButton{gravity}{\begin{figure}[ptbh]\caption{Gravity of $\tau
+%_{ln}$ and $\gamma_{il}$}\label{fig:gravity}
+%\centering\includegraphics[scale=0.8]{{gravity.pdf}}\end{figure}}}%
+%BeginExpansion
+\begin{figure}[ptbh]\caption{Gravity of $\tau_{ln}$ and $\gamma_{il}$}%
+\label{fig:gravity}
+\centering\includegraphics[scale=0.8]{{gravity.pdf}}\end{figure}%
+%EndExpansion
+
+
+The calibrated value of $\eta$, 0.693, shows there is at least some extensive
+substitution, which can be expected if I want to match the technology origin
+effect as in the data. To get a sense of how large the extensive substitution
+is, I consider firms in a closed economy, choosing both $\left(  a,b\right)  $
+and $\left(  K,L\right)  $ given the domestic factor prices $\left(
+r,w\right)  $. As is shown in Oberfield and Raval (2014), one can define a
+"total elasticity" $\varepsilon^{tot}$ as the response of the relative factor
+demand to factor prices, taking into account the firm's endogenous response
+through $\left(  a,b\right)  $. Using the first-order conditions, one has%
+\begin{align*}
+\frac{K}{L}  &  =\left(  \frac{a}{b}\right)  ^{\varepsilon-1}\left(  \frac
+{r}{w}\right)  ^{-\varepsilon}\\
+&  =\left(  \frac{A}{B}\right)  ^{\varepsilon^{tot}-1}\left(  \frac{r}%
+{w}\right)  ^{-\varepsilon^{tot}},
+\end{align*}
+where $\varepsilon^{tot}$ is a combination of the intensive and extensive
+margins%
+\[
+\frac{1}{\varepsilon^{tot}-1}=\frac{1}{\varepsilon-1}+\frac{1}{\eta-1}.
+\]
+The calibrated values of $\varepsilon$ and $\eta$ suggests the total
+elasticity is 0.82. Thus, without the extensive margin, the estimated
+elasticity $\varepsilon=0.547$ will underestimate the "total elasticity" by
+0.27. Therefore, ignoring the extensive elasticity would predict much higher
+dispersion in $r_{l}/w_{l}$ across countries.%
+
+%TCIMACRO{\TeXButton{eqm_price_fit}{\begin{figure}[ptbh]\caption
+%{Model Fit - Factor Prices}\label{fig:eqm_price_fit}
+%\centering\includegraphics[scale=0.8]{{eqm_price_fit.pdf}}\end{figure}}}%
+%BeginExpansion
+\begin{figure}[ptbh]\caption{Model Fit - Factor Prices}\label
+{fig:eqm_price_fit}
+\centering\includegraphics[scale=0.8]{{eqm_price_fit.pdf}}\end{figure}%
+%EndExpansion
+
+
+The model fits the relative factor prices in each country well. As Figure
+\ref{fig:eqm_price_fit} shows, the predicted values of $\log\left(
+r/w\right)  $ are highly correlated with those in the data, with a correlation
+coefficient as high as 0.9. Though the match is not perfect, one can be
+confident that the model captures the broad variation in factor prices across
+countries. To be consistent, in the counterfactual exercises below, I always
+compare the counterfactual factor prices with the factor prices in the
+calibrated baseline.
+
+\section{Counterfactuals}
+
+The main research question in this paper is how MP liberalization can affect
+distribution of income between capital and labor, especially through the two
+new mechanisms I study. In this section, I use the calibrated model to conduct
+two counterfactuals to evaluate the impact of MP on the labor shares. The
+first counterfactual is more hypothetical but can be used to illustrate the
+workings of the model. In this experiment, I study the impact of a unilateral
+MP cost decline in each of the countries in my sample. Second, I use my model
+to mimic the MP liberalization from 1996-2011 to a later period 2006-2011 and
+examine its implications on the labor shares. In both counterfactuals, MP
+liberalization reduces the labor shares in most countries especially in
+capital scarce countries. The MP liberalization in the past decade helps to
+explain not only the average decline in the labor shares but also the
+variation in the decline across countries. I use the model to further
+decompose the relative importance for the two mechanisms I introduced in my
+model. I found both mechanisms are important to account for the decline of
+labor shares after MP liberalization, with the technology origin effect
+relatively more important for understanding the changes in less-developed countries.
+
+\subsection{Unilateral MP liberalization}
+
+In the first counterfactual, I consider a scenario where each country reduces
+their inward MP costs by 10 log points but keeping all other parameters
+unchanged. This counterfactual mimics a country conducting unilateral MP
+liberalization without bilateral agreements that provide reciprocal
+incentives. In particular, for each country $l$, I reduce the bilateral MP
+costs $\gamma_{il}$ by 10 log points except for self-investment cost
+$\gamma_{ll}$ which is kept at its original value, one. The bilateral MP costs
+among other countries are also kept the same and I solve the general
+equilibrium of the global economy for each country $l$'s reform.%
+
+%TCIMACRO{\TeXButton{fig:cf_unilateral_mp_lib}{\begin{figure}[ptbh]\caption
+%{Unilateral MP liberalization}\label{fig:cf_unilateral_mp_lib}
+%\centering\includegraphics[scale=0.9]{{cf_unilateral_mp_lib.pdf}}\end{figure}%
+%}}%
+%BeginExpansion
+\begin{figure}[ptbh]\caption{Unilateral MP liberalization}\label
+{fig:cf_unilateral_mp_lib}
+\centering\includegraphics[scale=0.9]{{cf_unilateral_mp_lib.pdf}}\end{figure}%
+%EndExpansion
+
+
+Figure \ref{fig:cf_unilateral_mp_lib} illustrates the results of the first
+counterfactual experiment. Each dot in both panels represents a different
+general equilibrium that results from the country's unilateral MP
+liberalization and statistics are computed for that country only, leaving the
+other 36 countries in the background. Panel a plots the change in total inward
+MP shares $\sum_{i\neq l}X_{il\cdot}/Y_{l}$, which is positive for all
+countries when they liberalize MP unilaterally. The effect of the same
+10-log-point decline in $\gamma_{il}$ on total inward MP shares is non-linear
+in the sense that countries with higher inward MP shares initially (thus lower
+$\gamma_{il}$) see an even larger increase in inward multinational activities
+with the same decline in $\gamma_{il}$.
+
+Panel b of Figure \ref{fig:cf_unilateral_mp_lib} illustrates how the two
+mechanisms in my model predict the changes in labor shares after the
+unilateral MP liberalization. All countries see a decline in their labor
+shares after the liberalization but the effect is heterogeneous across
+countries. The key variable to explain the heterogeneity is the change in
+inward MP shares induced by the reduction in $\gamma_{il}$. On average, the
+larger the increase in inward MP shares, the larger the decline of the labor
+shares. The correlation is stronger for the half of the sample countries that
+are less capital abundant (blue dots) than those capital abundant ones (green
+dots). For example, Germany has the largest increase in the total inward MP
+share after their unilateral MP liberalization but only sees a decline in the
+labor share by less than one percentage point, while capital scarce countries
+such as Hungary and Slovakia see much larger declines in their labor shares.
+Inituitively, the capital-biased productivity mechanism works similarly in
+capital scarce and capital abundant countries. It works essentially through
+selection: more MP intensifies competition in the country and shifts the
+distribution of firms towards large and capital-intensive ones. In contrast,
+the technology origin effect only matters when the host country has different
+capital abundance than the home countries. Since the majority of FDI is from
+capital abundant countries, the capital scarce countries will be affected the
+most by the technology origin effect of MP, which causes a stronger
+relationship between the increase of multinational activities and the decline
+of labor shares.
+
+To summarize, a unilateral reduction in countries' inward MP costs increases
+multinational activities in that country. The CBP mechanism contributes to a
+labor share decline to all countries. The technology origin effect matters
+relatively more for capital scarce countries because they receive more MP from
+capital abundant countries after the liberalization, whose technologies are
+inherently more capital intensive than the ones used by the domestic firms in
+the host country.
+
+\subsection{MP liberalization up to 2011}
+
+The first counterfactual is useful to think about a hypothetical MP
+liberalization but it is hard to judge how reasonable a 10-log-point decrease
+in $\gamma_{il}$ is. In the second counterfatual, I use MP data in a later
+period to calibrate the decline in the inward MP costs for each country. I
+collect data on multinational activities from OECD and Eurostat up to 2011,
+and compute the average total inward MP shares for each country between 2006
+and 2011, after 10 years of the baseline period. For each host country $l$, I
+then calibrate the common change in the bilateral MP costs $\tilde{\gamma}%
+_{l}=\gamma_{il}^{06-11}/\gamma_{il}^{96-01}$ for all $i\neq l$. The data for
+the new period only covers 19 out of the 37 countries in the original sample.
+For countries that do not have information on total inward MP shares, I simply
+assume they have the average decline $\tilde{\gamma}_{l}$ of the other
+countries.\footnote{I also experiment with the assumption that the MP costs
+did not change at all for these 18 countries without data. The results are
+available upon request and the results for the 19 countries with data barely
+change.} When I examine the results from the counterfactual, I only focus on
+the 19 countries with data in the later period.
+
+Among the 19 countries with both 1996-2001 and 2006-2011 data, the average
+growth in inward MP shares is 10.2 percentage points. East European countries
+such as Romania, Bulgaria and Slovakia see large growth in inward MP shares,
+which can be as large as 30 percentage points. Correspondingly, the calibrated
+decline in MP costs are the largest for these countries ($\tilde{\gamma}_{l}$
+smaller than 1).\footnote{The average $\tilde{\gamma}_{l}$ indicates a
+8.2-log-point decline, which suggests the first counterfactual (10-log-point
+decline) is quantitatively reasonable.} The detailed changes in MP shares and
+calibrated decline in MP costs can be found in Table \ref{tab:cf_baseline}.
+The influx of foreign FDI leads to a decline in labor shares in the majority
+of the countries. The average decline predicted by the model is 1.4 percentage
+points while it is 1.8 percentage points in the data.
+
+The MP liberalization over this period not only helps to explain the average
+decline in the labor shares, but also helps to explain the variation of the
+decline across countries. Figure \ref{fig:cf_labor_share_baseline} correlates
+the change in the labor shares and the change in the total inward MP shares
+both in the data (panel a) and in the model (panel b). The model suggests a
+tight relationship between the change in the labor shares and the change in
+the total inward MP shares. In the data, there is much more variation in the
+change of the labor shares but there is also a significant negative
+correlation between the change in the labor shares and the change in the
+inward MP shares. The predicted regression coefficient from the model is also
+very close to that from the data. The predicted change in the labor shares is
+significantly correlated with the change in the labor shares in the data, with
+a correlation coefficient 0.34. This suggests the model is useful to account
+for different paces of labor share decline across countries.%
+
+%TCIMACRO{\TeXButton{fig:cf_labor_share_baseline}{\begin{figure}[ptbh]\caption
+%{Counterfactual of baseline model}\label{fig:cf_labor_share_baseline}
+%\centering\includegraphics[scale=0.9]{{cf_labor_share_baseline.pdf}%
+%}\end{figure}}}%
+%BeginExpansion
+\begin{figure}[ptbh]\caption{Counterfactual of baseline model}\label
+{fig:cf_labor_share_baseline}
+\centering\includegraphics[scale=0.9]{{cf_labor_share_baseline.pdf}%
+}\end{figure}%
+%EndExpansion
+
+
+With the calibrated model at hand, I next consider three alternative setups to
+further illustrate the workings of the model. First, I shut down the
+technology origin effect and see how the capital biased productivity mechanism
+only can help explain the labor share decline in the data. Second, I use an
+alternative model where the technology origin effects are exogenous to
+decompose the technology transfer and technology change in the baseline
+counterfactual. Finally, I consider a version of the model in which capital is
+fully mobile across countries to check the robustness of the predictions.
+
+\subsubsection{Shut down technology origin effect}
+
+With both mechanisms incorporated in the quantitative model, I can shut down
+one and study the relative importance of each mechanism. To shut down the
+technology origin effect (TOE), I re-calibrate the model assuming there is no
+scope to choose different technologies, i.e., $\eta\rightarrow-\infty$ thus
+$\left(  a,b\right)  =\left(  1,1\right)  $ for firms from any country. The
+new calibration targets all the moments except for the technology origin
+effect. I then calculate the same counterfactual experiment, reducing the
+foreign MP costs such that the MP shares matches those in 2006-2011.
+
+In Figure \ref{fig:baseline_vs_cbp_only}, I plot the percentage point changes
+in labor shares in the baseline model (CBP + TOE) against the model with only
+CBP (capital-biased productivities). For countries that are not hugely
+impacted by the inward MP, the CBP mechanism explains the majority of the
+decline in labor shares. However, for less developed countries that saw large
+increases in inward MP (Romania, Bulgaria and Slovakia), the TOE mechanism
+reduces the labor shares beyond the CBP mechanism. Panel B Figure
+\ref{fig:cf_cbp_only} shows the counterfactual change in the labor shares with
+only the CBP mechanism. The average decline in the labor shares is 0.85
+percentage points, and the correlation between the changes in MP and changes
+in labor shares is much weaker. Thus, both mechanisms are important to
+understand the impact of MP on the distribution of income between capital and
+labor, with the TOE mechanism especially important for less developed countries.%
+
+%TCIMACRO{\TeXButton{fig:baseline_vs_cbp_only}{\begin{figure}[ptbh]\caption
+%{Decompose CBP and TOE}\label{fig:baseline_vs_cbp_only}
+%\centering\includegraphics[scale=0.9]{{baseline_vs_cbp_only.pdf}}\end{figure}%
+%}}%
+%BeginExpansion
+\begin{figure}[ptbh]\caption{Decompose CBP and TOE}\label
+{fig:baseline_vs_cbp_only}
+\centering\includegraphics[scale=0.9]{{baseline_vs_cbp_only.pdf}}\end{figure}%
+%EndExpansion
+
+
+\subsubsection{Technology transfer v.s. technology change\newline}
+
+To generate technology differences across countries, I assume firms
+endogenously choose technologies to maximize their expected global profits.
+Theoretically, after a MP liberalization, firms not only transfer their
+technology to foreign countries more via MP, but also reoptimize their
+technology $\left(  a,b\right)  $. It is straightforward that the technology
+transfer will impact the labor shares in the host countries, but the
+endogenous change in $\left(  a,b\right)  $ will affect the labor shares both
+at home and in the foreign countries. In the extreme case where MP becomes
+frictionless, the factor biases of technologies developed in different
+countries converge, and such technology change must induce huge responses in
+factor prices. The second alternative model is calibrated to illustrate the
+quantitative importance of the two channels given the frictions in the recent period.
+
+In the alternative setup, I assume there is no endogenous choice of $\left(
+a,b\right)  $ but the capital share parameter $\lambda_{k}$ is now home
+country specific and increases with the home country's capital abundance in an
+exogenous fashion. It still generates the "technology origin effect" but firms
+no longer change their technology after MP liberalization. In particular, I
+allow the capital share parameter $\lambda_{k}$ to depend on the home country
+$i$ in an exogenous way%
+\[
+\log\left(  \frac{\lambda_{ki}}{1-\lambda_{ki}}\right)  =\alpha_{0}^{\lambda
+}+\alpha_{1}^{\lambda}\log\left(  K_{i}/L_{i}\right)  \text{.}%
+\]
+Thus the alternative model does not have the elasticity of extensive
+substitution $\eta$ but has a new parameter $\alpha_{1}^{\lambda}$ (note
+$\alpha_{0}^{\lambda}$ determines the average labor share in the baseline
+model and in the alternative model as well). I re-calibrate this model
+targeting exactly the same moments as in the baseline. $\alpha_{1}^{\lambda}$
+is calibrated to be 0.264, which is consistent with the technology origin
+effect I find in the data.
+
+After I calibrate the model, I conduct the same counterfactual experiment to
+match the increase in MP shares in the 10-year period. In Figure
+\ref{fig:baseline_vs_exogenous_toe}, I plot the changes in labor shares in the
+alternative calibration against the changes in the baseline calibration
+(endogenous choice of $\left(  a,b\right)  $). The two counterfactuals on the
+labor shares align very well with each other. This means that the impact of MP
+on the labor share through the TOE mechanism relies mostly on the transfer of
+technologies with different factor bias and that the technology change plays
+almost no role. The intuition behind this is that even though the inflow of MP
+activities into the host countries is large, it is still small comparing to
+the size of the home countries (especially the largest home countries such as
+US and Germany). Thus the potential of foreign production is still too small
+to alter firms' choices of $\left(  a_{i},b_{i}\right)  $ quantitatively. The
+response of endogenous technology choice to MP liberalization does not add
+much to the change in the labor shares, at least with the current level of MP
+costs, but could play an important role when MP costs further decline in the future.%
+
+%TCIMACRO{\TeXButton{fig:baseline_vs_exogenous_toe}{\begin{figure}%
+%[ptbh]\caption{Exogenous vs Endogenous TOE}\label
+%{fig:baseline_vs_exogenous_toe}
+%\centering\includegraphics[scale=0.9]{{baseline_vs_exogenous_toe.pdf}%
+%}\end{figure}}}%
+%BeginExpansion
+\begin{figure}[ptbh]\caption{Exogenous vs Endogenous TOE}\label
+{fig:baseline_vs_exogenous_toe}
+\centering\includegraphics[scale=0.9]{{baseline_vs_exogenous_toe.pdf}%
+}\end{figure}%
+%EndExpansion
+
+
+\subsubsection{Capital mobility}
+
+In the baseline calibration, I assume that there is no mobility in capital
+across countries. The debate about the mobility of capital across countries
+has not been settled yet. The international macro literature has documented
+the lack of capital flows towards developing countries (\cite{lucas_why_1990})
+while \cite{caselli_marginal_2007} argue that the capital rental rates are
+similar across countries after proper accounting so there is essentially no
+incentive to move capital across borders. Instead of modeling the friction of
+capital mobility across countries, here I simply consider an extreme version
+of the model where capital markets are perfectly integrated. This leads to an
+equalization of rental rates $r_{i}$ across countries but still leaves room
+for different relative factor prices across countries since the model features
+monopolistic competition and increasing return to scales and typically in such
+a model, countries with different sizes will have different wages. The
+differences in relative factor prices give firms incentives to choose
+different technologies $\left(  a_{i},b_{i}\right)  $ and the technology
+origin effect still operates besides the capital-biased productivity mechanism.
+
+In practice, I recalibrate the model with the same parameters and moments but
+allow capital to be perfectly mobile across countries. I can conduct the same
+counterfactual to match the new inward MP shares in 2006-2011. Table
+\ref{tab:cf_mobileK_selected} compares the change in labor shares in the
+baseline model and in this alternative setup for countries with largest
+declines of labor shares. The change of labor shares is smaller due to the
+cross-country flows of capital. However, one still sees a decline of labor
+share for most of the countries, with a reduction in the magnitude between 1/2
+to 2/3. Thus, changing the mobility of capital in the model only changes the
+predictions on the labor shares quantitatively but not qualitatively. The
+decline in most countries are still sizable comparing to those in the data.
+The new mechanisms introduced in my model still help to explain the average
+decline of labor shares and the variation across countries in the 10-year
+period, as long as factor prices are not equalized across countries.%
+
+%TCIMACRO{\TeXButton{cf_mobileK_selected}{\input
+%{tables/cf_mobileK_selected.tex}}}%
+%BeginExpansion
+\input{tables/cf_mobileK_selected.tex}%
+%EndExpansion
+
+
+\section{Conclusion}
+
+Multinational firms differ in many dimensions from domestic firms. This paper
+focuses on the factor bias of multinational production. I document two
+empirical regularities about firm's capital intensity (1) firms from capital
+abundant countries are more capital intensive and (2) larger firms are more
+capital intensive. The empirical results suggest multinational production may
+impact the labor shares in the host countries. Based on the empirical
+evidence, I build a quantifiable general equilibrium trade and MP model
+incorporating two novel mechanisms to match both empirical regularities. A
+reduction in MP costs leads to more MP activities thus changes the relative
+demand for capital and labor in the host countries through both mechanisms. I
+find the increase of multinational activities leads to sizable decline in the
+labor shares in the host countries through both mechanisms. The increase in MP
+activities not only explains the average change in the labor shares, but also
+the variation across countries.
+
+The paper provides a first step to understanding the heterogeneity in input
+usage across firms, especially firms from different countries. The framework
+can be applied to choices of other factor usage, such as skilled labor v.s.
+unskilled labor. I focus on capital and labor here largely because of data
+constraint. More detailed information about multinational firm operation is
+needed to study other factors. Moreover, other aspects of firms' technologies
+such as pollution are also worth studying given the debate about whether
+multinational firms increase or reduce pollution in the host countries.
+(\cite{wang_foreign_2014})
+
+The quantitative model highlights the technology transfer within the firm but
+abstracts from other vehicles of technology transfer and technology diffusion.
+The calibrated multinational production costs may overestimate the barriers to
+transfer technologies across countries. Incorporating different channels of
+technology transfer can be quantitatively important, and I leave it for future research.
+
+\bibliographystyle{econometrica}
+\bibliography{myLib160429}
+
+
+\appendix{}
+
+\section{Theory Appendix}
+
+\subsection{Proofs for Section \ref{sec:model}}
+
+Under the assumption that $\xi=0$, I obtain the following expressions for
+operating profits conditional on $\phi$ in market $n$
+\[
+\pi_{i\cdot n}\left(  \phi\right)  =\frac{\tilde{\sigma}^{1-\sigma}X_{n}%
+}{\sigma P_{n}^{1-\sigma}}\Gamma\left(  \frac{\theta-\sigma+1}{\theta}\right)
+\phi^{\sigma-1}\Psi_{in}^{\frac{\sigma-1}{\theta}},
+\]
+where $\Psi_{in}$ does not depend on $\phi$ but depends on $\left(
+a,b\right)  $ (omitted in the notation for simplicity)%
+\[
+\Psi_{in}\equiv\sum_{l}T_{il}\left(  \gamma_{il}C_{l}\left(  a,b\right)
+\tau_{ln}\right)  ^{-\theta}%
+\]
+The zero profit cutoff is%
+\begin{align*}
+\pi_{i\cdot n}\left(  \phi_{in}^{\ast}\right)   &  =P_{n}F_{n}\\
+&  \Rightarrow\phi_{in}^{\ast}=\Gamma^{-1/\left(  \sigma-1\right)  }\Psi
+_{in}^{-1/\theta}\frac{\tilde{\sigma}}{P_{n}}\left(  \frac{\sigma P_{n}F_{n}%
+}{X_{n}}\right)  ^{1/\left(  \sigma-1\right)  }%
+\end{align*}
+and the expected global profit%
+\begin{align*}
+E_{\phi}\left[  \pi_{i}\left(  \phi,a,b\right)  \right]   &  =\sum_{n}%
+\int_{\phi_{in}^{\ast}}\left(  \pi_{i\cdot n}\left(  \phi\right)  -P_{n}%
+F_{n}\right)  dF_{i}\left(  \phi\right) \\
+&  =\frac{\left(  \sigma-1\right)  \tilde{\sigma}^{-k}\sigma^{-\frac{k}%
+{\sigma-1}}}{k-\sigma+1}\Gamma^{k/\left(  \sigma-1\right)  }\phi_{i,\min}%
+^{k}\sum_{n}X_{n}^{\frac{k}{\sigma-1}}P_{n}^{k}\Psi_{in}\left(  a,b\right)
+^{\frac{k}{\theta}}\left(  P_{n}F_{n}\right)  ^{\frac{\sigma-k-1}{\sigma-1}}%
+\end{align*}
+Denote%
+\[
+D_{n}\equiv\frac{\left(  \sigma-1\right)  \tilde{\sigma}^{-k}\sigma^{-\frac
+{k}{\sigma-1}}}{k-\sigma+1}\Gamma^{k/\left(  \sigma-1\right)  }X_{n}^{\frac
+{k}{\sigma-1}}P_{n}^{k}\left(  P_{n}F_{n}\right)  ^{\frac{\sigma-k-1}%
+{\sigma-1}}%
+\]
+
+
+\begin{lemma}
+The optimal technology choice $\left(  a,b\right)  $ must be on the boundary
+of the technology menu, i.e.,%
+\[
+\theta\left(  a,b\right)  =1.
+\]
+For an optimal interior technology $\left(  a_{i}^{\ast},b_{i}^{\ast}\right)
+$, the following condition must hold%
+\[
+\frac{\partial\pi_{i}\left(  a_{i}^{\ast},b_{i}^{\ast}\right)  /\partial
+a}{\partial\pi_{i}\left(  a_{i}^{\ast},b_{i}^{\ast}\right)  /\partial b}%
+=\frac{\partial\theta\left(  a_{i}^{\ast},b_{i}^{\ast}\right)  /\partial
+a}{\partial\theta\left(  a_{i}^{\ast},b_{i}^{\ast}\right)  /\partial
+b},i=N,S.
+\]
+
+\end{lemma}
+
+\begin{proof}
+This is a direct result of the properties of the production function, the
+profit function and the technology menu. Recall that the production function
+is strictly increasing in $a$ and $b$%
+\[
+q=zF\left(  aK,bL\right)  .
+\]
+Thus, the marginal cost strictly decreases with $a$ and $b$. The expected
+global profit is $\pi_{i}=\sum_{n}D_{n}\Psi_{in}$ where $\Psi_{in}%
+\equiv\left(  \sum_{m}\left(  T_{im}\zeta_{imn}^{-k}\right)  ^{1/\left(
+1-\rho\right)  }\right)  ^{1-\rho}$ and $\zeta_{iln}\equiv\gamma_{il}%
+C_{l}\left(  a,b\right)  \tau_{ln}$. Clearly, $\zeta_{iln}$ strictly decreases
+in $a$ and $b$, thus $\Psi_{in}$ and $\pi_{i}$ strictly increase in $a$ and
+$b$.
+
+On the other hand, the function that determines the boundary of the technology
+menu, $\theta\left(  a,b\right)  $, strictly increases in $a$ and $b$.
+Consider $\left(  a,b\right)  $ such that $\theta\left(  a,b\right)
+=\lambda<1$, then there exists $\left(  a^{\prime},b^{\prime}\right)  >$
+$\left(  a,b\right)  $ such that $\theta\left(  a^{\prime},b^{\prime}\right)
+<1$. It allows the firm to have a lower cost of production in any country,
+which increases the profit. Thus, the optimal technology choice $\left(
+a,b\right)  $ must occur on the boundary.
+
+The first order conditions imply the iso-profit curve is tangent to the
+technology boundary at any optimal technology $\left(  a_{i}^{\ast}%
+,b_{i}^{\ast}\right)  $. Since both $\theta$ and $\pi_{i}$ are continuously
+differentiable and strictly increasing in $\left(  a,b\right)  $, I invert
+$\theta\left(  a,b\right)  =1$ and $\pi_{i}\left(  a,b\right)  =\pi_{i}\left(
+a_{i}^{\ast},b_{i}^{\ast}\right)  $\footnote{Suppose $\exists$ $b_{1}\neq
+b_{2}$ such that $\pi_{i}\left(  a,b_{1}\right)  =\pi_{i}\left(
+a,b_{2}\right)  $. By mean value theorem, $\partial\pi_{i}/\partial b=\left[
+\pi_{i}\left(  a,b_{2}\right)  -\pi_{i}\left(  a,b_{1}\right)  \right]
+/\left(  b_{2}-b_{1}\right)  =0$ which contradicts $\partial\pi_{i}/\partial
+b>0$.} and get%
+\[
+b=\theta^{-1}\left(  a\right)  ,\,b=\pi_{i}^{-1}\left(  a\right)  .
+\]
+
+
+Consider $f_{i}\left(  a\right)  \equiv\pi_{i}^{-1}\left(  a\right)
+-\theta^{-1}\left(  a\right)  $, which is a continuously differentiable
+function in $a$ (because $C$ and $\theta$ are continuously differentiable). By
+construction, $f_{i}\left(  a_{i}^{\ast}\right)  =b_{i}^{\ast}-b_{i}^{\ast}%
+=0$. In addition, for any value of $a$, we must have $f\left(  a\right)
+\geq0$; otherwise, $\left(  a,\pi_{i}^{-1}\left(  a\right)  \right)  $ is in
+the interior of the technology menu and we can always find a technology that
+delivers a higher expected global profit than $\pi_{i}\left(  a_{i}^{\ast
+},b_{i}^{\ast}\right)  $. Thus, $f^{\prime}\left(  a\right)  $ must be zero at
+$a_{i}^{\ast}$. This implies $\frac{\partial}{\partial a}\pi_{i}^{-1}\left(
+a_{i}^{\ast}\right)  -\frac{\partial}{\partial a}\theta^{-1}\left(
+a_{i}^{\ast}\right)  =0$. Since $\theta\left(  a,\theta^{-1}\left(  a\right)
+\right)  =1$, $\pi_{i}\left(  a,\pi_{i}^{-1}\left(  a\right)  \right)
+=\pi_{i}\left(  a_{i}^{\ast},b_{i}^{\ast}\right)  $, I obtain%
+\[
+\frac{\partial\pi_{i}/\partial a}{\partial\pi_{i}/\partial b}=-\frac{\partial
+}{\partial a}\pi_{i}^{-1}\left(  a_{i}^{\ast}\right)  =-\frac{\partial
+}{\partial a}\theta^{-1}\left(  a_{i}^{\ast}\right)  =\frac{\partial
+\theta/\partial a}{\partial\theta/\partial b}.
+\]
+
+\end{proof}
+
+\begin{proof}
+[Proof of Proposition 1]When there are $N_{N}$ symmetric Northern countries
+and $N_{S}$ symmetric Southern countries, the expected gross global profit of
+a Northern firm can be simplified to (denote $\tilde{k}\equiv k/\left(
+1-\rho\right)  $)%
+\begin{equation}
+\pi_{N}\left(  a,b\right)  =D_{N}\Psi_{Nh}+\left(  N_{N}-1\right)  D_{N}%
+\Psi_{NN}+N_{S}D_{S}\Psi_{NS}, \label{pi_n}%
+\end{equation}
+where
+\begin{align*}
+\Psi_{Nh}  &  \equiv\left(  C_{N}^{-\tilde{k}}+\left(  N_{N}-1\right)  \left(
+\gamma C_{N}\tau\right)  ^{-\tilde{k}}+N_{S}\left(  \gamma C_{S}\tau\right)
+^{-\tilde{k}}\right)  ^{1-\rho},\\
+\Psi_{NN}  &  \equiv\left(  \left(  C_{N}\tau\right)  ^{-\tilde{k}}+\left(
+\gamma C_{N}\right)  ^{-\tilde{k}}+\left(  N_{N}-2\right)  \left(  \gamma
+C_{N}\tau\right)  ^{-\tilde{k}}+N_{S}\left(  \gamma C_{S}\tau\right)
+^{-\tilde{k}}\right)  ^{1-\rho},\\
+\Psi_{NS}  &  \equiv\left(  \left(  C_{N}\tau\right)  ^{-\tilde{k}}+\left(
+N_{N}-1\right)  \left(  \gamma C_{N}\tau\right)  ^{-\tilde{k}}+\left(  \gamma
+C_{S}\right)  ^{-\tilde{k}}+\left(  N_{S}-1\right)  \left(  \gamma C_{S}%
+\tau\right)  ^{-\tilde{k}}\right)  ^{1-\rho}.
+\end{align*}
+The first term in equation (\ref{pi_n}) is the expected profit from the
+domestic market, the second term is the total expected profit from other
+Northern markets, and the third term is the total expected profit from selling
+to the South. The expressions for $\Psi$'s are also intuitive. $\Psi_{Nh}$
+determines the expected profit from serving the home market through (1)
+selling from itself (2) selling from a subsidiary in another Northern country
+and (3) selling from a subsidiary in a Southern country. The expressions for
+$\Psi_{NN}$ and $\Psi_{NS}$ can be interpreted in the same way. The global
+expected profit depends on technology choice through the production costs
+$C_{N}$ and $C_{S}$. For a typical Southern firm $i\in S$, the expression is
+similar%
+\begin{equation}
+\pi_{S}\left(  a,b\right)  =D_{S}\Psi_{Sh}+\left(  N_{S}-1\right)  D_{S}%
+\Psi_{SS}+N_{N}D_{N}\Psi_{SN}, \label{pi_s}%
+\end{equation}
+where%
+\begin{align*}
+&  \Psi_{Sh}\equiv\left(  C_{S}^{-\tilde{k}}+\left(  N_{S}-1\right)  \left(
+\gamma C_{S}\tau\right)  ^{-\tilde{k}}+N_{N}\left(  \gamma C_{N}\tau\right)
+^{-\tilde{k}}\right)  ^{1-\rho},\\
+&  \Psi_{SS}\equiv\left(  \left(  C_{S}\tau\right)  ^{-\tilde{k}}+\left(
+\gamma C_{S}\right)  ^{-\tilde{k}}+\left(  N_{S}-2\right)  \left(  \gamma
+C_{S}\tau\right)  ^{-\tilde{k}}+N_{N}\left(  \gamma C_{N}\tau\right)
+^{-\tilde{k}}\right)  ^{1-\rho},\\
+&  \Psi_{SN}\equiv\left(  \left(  C_{S}\tau\right)  ^{-\tilde{k}}+\left(
+N_{S}-1\right)  \left(  \gamma C_{S}\tau\right)  ^{-\tilde{k}}+\left(  \gamma
+C_{N}\right)  ^{-\tilde{k}}+\left(  N_{N}-1\right)  \left(  \gamma C_{N}%
+\tau\right)  ^{-\tilde{k}}\right)  ^{1-\rho}.
+\end{align*}
+
+
+Consider the derivative of expected profit with respect to $C_{N}$ and $C_{S}$%
+\begin{align*}
+\partial\pi_{N}/\partial C_{N}  &  =-kD_{N}\left(  1+\left(  N_{N}-1\right)
+\left(  \gamma\tau\right)  ^{-\tilde{k}}\right)  \Psi_{Nh}^{\frac{-\rho
+}{1-\rho}}C_{N}^{-\tilde{k}-1}\\
+&  -kD_{N}\left(  N_{N}-1\right)  \left(  \tau^{-\tilde{k}}+\gamma^{-\tilde
+{k}}+\left(  N_{N}-2\right)  \left(  \gamma\tau\right)  ^{-\tilde{k}}\right)
+\Psi_{NN}^{\frac{-\rho}{1-\rho}}C_{N}^{-\tilde{k}-1}\\
+&  -kD_{S}N_{S}\tau^{-\tilde{k}}\left(  1+\left(  N_{N}-1\right)
+\gamma^{-\tilde{k}}\right)  \Psi_{NS}^{\frac{-\rho}{1-\rho}}C_{N}^{-\tilde
+{k}-1},
+\end{align*}
+and%
+\begin{align*}
+\partial\pi_{N}/\partial C_{S}  &  =-kD_{N}N_{S}\left(  \gamma\tau\right)
+^{-\tilde{k}}\Psi_{Nh}^{\frac{-\rho}{1-\rho}}C_{S}^{-\tilde{k}-1}\\
+&  -kD_{N}\left(  N_{N}-1\right)  N_{S}\left(  \gamma\tau\right)  ^{-\tilde
+{k}}\Psi_{NN}^{\frac{-\rho}{1-\rho}}C_{S}^{-\tilde{k}-1}\\
+&  -kD_{S}N_{S}\gamma^{-\tilde{k}}\left(  1+\left(  N_{S}-1\right)
+\tau^{-\tilde{k}}\right)  \Psi_{NS}^{\frac{-\rho}{1-\rho}}C_{S}^{-\tilde{k}%
+-1}.
+\end{align*}
+
+
+What matters for the choice of technology is the ratio of the two%
+\[
+\frac{\partial\pi_{N}/\partial C_{N}}{\partial\pi_{N}/\partial C_{S}}%
+=\frac{A_{N}}{B_{N}}\left(  \frac{C_{N}}{C_{S}}\right)  ^{-\tilde{k}-1},
+\]
+where%
+\begin{align*}
+A_{N}  &  =D_{N}\left(  1+\left(  N_{N}-1\right)  \left(  \gamma\tau\right)
+^{-\tilde{k}}\right)  \Psi_{Nh}^{\frac{-\rho}{1-\rho}}\\
+&  +D_{N}\left(  N_{N}-1\right)  \left(  \tau^{-\tilde{k}}+\gamma^{-\tilde{k}%
+}+\left(  N_{N}-2\right)  \left(  \gamma\tau\right)  ^{-\tilde{k}}\right)
+\Psi_{NN}^{\frac{-\rho}{1-\rho}}\\
+&  +D_{S}N_{S}\tau^{-\tilde{k}}\left(  1+\left(  N_{N}-1\right)
+\gamma^{-\tilde{k}}\right)  \Psi_{NS}^{\frac{-\rho}{1-\rho}},
+\end{align*}
+and%
+\begin{align*}
+B_{N}  &  =D_{N}N_{S}\left(  \gamma\tau\right)  ^{-\tilde{k}}\Psi_{Nh}%
+^{\frac{-\rho}{1-\rho}}\\
+&  +D_{N}\left(  N_{N}-1\right)  N_{S}\left(  \gamma\tau\right)  ^{-\tilde{k}%
+}\Psi_{NN}^{\frac{-\rho}{1-\rho}}\\
+&  +D_{S}N_{S}\gamma^{-\tilde{k}}\left(  1+\left(  N_{S}-1\right)
+\tau^{-\tilde{k}}\right)  \Psi_{NS}^{\frac{-\rho}{1-\rho}}.
+\end{align*}
+
+
+For a typical Southern firm the expressions are similar%
+\[
+\frac{\partial\pi_{S}/\partial C_{N}}{\partial\pi_{S}/\partial C_{S}}%
+=\frac{A_{S}}{B_{S}}\left(  \frac{C_{N}}{C_{S}}\right)  ^{-\tilde{k}-1},
+\]
+where%
+\begin{align*}
+A_{S}  &  =D_{S}N_{N}\left(  \gamma\tau\right)  ^{-\tilde{k}}\Psi_{Sh}%
+^{\frac{-\rho}{1-\rho}}\\
+&  +D_{S}\left(  N_{S}-1\right)  N_{N}\left(  \gamma\tau\right)  ^{-\tilde{k}%
+}\Psi_{SS}^{\frac{-\rho}{1-\rho}}\\
+&  +D_{N}N_{N}\gamma^{-\tilde{k}}\left(  1+\left(  N_{N}-1\right)
+\tau^{-\tilde{k}}\right)  \Psi_{SN}^{\frac{-\rho}{1-\rho}},
+\end{align*}
+and%
+\begin{align*}
+B_{S}  &  =D_{S}\left(  1+\left(  N_{S}-1\right)  \left(  \gamma\tau\right)
+^{-\tilde{k}}\right)  \Psi_{Sh}^{\frac{-\rho}{1-\rho}}\\
+&  +D_{S}\left(  N_{S}-1\right)  \left(  \tau^{-\tilde{k}}+\gamma^{-\tilde{k}%
+}+\left(  N_{S}-2\right)  \left(  \gamma\tau\right)  ^{-\tilde{k}}\right)
+\Psi_{SS}^{\frac{-\rho}{1-\rho}}\\
+&  +D_{N}N_{N}\tau^{-\tilde{k}}\left(  1+\left(  N_{S}-1\right)
+\gamma^{-\tilde{k}}\right)  \Psi_{SN}^{\frac{-\rho}{1-\rho}}.
+\end{align*}
+
+
+To compare $A_{N}/B_{N}$ and $A_{S}/B_{S}$, consider $A_{N}B_{S}-B_{N}A_{S}$.
+Collecting terms, one can show that when $\gamma>1$,
+
+\begin{itemize}
+\item the coefficient before $D_{N}^{2}$ is positive;
+
+\item the coefficient before $D_{S}^{2}$ is positive;
+
+\item the coefficient before $D_{N}D_{S}$ equals%
+\begin{align}
+&  \lambda_{Nh,Sh}\Psi_{Nh}^{\frac{-\rho}{1-\rho}}\Psi_{Sh}^{\frac{-\rho
+}{1-\rho}}+\lambda_{Nh,SS}\Psi_{Nh}^{\frac{-\rho}{1-\rho}}\Psi_{SS}%
+^{\frac{-\rho}{1-\rho}}+\lambda_{NN,Sh}\Psi_{NN}^{\frac{-\rho}{1-\rho}}%
+\Psi_{Sh}^{\frac{-\rho}{1-\rho}}\label{whatSign}\\
+&  +\lambda_{NN,SS}\Psi_{NN}^{\frac{-\rho}{1-\rho}}\Psi_{SS}^{\frac{-\rho
+}{1-\rho}}+\lambda_{NS,SN}\Psi_{NS}^{\frac{-\rho}{1-\rho}}\Psi_{SN}%
+^{\frac{-\rho}{1-\rho}},\nonumber
+\end{align}
+where $\lambda$'s are coefficients that involve $\gamma,\tau,N_{N},N_{S}$. It
+is straightforward to show that the first four coefficients are all positive,
+while the last coefficient $\lambda_{NS,SN}$ has the same sign as $\gamma
+-\tau$. All the expressions for these coefficients can be found in the online
+appendix. When $\gamma>\tau$ or $\tau\rightarrow\infty$, one can show that
+$A_{N}B_{S}-B_{N}A_{S}>0$ thus
+\[
+\frac{\partial\pi_{N}/\partial C_{N}}{\partial\pi_{N}/\partial C_{S}}%
+>\frac{\partial\pi_{S}/\partial C_{N}}{\partial\pi_{S}/\partial C_{S}}%
+\]
+for any $\left(  C_{N},C_{S}\right)  $. After all the tedious algebra, I
+conclude that firms care relatively more about the production cost in its home
+country. This is because the foreign MP cost $\gamma$ is greater than 1, which
+makes the firm sees the foreign market as less important.
+\end{itemize}
+
+Now it becomes straightforward to determine the sign of $\frac{\partial\pi
+_{N}/\partial a}{\partial\pi_{N}/\partial b}-\frac{\partial\pi_{S}/\partial
+a}{\partial\pi_{S}/\partial b}$. Using the chain rule,%
+\[
+\frac{\partial\pi_{N}}{\partial a}=\frac{\partial\pi_{N}}{\partial C_{N}}%
+\frac{\partial C_{N}}{\partial a}+\frac{\partial\pi_{N}}{\partial C_{S}}%
+\frac{\partial C_{S}}{\partial a},
+\]
+and similar expressions hold for $\partial\pi_{N}/\partial b$, $\partial
+\pi_{S}/\partial a$ and $\partial\pi_{S}/\partial b$. Thus%
+\[
+\frac{\partial\pi_{N}/\partial a}{\partial\pi_{N}/\partial b}=\frac
+{\frac{\partial\pi_{N}/\partial C_{N}}{\partial\pi_{N}/\partial C_{S}}%
+\frac{\partial C_{N}}{\partial a}+\frac{\partial C_{S}}{\partial a}}%
+{\frac{\partial\pi_{N}/\partial C_{N}}{\partial\pi_{N}/\partial C_{S}}%
+\frac{\partial C_{N}}{\partial b}+\frac{\partial C_{S}}{\partial b}}%
+\]
+and%
+\[
+\frac{\partial\pi_{S}/\partial a}{\partial\pi_{S}/\partial b}=\frac
+{\frac{\partial\pi_{S}/\partial C_{N}}{\partial\pi_{S}/\partial C_{S}}%
+\frac{\partial C_{N}}{\partial a}+\frac{\partial C_{S}}{\partial a}}%
+{\frac{\partial\pi_{S}/\partial C_{N}}{\partial\pi_{S}/\partial C_{S}}%
+\frac{\partial C_{N}}{\partial b}+\frac{\partial C_{S}}{\partial b}}.
+\]
+
+
+Denote $\sigma_{N}\equiv\frac{\partial\pi_{N}/\partial C_{N}}{\partial\pi
+_{N}/\partial C_{S}}$ and $\sigma_{S}\equiv\frac{\partial\pi_{S}/\partial
+C_{N}}{\partial\pi_{S}/\partial C_{S}}$, the difference between $\frac
+{\partial\pi_{N}/\partial a}{\partial\pi_{N}/\partial b}$ and $\frac
+{\partial\pi_{S}/\partial a}{\partial\pi_{S}/\partial b}$ is%
+\begin{align*}
+\frac{\partial\pi_{N}/\partial a}{\partial\pi_{N}/\partial b}-\frac
+{\partial\pi_{S}/\partial a}{\partial\pi_{S}/\partial b}  &  =\frac{\sigma
+_{N}\frac{\partial C_{N}}{\partial a}+\frac{\partial C_{S}}{\partial a}%
+}{\sigma_{N}\frac{\partial C_{N}}{\partial b}+\frac{\partial C_{S}}{\partial
+b}}-\frac{\sigma_{S}\frac{\partial C_{N}}{\partial a}+\frac{\partial C_{S}%
+}{\partial a}}{\sigma_{S}\frac{\partial C_{N}}{\partial b}+\frac{\partial
+C_{S}}{\partial b}}\\
+&  =\frac{\partial C_{N}}{\partial b}\frac{\partial C_{S}}{\partial b}%
+\frac{\left(  \sigma_{N}-\sigma_{S}\right)  \left(  \frac{\partial
+C_{N}/\partial a}{\partial C_{N}/\partial b}-\frac{\partial C_{S}/\partial
+a}{\partial C_{S}/\partial b}\right)  }{\left(  \sigma_{N}\frac{\partial
+C_{N}}{\partial b}+\frac{\partial C_{S}}{\partial b}\right)  \left(
+\sigma_{S}\frac{\partial C_{N}}{\partial b}+\frac{\partial C_{S}}{\partial
+b}\right)  }.
+\end{align*}
+Since $\sigma_{N}>\sigma_{S}$, the sign of the above expression is determined
+by the second term in the numerator. Consider the cost function dual to the
+production function $F\left(  aK,bL\right)  $%
+\[
+C\left(  r,w;a,b\right)  =\min_{K,L}rK+wL\text{ s.t. }F\left(  aK,bL\right)
+\geq1.
+\]
+
+
+The optimization of factor usage can be transformed into one with production
+function $F\left(  K,L\right)  $ and corresponding factor prices are $\left(
+r/a,w/b\right)  $. Define $\tilde{C}\left(  r,w\right)  \equiv C\left(
+r,w;1,1\right)  $, which is the cost function for the production $F\left(
+K,L\right)  $. When $\left(  a,b\right)  \neq\left(  1,1\right)  $, and factor
+prices are $\left(  r/a,w/b\right)  $, the optimal factor demand $\left(
+\tilde{K},\tilde{L}\right)  $ satisfies that%
+\[
+\frac{F_{K}\left(  \tilde{K},\tilde{L}\right)  }{F_{L}\left(  \tilde{K}%
+,\tilde{L}\right)  }=\frac{r/a}{w/b},F\left(  \tilde{K},\tilde{L}\right)  =1.
+\]
+When it comes to the original problem where $\left(  a,b\right)  \neq\left(
+1,1\right)  $%
+\[
+\frac{aF_{K}\left(  aK,bL\right)  }{bF_{L}\left(  aK,bL\right)  }=\frac{r}%
+{w},F\left(  aK,bL\right)  =1.
+\]
+Comparing the two set of conditions, there is a relationship between $\left(
+K,L\right)  $ and $\left(  \tilde{K},\tilde{L}\right)  $:
+\[
+K=\tilde{K}/a,L=\tilde{L}/b.
+\]
+Thus the cost function
+\begin{align*}
+C\left(  r,w;a,b\right)   &  =rK+wL\\
+&  =r\frac{\tilde{K}}{a}+w\frac{\tilde{L}}{b}\\
+&  =\tilde{C}\left(  r/a,w/b\right)  .
+\end{align*}
+The derivative of $C$ with respect to technology choice%
+\begin{align*}
+\frac{\partial C\left(  r,w;a,b\right)  }{\partial a}  &  =\frac
+{\partial\tilde{C}\left(  r/a,w/b\right)  }{\partial a}=-\tilde{C}_{r}\frac
+{r}{a^{2}},\\
+\frac{\partial C\left(  r,w;a,b\right)  }{\partial b}  &  =\frac
+{\partial\tilde{C}\left(  r/a,w/b\right)  }{\partial b}=-\tilde{C}_{w}\frac
+{w}{b^{2}}.
+\end{align*}
+By Shephard's Lemma%
+\begin{align*}
+\tilde{C}_{r}  &  =\tilde{K}\left(  r/a,w/b\right)  =aK,\\
+\tilde{C}_{w}  &  =\tilde{L}\left(  r/a,w/b\right)  =bL,
+\end{align*}
+and%
+\[
+\frac{\partial C/\partial a}{\partial C/\partial b}=\frac{rK/a}{wL/b}.
+\]
+
+
+Now consider the impact of factor price on $\frac{\partial C/\partial
+a}{\partial C/\partial b}$
+\begin{align*}
+\frac{\partial\ln\left(  \frac{\partial C/\partial a}{\partial C/\partial
+b}\right)  }{\partial\ln\left(  r/w\right)  }  &  =1-\left(  -\frac
+{\partial\ln\left(  K/L\right)  }{\partial\ln\left(  r/w\right)  }\right) \\
+&  \equiv1-\varepsilon\left(  r/w\right)  ,
+\end{align*}
+where the second term is the elasticity between capital and labor at the
+factor prices $\left(  r,w\right)  $. Suppose the elasticity is always above
+one, the left hand side is always negative. Therefore,
+\[
+\frac{\partial C_{N}/\partial a}{\partial C_{N}/\partial b}-\frac{\partial
+C_{S}/\partial a}{\partial C_{S}/\partial b}>0\text{ and }\frac{\partial
+\pi_{N}/\partial a}{\partial\pi_{N}/\partial b}-\frac{\partial\pi_{S}/\partial
+a}{\partial\pi_{S}/\partial b}>0.
+\]
+When the elasticity is always below one, vice versa.
+
+Now I can characterize the optimal technology under the constraint
+$\theta\left(  a,b\right)  =1$. First consider $\varepsilon\left(  r/w\right)
+<1$ and denote $\left(  a_{N},b_{N}\right)  =\arg\max\pi_{N}$, $\left(
+a_{S},b_{S}\right)  =\arg\max\pi_{S}$. Suppose $a_{N}\geq a_{S}$. Similar to
+the proof of Lemma A.1, I invert the two iso-profit curves $\pi_{i}\left(
+a,b\right)  =\pi_{i}\left(  a_{i},b_{i}\right)  ,i=N,S$ and get $b=\pi
+_{i}^{-1}\left(  a\right)  $. Define a function%
+\[
+g\left(  a\right)  \equiv\pi_{N}^{-1}\left(  a\right)  -\pi_{S}^{-1}\left(
+a\right)
+\]
+and its derivative%
+\[
+g^{\prime}\left(  a\right)  =-\frac{\partial\pi_{N}/\partial a}{\partial
+\pi_{N}/\partial b}+\frac{\partial\pi_{S}/\partial a}{\partial\pi_{S}/\partial
+b}>0
+\]
+for any $\left(  a,b\right)  $.
+
+On the other hand, $g\left(  a_{S}\right)  =\pi_{N}^{-1}\left(  a_{S}\right)
+-b_{S}=\pi_{N}^{-1}\left(  a_{S}\right)  -\theta^{-1}\left(  a_{S}\right)
+\geq0$, and $g\left(  a_{N}\right)  =b_{N}-$ $\pi_{S}^{-1}\left(
+a_{N}\right)  \leq0$. $g\left(  a\right)  $ is strictly increasing implies
+$a_{S}\geq a_{N}$. Suppose $a_{S}=a_{N}$, then both the Northern and Southern
+firms choose exactly the same technology $\left(  \tilde{a},\tilde{b}\right)
+$. By Lemma A.1,%
+\[
+\frac{\partial\pi_{N}/\partial a}{\partial\pi_{N}/\partial b}=\frac
+{\partial\theta/\partial a}{\partial\theta/\partial b}=\frac{\partial\pi
+_{S}/\partial a}{\partial\pi_{S}/\partial b},
+\]
+which contradicts $\frac{\partial\pi_{N}/\partial a}{\partial\pi_{N}/\partial
+b}<\frac{\partial\pi_{S}/\partial a}{\partial\pi_{S}/\partial b}$. Thus,
+$a_{S}$ must be greater than $a_{N}$. Since the optimal technology occur along
+$\theta\left(  a,b\right)  =1$, we immediately get $b_{S}<b_{N}$. To compare
+capital intensity of production in the same location $l$ by firms' origin, I
+apply the transformation of factor demand from $\left(  \tilde{K},\tilde
+{L}\right)  $ to $\left(  K,L\right)  $ as above and consider the derivative
+of $K/L$ with respect to $a/b$%
+\begin{align*}
+\frac{\partial\ln\frac{K\left(  r_{l},w_{l};a,b\right)  }{L\left(  r_{l}%
+,w_{l};a,b\right)  }}{\partial\ln\left(  a/b\right)  }  &  =\frac{\partial
+\ln\frac{\tilde{K}\left(  r_{l}/a,w_{l}/b\right)  /a}{\tilde{L}\left(
+r_{l}/a,w_{l}/b\right)  /b}}{\partial\ln\left(  a/b\right)  }\\
+&  =-1-\frac{\partial\ln\frac{\tilde{K}\left(  r_{l}/a,w_{l}/b\right)
+}{\tilde{L}\left(  r_{l}/a,w_{l}/b\right)  }}{\partial\ln\frac{r_{l}/a}%
+{w_{l}/b}}\\
+&  \equiv-1+\varepsilon\left(  \frac{r_{l}/a}{w_{l}/b}\right)  <0,
+\end{align*}
+where $\varepsilon\left(  \frac{r_{l}/a}{w_{l}/b}\right)  $ the elasticity of
+capital and labor of $F\left(  K,L\right)  $ evaluated at $\left(
+r_{l}/a,w_{l}/b\right)  $. Since $a_{N}/b_{N}<a_{S}/b_{S}$, we conclude%
+\[
+\frac{K\left(  r_{l},w_{l};a_{N},b_{N}\right)  }{L\left(  r_{l},w_{l}%
+;a_{N},b_{N}\right)  }>\frac{K\left(  r_{l},w_{l};a_{S},b_{S}\right)
+}{L\left(  r_{l},w_{l};a_{S},b_{S}\right)  }.
+\]
+
+
+For the case $\varepsilon\left(  \frac{r_{l}/a}{w_{l}/b}\right)  >1$, we know
+$\frac{\partial\pi_{N}/\partial a}{\partial\pi_{N}/\partial b}$ is larger than
+$\frac{\partial\pi_{S}/\partial a}{\partial\pi_{S}/\partial b}$, thus
+$g\left(  a\right)  $ strictly decreases with $a$ and $a_{S}\leq a_{N}$. Using
+the same argument, I exclude the case $a_{S}=a_{N}$. This again implies
+$a_{S}<a_{N}$ and $b_{S}>b_{N}$. The Northern firms are more capital intensive
+since%
+\[
+\frac{\partial\ln\frac{K\left(  r_{l},w_{l};a,b\right)  }{L\left(  r_{l}%
+,w_{l};a,b\right)  }}{\partial\ln\left(  a/b\right)  }=-1+\varepsilon
+>0\text{.}%
+\]
+
+
+The last part of the proposition is to show that under the optimal choice of
+technology, the cost of production is relatively small in the domestic market,
+compared to a firm originated in the opposite region. I first prove that%
+\begin{equation}
+\frac{C\left(  r_{N},w_{N};a_{N},b_{N}\right)  }{C\left(  r_{N},w_{N}%
+;a_{S},b_{S}\right)  }\leq\frac{C\left(  r_{S},w_{S};a_{N},b_{N}\right)
+}{C\left(  r_{S},w_{S};a_{S},b_{S}\right)  }. \label{relativeCosts}%
+\end{equation}
+
+
+I again use the transformation $\tilde{C}$ developed above:%
+\[
+\frac{C\left(  r_{N},w_{N};a_{N},b_{N}\right)  }{C\left(  r_{N},w_{N}%
+;a_{S},b_{S}\right)  }=\frac{\tilde{C}\left(  r_{N}/a_{N},w_{N}/b_{N}\right)
+}{\tilde{C}\left(  r_{N}/a_{S},w_{N}/b_{S}\right)  }=\frac{\tilde{C}\left(
+\frac{r_{N}/a_{N}}{w_{N}/b_{N}},1\right)  }{\tilde{C}\left(  \frac{r_{N}%
+/a_{S}}{w_{N}/b_{S}},1\right)  }.
+\]
+
+
+Denote $r_{1}\equiv\frac{r_{N}/a_{N}}{w_{N}/b_{N}}$, $r_{2}\equiv\frac
+{r_{N}/a_{S}}{w_{N}/b_{S}}$, $r_{3}\equiv\frac{r_{S}/a_{N}}{w_{S}/b_{N}}$,
+$r_{4}\equiv\frac{r_{S}/a_{S}}{w_{S}/b_{S}}$. The inequality (\ref{prop1.2})
+is equivalent to
+\[
+\ln\tilde{C}\left(  \ln\left(  r_{1}\right)  ,1\right)  +\ln\tilde{C}\left(
+\ln\left(  r_{4}\right)  ,1\right)  \leq\ln\tilde{C}\left(  \ln\left(
+r_{2}\right)  ,1\right)  +\ln\tilde{C}\left(  \ln\left(  r_{3}\right)
+,1\right)  .
+\]
+Note that $\ln r_{1}+\ln r_{4}=\ln r_{2}+\ln r_{3}$. Suppose $\varepsilon<1$,
+the technology choices satisfy $a_{N}/b_{N}\leq a_{S}/b_{S}$ thus $\ln
+r_{3}>\ln r_{1},\ln r_{4}>\ln r_{2}$. To establish the above inequality, one
+just needs to show $\ln\tilde{C}\left(  r,1\right)  $ is convex in $\ln r$.%
+\begin{align*}
+\frac{\partial\ln\tilde{C}\left(  r,1\right)  }{\partial\ln r}  &
+=\frac{r\tilde{K}\left(  r,1\right)  }{\tilde{C}\left(  r,1\right)  }\\
+&  =1-\frac{\tilde{L}\left(  r,1\right)  }{r\tilde{K}\left(  r,1\right)
++\tilde{L}\left(  r,1\right)  }\\
+&  =1-\frac{1}{r\tilde{K}/\tilde{L}+1}%
+\end{align*}
+and%
+\begin{align*}
+\frac{\partial^{2}\ln\tilde{C}\left(  r,1\right)  }{\partial\left(  \ln
+r\right)  ^{2}}  &  =r\frac{\tilde{K}/\tilde{L}+r\frac{\partial\left(
+\tilde{K}/\tilde{L}\right)  }{\partial r}}{\left(  r\tilde{K}/\tilde
+{L}+1\right)  ^{2}}\\
+&  =r\frac{1+\frac{\partial\ln\left(  \tilde{K}/\tilde{L}\right)  }%
+{\partial\ln r}}{\left(  r\tilde{K}/\tilde{L}+1\right)  ^{2}}>0
+\end{align*}
+Thus I prove the inequality (\ref{relativeCosts}). When $\varepsilon>1$, we
+have $a_{N}/b_{N}\geq a_{S}/b_{S}$ thus $\ln r_{4}>\ln r_{2},\ln r_{3}>\ln
+r_{1}$. Correspondingly $\ln\tilde{C}\left(  r,1\right)  $ is concave in $\ln
+r$. The inequality holds as well.
+
+For simplicity, I denote $C_{il}=C\left(  r_{l},w_{l};a_{i},b_{i}\right)  $.
+Suppose $C_{NN}>C_{SN}$, then $C_{SS}<C_{NS}$ for inequality
+(\ref{relativeCosts}) to hold. This implies that the technology of the
+Northern firms is strictly worse than that of the Southern firms $\left(
+C_{NN},C_{NS}\right)  >\left(  C_{SN},C_{SS}\right)  $. The Northern firms can
+adopt the Southern technology to improve their profits. Thus $\left(
+C_{NN},C_{NS}\right)  $ is not optimal and I obtain a contradiction. Thus,
+Northern firms must have cost advantage in the North and so do Southern firms
+in the South.
+\end{proof}
+
+\begin{proof}
+[Proof of Corollary 1]Under the assumption of CES production function, one can
+show that the optimal technology must occur in the interior of $\theta\left(
+a,b\right)  =1$. This is equivalent to show that the maximum of profit does
+not occur when $\alpha\equiv a/b$ goes to $+\infty$ or $0$. Rewrite the
+technology choice in terms of $\alpha$%
+\begin{align*}
+b  &  =\theta\left(  \alpha,1\right)  ^{-1},\\
+a  &  =\alpha\theta\left(  \alpha,1\right)  ^{-1}.
+\end{align*}
+Now the marginal cost can be written as%
+\[
+C=\left(  \left(  \alpha/A\right)  ^{1-\eta}+\left(  1/B\right)  ^{1-\eta
+}\right)  ^{1/\left(  1-\eta\right)  }\left(  r^{1-\varepsilon}\alpha
+^{\varepsilon-1}+w^{1-\varepsilon}\right)  ^{1/\left(  1-\varepsilon\right)
+}.
+\]
+Taking derivatives of $\log C$ with respect to $\log\alpha$%
+\[
+\frac{\partial\log C}{\partial\log\alpha}=\frac{\left(  \frac{A}{B}\right)
+^{\eta-1}\alpha^{\varepsilon-1}\left[  \alpha^{2-\eta-\varepsilon}-\left(
+\frac{A}{B}\right)  ^{1-\eta}\left(  \frac{r}{w}\right)  ^{1-\varepsilon
+}\right]  }{\left[  \left(  \frac{A}{B}\right)  ^{\eta-1}\alpha^{1-\eta
+}+1\right]  \left[  \left(  \frac{r}{w}\right)  ^{1-\varepsilon}%
+\alpha^{\varepsilon-1}+1\right]  },
+\]
+the sign of which depends on $\alpha^{2-\eta-\varepsilon}-\left(  \frac{A}%
+{B}\right)  ^{1-\eta}\left(  \frac{r}{w}\right)  ^{1-\varepsilon}$. Denote the
+zero of this expression $\alpha^{\ast}\left(  r/w\right)  $ (an asterisk is
+used since $\alpha^{\ast}\left(  r/w\right)  $ would be the optimal technology
+choice in a world without MP)%
+\[
+\alpha^{\ast}\left(  r/w\right)  =\left(  \frac{A}{B}\right)  ^{\frac{1-\eta
+}{2-\varepsilon-\eta}}\left(  \frac{r}{w}\right)  ^{\frac{1-\varepsilon
+}{2-\varepsilon-\eta}}.
+\]
+When $\alpha>\alpha^{\ast}$, $\frac{\partial\log C}{\partial\log\alpha}>0$ and
+vice versa when $\alpha<\alpha^{\ast}$. When there is a symmetric North and a
+symmetric South region, it is straightforward to show that the optimal
+technology must occur between $\alpha^{\ast}\left(  r_{N}/w_{N}\right)  $ and
+$\alpha^{\ast}\left(  r_{S}/w_{S}\right)  $. If $\alpha>\max\left\{
+\alpha^{\ast}\left(  r_{N}/w_{N}\right)  ,\alpha^{\ast}\left(  r_{S}%
+/w_{S}\right)  \right\}  $, both $C_{N}$ and $C_{S}$ can be reduced by
+reducing $\alpha$; if $\alpha<\min\left\{  \alpha^{\ast}\left(  r_{N}%
+/w_{N}\right)  ,\alpha^{\ast}\left(  r_{S}/w_{S}\right)  \right\}  $, both
+$C_{N}$ and $C_{S}$ can be reduced by increasing $\alpha$. Thus the optimal
+technology must be an interior solution. Also note that the sign of
+$2-\eta-\varepsilon$ is crucial for establishing this result, which is assumed
+to be positive in the assumption.
+
+Next, I establish the inequality that $C_{NN}\leq C_{SN}$ and $C_{SS}\leq
+C_{NS}$. For a typical firm, I can transform its technology choice problem
+into a problem of choosing marginal costs of production in the two regions
+$\left(  C_{N},C_{S}\right)  $. An interior solution must occur where there is
+a trade off between minimizing $C_{N}$ and $C_{S}$ thus $\frac{dC_{N}}{dC_{S}%
+}\leq0$. When production function is CES, one can show that
+\[
+\frac{dC_{N}}{dC_{S}}=\left(  \frac{C_{N}}{C_{S}}\right)  ^{\varepsilon}%
+\frac{r_{N}^{1-\varepsilon}-w_{N}^{1-\varepsilon}\left(  \frac{A}{B}\right)
+^{\eta-1}\left(  \frac{a}{b}\right)  ^{2-\varepsilon-\eta}}{r_{S}%
+^{1-\varepsilon}-w_{S}^{1-\varepsilon}\left(  \frac{A}{B}\right)  ^{\eta
+-1}\left(  \frac{a}{b}\right)  ^{2-\varepsilon-\eta}}.
+\]
+The trade off $dC_{N}/dC_{S}\leq0$ only when $a/b$ is between $\left(
+\frac{A}{B}\right)  ^{\frac{1-\eta}{2-\eta-\varepsilon}}\left(  \frac{r_{S}%
+}{w_{S}}\right)  ^{\frac{1-\varepsilon}{2-\eta-\varepsilon}}$and $\left(
+\frac{A}{B}\right)  ^{\frac{1-\eta}{2-\eta-\varepsilon}}\left(  \frac{r_{N}%
+}{w_{N}}\right)  ^{\frac{1-\varepsilon}{2-\eta-\varepsilon}}$. Outside this
+region, we can change $\left(  a,b\right)  $ to reduce both $C_{N}$ and
+$C_{S}$ and increase the expected profit. Thus the optimum $\left(
+C_{NN},C_{NS}\right)  $ for Northern firms and $\left(  C_{SN},C_{SS}\right)
+$ for Southern firms can only occur on this segment. Combining with the result
+that $C_{NN}/C_{NS}\leq C_{SN}/C_{SS}$, I obtain $C_{NN}\leq C_{SN}$ and
+$C_{SS}\leq C_{NS}$.
+\end{proof}
+
+\begin{proof}
+[Proof of Proposition 2]Suppose the opposite: capital is relatively cheap in
+the South $r_{N}/w_{N}>r_{S}/w_{S}$. In the proof I will derive a
+contradiction that the relative demand for capital is larger in the South
+under this condition for the case $\varepsilon<1$. (the proof for
+$\varepsilon>1$ is similar). \qquad When $r_{N}/w_{N}>r_{S}/w_{S}$,
+Proposition \ref{prop1} implies the Northern firms must be more labor
+intensive $a_{N}/b_{N}>a_{S}/b_{S}$ and $C_{NN}C_{SS}<C_{NS}C_{SN}$. Recall
+the factor market clearing conditions \ref{capitalMarket} and
+\ref{laborMarket}, the relative factor demand in country $l$ is%
+\begin{align*}
+\frac{K_{l}}{L_{l}}  &  =\left(  \frac{r_{l}}{w_{l}}\right)  ^{-1}\frac
+{\tilde{\sigma}^{-1}\sum_{i,n}\psi_{iln}\lambda_{in}^{E}X_{n}\kappa_{il}%
++\frac{1}{\tilde{\sigma}k}\sum_{n}\lambda_{ln}^{E}X_{n}\kappa_{ll}%
++\frac{k-\left(  \sigma-1\right)  }{\sigma k}X_{l}\kappa_{ll}}{\tilde{\sigma
+}^{-1}\sum_{i,n}\psi_{iln}\lambda_{in}^{E}X_{n}\left(  1-\kappa_{il}\right)
++\frac{1}{\tilde{\sigma}k}\sum_{n}\lambda_{ln}^{E}X_{n}\left(  1-\kappa
+_{ll}\right)  +\frac{k-\left(  \sigma-1\right)  }{\sigma k}X_{l}\left(
+1-\kappa_{ll}\right)  }\\
+&  =\left(  \frac{r_{l}}{w_{l}}\right)  ^{-\varepsilon}\frac{\tilde{\sigma
+}^{-1}\sum_{i,n}\psi_{iln}\lambda_{in}^{E}X_{n}C_{il}^{\varepsilon-1}%
+a_{i}^{\varepsilon-1}+\left(  \frac{1}{\tilde{\sigma}k}\sum_{n}\lambda
+_{ln}^{E}X_{n}+\frac{k-\left(  \sigma-1\right)  }{\sigma k}X_{l}\right)
+C_{ll}^{\varepsilon-1}a_{l}^{\varepsilon-1}}{\tilde{\sigma}^{-1}\sum_{i,n}%
+\psi_{iln}\lambda_{in}^{E}X_{n}C_{il}^{\varepsilon-1}b_{i}^{\varepsilon
+-1}+\left(  \frac{1}{\tilde{\sigma}k}\sum_{n}\lambda_{ln}^{E}X_{n}%
++\frac{k-\left(  \sigma-1\right)  }{\sigma k}X_{l}\right)  C_{ll}%
+^{\varepsilon-1}b_{l}^{\varepsilon-1}}%
+\end{align*}
+where the CES cost function has been applied.
+
+Define $K_{N}^{e}\equiv\left(  \tilde{\sigma}k\right)  ^{-1}\sum_{i,n}%
+\psi_{iNn}\lambda_{in}^{E}X_{n}C_{iN}^{\varepsilon-1}a_{i}^{\varepsilon
+-1}+D_{N}^{e}C_{NN}^{\varepsilon-1}a_{N}^{\varepsilon-1}$ where%
+\[
+D_{N}^{e}\equiv\frac{1}{\tilde{\sigma}k^{2}}\sum_{n}\lambda_{Nn}^{E}%
+X_{n}+\frac{k-\left(  \sigma-1\right)  }{\sigma k^{2}}X_{N}%
+\]
+represents the demand from marketing and entry. Using the demand shifter
+(\ref{demandShifter}), the first part of $K_{N}^{e}$ can be rewritten as%
+\[
+\left(  \tilde{\sigma}k\right)  ^{-1}\sum_{i,n}\psi_{iln}\lambda_{in}^{E}%
+X_{n}C_{il}^{\varepsilon-1}a_{i}^{\varepsilon-1}=\sum_{i,n}\left(  \gamma
+_{il}\tau_{ln}\right)  ^{-\tilde{k}}M_{i}D_{n}\Psi_{in}^{\frac{-\rho}{1-\rho}%
+}C_{il}^{-\tilde{k}+\varepsilon-1}a_{i}^{\varepsilon-1}%
+\]
+
+
+Consider a typical Northern country, its factor demand can be decomposed into:
+(1) home firms production and sales to (1.1) home market (1.2) another
+Northern market (1.3) a Souther market; (2) production of subsidiaries
+headquartered in another Northern country and sales to (2.1) the host
+(Northern) country (2.2) the source (Northern) country (2.3) a third Northern
+country (2.4) a Southern country; (3) production of subsidiaries headquartered
+in a Southern country and sales to (3.1) the source Southern country (3.2)
+another Southern country (3.3) the host (Northern) country (3.4) another
+Northern country; (4) production of goods used in marketing and entry.
+Collecting terms in $K_{N}^{e}$%
+\begin{align*}
+K_{N}^{e}  &  =M_{N}D_{N}\left(  1+\left(  N_{N}-1\right)  \left(  \gamma
+\tau\right)  ^{-\tilde{k}}\right)  \left(  C_{NN}^{-\tilde{k}}+\left(
+N_{N}-1\right)  \left(  \gamma\tau C_{NN}\right)  ^{-\tilde{k}}+N_{S}\left(
+\gamma\tau C_{NS}\right)  ^{-\tilde{k}}\right)  ^{-\rho}C_{NN}^{\varepsilon
+-\tilde{k}-1}a_{N}^{\varepsilon-1}\\
+&  +M_{N}D_{N}\left(  N_{N}-1\right)  \left(  \tau^{-\tilde{k}}+\gamma
+^{-\tilde{k}}+\left(  N_{N}-2\right)  \left(  \gamma\tau\right)  ^{-\tilde{k}%
+}\right)  \left(  \left(  \gamma C_{NN}\right)  ^{-\tilde{k}}+\left(  \tau
+C_{NN}\right)  ^{-\tilde{k}}+\left(  N_{N}-2\right)  \left(  \gamma\tau
+C_{NN}\right)  ^{-\tilde{k}}+N_{S}\left(  \gamma\tau C_{NS}\right)
+^{-\tilde{k}}\right)  ^{-\rho}C_{NN}^{\varepsilon-\tilde{k}-1}a_{N}%
+^{\varepsilon-1}\\
+&  +M_{N}N_{S}D_{S}\left(  \tau^{-\tilde{k}}+\left(  N_{N}-1\right)  \left(
+\gamma\tau\right)  ^{-\tilde{k}}\right)  \left(  \left(  \tau C_{NN}\right)
+^{-\tilde{k}}+\left(  N_{N}-1\right)  \left(  \gamma\tau C_{NN}\right)
+^{-\tilde{k}}+\left(  \gamma C_{NS}\right)  ^{-\tilde{k}}+\left(
+N_{S}-1\right)  \left(  \gamma\tau C_{NS}\right)  ^{-\tilde{k}}\right)
+^{-\rho}C_{NN}^{\varepsilon-\tilde{k}-1}a_{N}^{\varepsilon-1}\\
+&  +N_{S}M_{S}D_{S}\left(  \gamma\tau\right)  ^{-\tilde{k}}\left(
+C_{SS}^{-\tilde{k}}+\left(  N_{S}-1\right)  \left(  \gamma\tau C_{SS}\right)
+^{-\tilde{k}}+N_{N}\left(  \gamma\tau C_{SN}\right)  ^{-\tilde{k}}\right)
+^{-\rho}C_{SN}^{\varepsilon-\tilde{k}-1}a_{S}^{\varepsilon-1}\\
+&  +N_{S}M_{S}\left(  N_{S}-1\right)  D_{S}\left(  \gamma\tau\right)
+^{-\tilde{k}}\left(  \left(  \tau C_{SS}\right)  ^{-\tilde{k}}+\left(  \gamma
+C_{SS}\right)  ^{-\tilde{k}}+\left(  N_{S}-2\right)  \left(  \gamma\tau
+C_{SS}\right)  ^{-\tilde{k}}+N_{N}\left(  \gamma\tau C_{SN}\right)
+^{-\tilde{k}}\right)  ^{-\rho}C_{SN}^{\varepsilon-\tilde{k}-1}a_{S}%
+^{\varepsilon-1}\\
+&  +N_{S}M_{S}D_{N}\left(  \gamma^{-\tilde{k}}+\left(  N_{N}-1\right)  \left(
+\gamma\tau\right)  ^{-\tilde{k}}\right)  \left(  \left(  \tau C_{SS}\right)
+^{-\tilde{k}}+\left(  N_{S}-1\right)  \left(  \gamma\tau C_{SS}\right)
+^{-\tilde{k}}+\left(  \gamma C_{SN}\right)  ^{-\tilde{k}}+\left(
+N_{N}-1\right)  \left(  \gamma\tau C_{SN}\right)  ^{-\tilde{k}}\right)
+^{-\rho}C_{SN}^{\varepsilon-\tilde{k}-1}a_{S}^{\varepsilon-1}\\
+&  +D_{N}^{e}C_{NN}^{\varepsilon-1}a_{N}^{\varepsilon-1}.
+\end{align*}
+The expression for $L_{N}^{e}$, $K_{S}^{e}$, $L_{S}^{e}$ can be derived in the
+same way. My goal here is to derive $K_{N}^{e}/L_{N}^{e}\leq K_{S}^{e}%
+/L_{S}^{e}$. If this holds, combining the fact that the first part in relative
+factor demand $\left(  r_{N}/w_{N}\right)  ^{-\varepsilon}<\left(  r_{S}%
+/w_{S}\right)  ^{-\varepsilon}$, I will obtain a contradiction $K_{N}%
+/L_{N}<K_{S}/L_{S}$. I consider $K_{N}^{e}L_{S}^{e}-K_{S}^{e}L_{N}^{e}$ and
+collect terms of $M_{N}^{2}D_{N}^{2}$, $M_{S}^{2}D_{S}^{2}$, $M_{S}^{2}%
+D_{N}^{2}$, $M_{N}^{2}D_{S}^{2}$, $M_{N}^{2}D_{N}D_{S}$, $M_{S}^{2}D_{N}D_{S}%
+$, $M_{N}M_{S}D_{N}^{2}$, $M_{N}M_{S}D_{S}^{2}$ and $M_{N}M_{S}D_{N}D_{S}$,
+and terms involving the demand from entry and market access costs $D_{N}%
+^{e}D_{S}^{e}$, $D_{N}^{e}M_{N}D_{N}$, $D_{N}^{e}M_{N}D_{S}$, $D_{N}^{e}%
+M_{S}D_{N}$, $D_{N}^{e}M_{S}D_{S}$, $D_{S}^{e}M_{S}D_{S}$, $D_{S}^{e}%
+M_{S}D_{N}$, $D_{S}^{e}M_{N}D_{S}$, $D_{S}^{e}M_{N}D_{N}$. It turns out that
+all coefficients before all terms expect $M_{N}M_{S}D_{N}D_{S}$ are either
+zero or negative using the results $a_{N}/b_{N}>a_{S}/b_{S}$ and $C_{NN}%
+C_{SS}<C_{NS}C_{SN}$. The sign of the coefficient before $M_{N}M_{S}D_{N}%
+D_{S}$ is the opposite to (\ref{whatSign}). Under the conditions of
+Proposition \ref{prop1}, it must be negative. Thus, $K_{N}^{e}/L_{N}^{e}%
+<K_{S}^{e}/L_{S}^{e}$ and a contradiction is obtained.
+\end{proof}
+
+\begin{proof}
+[Proof of Proposition 3]Trade is frictionless $\tau=1$. The expected global
+profit of a Northern firm can be written as%
+\[
+\pi_{N}=D_{N}\Psi_{Nh}+\left(  N_{N}-1\right)  D_{N}\Psi_{NN}+N_{S}D_{S}%
+\Psi_{NS},
+\]
+where%
+\[
+\Psi_{Nh}=\left(  \left(  1+\left(  N_{N}-1\right)  \gamma^{-\tilde{k}%
+}\right)  C_{N}^{-\tilde{k}}+N_{S}\gamma^{-\tilde{k}}C_{S}^{-\tilde{k}%
+}\right)  ^{1-\rho}=\Psi_{NN}=\Psi_{NS}.
+\]
+Thus%
+\[
+\pi_{N}=\left(  N_{N}D_{N}+N_{S}D_{S}\right)  \Psi_{Nh}.
+\]
+
+
+Similarly, for a Southern firm,%
+\[
+\pi_{S}=\left(  N_{N}D_{N}+N_{S}D_{S}\right)  \Psi_{Sh},
+\]
+where%
+\[
+\Psi_{Sh}=\left(  \left(  1+\left(  N_{S}-1\right)  \gamma^{-\tilde{k}%
+}\right)  C_{S}^{-\tilde{k}}+N_{N}\gamma^{-\tilde{k}}C_{N}^{-\tilde{k}%
+}\right)  ^{1-\rho}.
+\]
+
+
+When $\gamma=1$, $\pi_{N}\left(  \delta\right)  =\pi_{S}\left(  \delta\right)
+$. Then $\delta_{N}=\delta_{S}$ when the optimal technology is unique. When
+$\gamma>1$, Proposition 1 implies that $\delta_{N}>\delta_{S}$.
+
+Now consider the factor market clearing conditions which determine the
+relative factor prices%
+\[
+\frac{K_{l}}{L_{l}}=\frac{K_{l}^{e}}{L_{l}^{e}}\left(  \frac{r_{l}}{w_{l}%
+}\right)  ^{-\varepsilon},
+\]
+where $K_{l}^{e}$ and $L_{l}^{e}$ are defined as in the proof of Proposition 2.
+
+Apply $\tau=1$, $\Psi_{Nh}=\Psi_{NN}=\Psi_{NS}$, and $\Psi_{Sh}=\Psi_{SS}%
+=\Psi_{SN}$,%
+\begin{align*}
+K_{N}^{e}  &  =M_{N}\left(  N_{N}D_{N}+N_{S}D_{S}\right)  \left(  1+\left(
+N_{N}-1\right)  \gamma^{-\tilde{k}}\right)  \Psi_{Nh}^{\frac{-\rho}{1-\rho}%
+}C_{NN}^{\varepsilon-\tilde{k}-1}a_{N}^{\varepsilon-1}\\
+&  +M_{S}\left(  N_{N}D_{N}+N_{S}D_{S}\right)  N_{S}\gamma^{-\tilde{k}}%
+\Psi_{Sh}^{\frac{-\rho}{1-\rho}}C_{SN}^{\varepsilon-\tilde{k}-1}%
+a_{S}^{\varepsilon-1}+D_{N}^{e}C_{NN}^{\varepsilon-1}a_{N}^{\varepsilon-1},
+\end{align*}
+and%
+\begin{align*}
+L_{N}^{e}  &  =M_{N}\left(  N_{N}D_{N}+N_{S}D_{S}\right)  \left(  1+\left(
+N_{N}-1\right)  \gamma^{-\tilde{k}}\right)  \Psi_{Nh}^{\frac{-\rho}{1-\rho}%
+}C_{NN}^{\varepsilon-\tilde{k}-1}b_{N}^{\varepsilon-1}\\
+&  +M_{S}\left(  N_{N}D_{N}+N_{S}D_{S}\right)  N_{S}\gamma^{-\tilde{k}}%
+\Psi_{Sh}^{\frac{-\rho}{1-\rho}}C_{SN}^{\varepsilon-\tilde{k}-1}%
+b_{S}^{\varepsilon-1}+D_{N}^{e}C_{NN}^{\varepsilon-1}b_{N}^{\varepsilon-1}.
+\end{align*}
+
+
+The ratio of relative factor demand%
+\begin{align*}
+\frac{K_{N}^{e}}{L_{N}^{e}}  &  =\frac{M_{N}\left(  1+\left(  N_{N}-1\right)
+\gamma^{-\tilde{k}}\right)  \Psi_{Nh}^{\frac{-\rho}{1-\rho}}C_{NN}%
+^{\varepsilon-\tilde{k}-1}a_{N}^{\varepsilon-1}+M_{S}N_{S}\gamma^{-\tilde{k}%
+}\Psi_{Sh}^{\frac{-\rho}{1-\rho}}C_{SN}^{\varepsilon-\tilde{k}-1}%
+a_{S}^{\varepsilon-1}+D_{N}^{e}C_{NN}^{\varepsilon-1}a_{N}^{\varepsilon-1}%
+}{M_{N}\left(  1+\left(  N_{N}-1\right)  \gamma^{-\tilde{k}}\right)  \Psi
+_{Nh}^{\frac{-\rho}{1-\rho}}C_{NN}^{\varepsilon-\tilde{k}-1}b_{N}%
+^{\varepsilon-1}+M_{S}N_{S}\gamma^{-\tilde{k}}\Psi_{Sh}^{\frac{-\rho}{1-\rho}%
+}C_{SN}^{\varepsilon-\tilde{k}-1}b_{S}^{\varepsilon-1}+D_{N}^{e}%
+C_{NN}^{\varepsilon-1}b_{N}^{\varepsilon-1}},\\
+\frac{K_{S}^{e}}{L_{S}^{e}}  &  =\frac{M_{N}N_{N}\gamma^{-\tilde{k}}\Psi
+_{Nh}^{\frac{-\rho}{1-\rho}}C_{NS}^{\varepsilon-\tilde{k}-1}a_{N}%
+^{\varepsilon-1}+M_{S}\left(  1+\left(  N_{S}-1\right)  \gamma^{-\tilde{k}%
+}\right)  \Psi_{Sh}^{\frac{-\rho}{1-\rho}}C_{SS}^{\varepsilon-\tilde{k}%
+-1}a_{S}^{\varepsilon-1}+D_{S}^{e}C_{SS}^{\varepsilon-1}a_{S}^{\varepsilon-1}%
+}{M_{N}N_{N}\gamma^{-\tilde{k}}\Psi_{Nh}^{\frac{-\rho}{1-\rho}}C_{NS}%
+^{\varepsilon-\tilde{k}-1}b_{N}^{\varepsilon-1}+M_{S}\left(  1+\left(
+N_{S}-1\right)  \gamma^{-\tilde{k}}\right)  \Psi_{Sh}^{\frac{-\rho}{1-\rho}%
+}C_{SS}^{\varepsilon-\tilde{k}-1}b_{S}^{\varepsilon-1}+D_{S}^{e}%
+C_{SS}^{\varepsilon-1}b_{S}^{\varepsilon-1}}.
+\end{align*}
+
+
+When $\gamma\rightarrow1$%
+\[
+\frac{K_{N}^{e}}{L_{N}^{e}}=\left(  \frac{a}{b}\right)  ^{\varepsilon-1}%
+=\frac{K_{S}^{e}}{L_{S}^{e}}.
+\]
+
+
+To show relative factor prices converge when $\gamma>1$, I need to show that
+\[
+\frac{K_{N}^{e}}{L_{N}^{e}}>\frac{K_{S}^{e}}{L_{S}^{e}}.
+\]
+
+
+Now consider $K_{N}^{e}L_{S}^{e}-K_{S}^{e}L_{N}^{e}$ and one can show that it
+can be simplified to\footnote{Detailed derivation can be found in the online
+appendix.}%
+\[
+\left(  a_{N}^{\varepsilon-1}b_{S}^{\varepsilon-1}-a_{S}^{\varepsilon-1}%
+b_{N}^{\varepsilon-1}\right)  \Xi,
+\]
+where $a_{N}^{\varepsilon-1}b_{S}^{\varepsilon-1}-a_{S}^{\varepsilon-1}%
+b_{N}^{\varepsilon-1}$ is positive by Proposition 1 and
+\begin{align*}
+\Xi &  \equiv M_{N}\left(  1+\left(  N_{N}-1\right)  \gamma^{-\tilde{k}%
+}\right)  \Psi_{Nh}^{\frac{-\rho}{1-\rho}}C_{NN}^{\varepsilon-\tilde{k}%
+-1}\times M_{S}\left(  1+\left(  N_{S}-1\right)  \gamma^{-\tilde{k}}\right)
+\Psi_{Sh}^{\frac{-\rho}{1-\rho}}C_{SS}^{\varepsilon-\tilde{k}-1}\\
+&  +M_{S}N_{S}\gamma^{-\tilde{k}}\Psi_{Sh}^{\frac{-\rho}{1-\rho}}%
+C_{SN}^{\varepsilon-\tilde{k}-1}\times M_{N}N_{N}\gamma^{-\tilde{k}}\Psi
+_{Nh}^{\frac{-\rho}{1-\rho}}C_{NS}^{\varepsilon-\tilde{k}-1}\\
+&  +D_{N}^{e}C_{NN}^{\varepsilon-1}D_{S}^{e}C_{SS}^{\varepsilon-1}\\
+&  +D_{N}^{e}C_{NN}^{\varepsilon-1}M_{S}\left(  1+\left(  N_{S}-1\right)
+\gamma^{-\tilde{k}}\right)  \Psi_{Sh}^{\frac{-\rho}{1-\rho}}C_{SS}%
+^{\varepsilon-\tilde{k}-1}\\
+&  +D_{S}^{e}C_{SS}^{\varepsilon-1}M_{N}\left(  1+\left(  N_{N}-1\right)
+\gamma^{-\tilde{k}}\right)  \Psi_{Nh}^{\frac{-\rho}{1-\rho}}C_{NN}%
+^{\varepsilon-\tilde{k}-1}.
+\end{align*}
+Using the restriction $\varepsilon-\tilde{k}-1<0$ and the result from
+Proposition \ref{prop1} that $C_{NN}C_{SS}<C_{SN}C_{NS}$, I can show that the
+sum of the first two terms are positive. Thus, $\Xi>0$ and $K_{N}^{e}%
+/L_{N}^{e}>K_{S}^{e}/L_{S}^{e}$. Relative factor prices diverge after MP liberalization.
+\end{proof}
+
+\section{Data Appendix}
+
+\subsection{Construction of asset deflators}
+
+Since I only use the 2012 firm-level data, I cannot perform a perpetual
+inventory method to calculate the real stock of capital. Consider the
+perpetual inventory method for a typical firm in country $l$:%
+\[
+\tilde{K}_{lt}=I_{lt}+\frac{P_{lt}^{I}}{P_{lt-1}^{I}}\left(  1-\delta
+_{l}\right)  \tilde{K}_{lt-1},
+\]
+where $I_{lt}$ is the \textbf{value} of investment in period $t$ at the price
+of $P_{lt}^{I}$ and $\tilde{K}_{lt}$ is the \textbf{value} of capital stock at
+the price of $P_{lt}^{I}$, at the end of period $t$. $\delta_{l}$ is the
+country specific discount rate. Iterate backwards,%
+\begin{align*}
+\tilde{K}_{it}  &  =I_{lt}+\frac{P_{lt}^{I}}{P_{lt-1}^{I}}\left(  1-\delta
+_{l}\right)  \left[  I_{lt-1}+\frac{P_{lt-1}^{I}}{P_{lt-2}^{I}}\left(
+1-\delta_{l}\right)  \tilde{K}_{lt-2}\right] \\
+&  =\sum_{j=0}^{\infty}\left(  1-\delta_{l}\right)  ^{j}\frac{P_{lt}^{I}%
+}{P_{lt-j}^{I}}I_{lt-j}.
+\end{align*}
+
+
+The real stock of capital equals%
+\[
+K_{lt}\equiv\frac{\tilde{K}_{lt}}{P_{lt}^{I}}=\sum_{j=0}^{\infty}\left(
+1-\delta_{l}\right)  ^{j}\frac{1}{P_{lt-j}^{I}}I_{lt-j}.
+\]
+
+
+However, in practice, the book value of past investment are not adjusted as
+investment price changes over time. I approximate the book value of total
+assets as follows%
+\[
+\tilde{K}_{lt}^{acct}\equiv I_{lt}+\left(  1-\delta_{l}\right)  \tilde
+{K}_{lt-1}^{acct}=\sum_{j=0}^{\infty}\left(  1-\delta_{l}\right)  ^{j}%
+I_{lt-j}.
+\]
+Crozet and Trionfetti (2013) simply deflate the accounting value of capital
+stock using the price of investment (PWT 8.0, US 2005 = 1) and get%
+\[
+K_{lt}^{CT}\equiv\tilde{K}_{lt}^{acct}/P_{lt}^{I}=\sum_{j=0}^{\infty}\left(
+1-\delta\right)  ^{j}\frac{1}{P_{lt}^{I}}I_{lt-j},
+\]
+which tends to underestimate the real capital stock if there is constant
+inflation in investment prices. To properly adjust the real capital stock, I
+assume that the economies are in steady states and \emph{the real capital
+stock grows at a constant rate }$g_{l}$. This implies%
+\begin{align*}
+K_{lt}  &  =\left(  1+g_{l}\right)  K_{lt-1}=I_{lt}/P_{lt}^{I}+\left(
+1-\delta_{l}\right)  K_{lt-1}\\
+&  \Rightarrow I_{lt}/P_{lt}^{I}=\left(  g_{l}+\delta_{l}\right)  K_{lt-1}.
+\end{align*}
+Thus real investment grows at the same speed as capital stock. Also assume the
+investment prices grow at constant rates $\pi_{l}$. I can rewrite the real
+capital stock as
+\begin{align*}
+K_{lt}  &  =\sum_{j=0}^{\infty}\left(  1-\delta_{l}\right)  ^{j}\frac
+{1}{P_{lt-j}^{I}}I_{lt-j}\\
+&  =\frac{I_{lt}}{P_{lt}^{I}}\sum_{j=0}^{\infty}\left(  \frac{1-\delta_{l}%
+}{1+g_{l}}\right)  ^{j}\\
+&  =\frac{I_{lt}}{P_{lt}^{I}}\frac{1+g_{l}}{\delta_{l}+g_{l}},
+\end{align*}
+and
+\begin{align*}
+\tilde{K}_{lt}^{acct}  &  =\sum_{j=0}^{\infty}\left(  \frac{1-\delta_{l}%
+}{1+g_{l}}\right)  ^{j}\frac{I_{lt}}{P_{lt}^{I}}P_{lt-j}^{I}\\
+&  =\frac{I_{lt}}{P_{lt}^{I}}\sum_{j=0}^{\infty}P_{lt}^{I}\left(
+\frac{1-\delta_{l}}{\left(  1+\pi_{l}\right)  \left(  1+g_{l}\right)
+}\right)  ^{j}\\
+&  =I_{lt}\frac{\left(  1+\pi_{l}\right)  \left(  1+g_{l}\right)  }{\left(
+1+\pi_{l}\right)  \left(  1+g_{l}\right)  -\left(  1-\delta_{l}\right)  }.
+\end{align*}
+Thus the proper deflator is%
+\[
+\frac{\tilde{K}_{lt}^{acct}}{K_{lt}}=P_{lt}^{I}\frac{\left(  1+\pi_{l}\right)
+\left(  \delta_{l}+g_{l}\right)  }{\pi_{l}+g_{l}+\pi_{l}g_{l}+\delta_{l}}.
+\]
+If the life span of firms is finite, say $T$, then the deflator should be%
+\begin{align*}
+\frac{\tilde{K}_{lt}^{acct}}{K_{lt}}  &  =P_{lt}^{I}\frac{\sum_{j=0}%
+^{T-1}\left(  \frac{1-\delta_{l}}{\left(  1+\pi_{l}\right)  \left(
+1+g_{l}\right)  }\right)  ^{j}}{\sum_{j=0}^{T-1}\left(  \frac{1-\delta_{l}%
+}{1+g_{l}}\right)  ^{j}}\\
+&  =P_{lt}^{I}\frac{\left(  1+\pi_{l}\right)  \left(  \delta_{l}+g_{l}\right)
+}{\pi_{l}+g_{l}+\pi_{l}g_{l}+\delta_{l}}\frac{1-\left(  \frac{1-\delta_{l}%
+}{\left(  1+\pi_{l}\right)  \left(  1+g_{l}\right)  }\right)  ^{T}}{1-\left(
+\frac{1-\delta_{l}}{1+g_{l}}\right)  ^{T}}.
+\end{align*}
+
+
+In practice, I calculate $g_{l}$ and $\pi_{l}$ using a log-linear regression
+of real capital stock and investment prices on time for the sample period
+1990-2011, respectively. Then I extrapolate $P_{l,2012}^{I}$ from 2000-2011 to
+2012 using country-specific growth rates. Firm age in all countries is assumed
+to be 10 years.
+
+In the reduced-form regressions in Section 2, it does not matter what deflator
+I use since it is country specific and will be absorbed by the
+country-industry fixed effects. However, when it comes to the estimation of
+the intensive elasticity, the capital-labor ratio has to be comparable across
+countries. For the estimate used in calibration, I assume firm age to be 10
+years in all countries. I experiment with different $T$ and the results are
+robust. (See Table A7)
+
+\section{Tables}%
+
+%TCIMACRO{\TeXButton{reset_counter}{\setcounter{table}{0}
+%\renewcommand{\thetable}{A\arabic{table}}}}%
+%BeginExpansion
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{frequency_by_host}{\newpage\input
+%{tables/frequency_by_host.tex}}}%
+%BeginExpansion
+\newpage\input{tables/frequency_by_host.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{frequency_by_home}{\newpage\input
+%{tables/frequency_by_home.tex}}}%
+%BeginExpansion
+\newpage\input{tables/frequency_by_home.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{tech_origin_mne}{\newpage\input
+%{tables/tech_origin_mne.tex}}}%
+%BeginExpansion
+\newpage\input{tables/tech_origin_mne.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{tech_origin_mne_common_sample}{\newpage\input
+%{tables/tech_origin_mne_common_sample.tex}}}%
+%BeginExpansion
+\newpage\input{tables/tech_origin_mne_common_sample.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{tech_origin_foreignLink}{\newpage\input
+%{tables/tech_origin_foreignLink.tex}}}%
+%BeginExpansion
+\newpage\input{tables/tech_origin_foreignLink.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{alter_tech_origin}{\newpage\input
+%{tables/alter_tech_origin.tex}}}%
+%BeginExpansion
+\newpage\input{tables/alter_tech_origin.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{ind_def}{\newpage\input{tables/ind_def.tex}}}%
+%BeginExpansion
+\newpage\input{tables/ind_def.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{elas_int}{\newpage\input{tables/elas_int.tex}}}%
+%BeginExpansion
+\newpage\input{tables/elas_int.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{cf_unilateral_mp_lib}{\newpage\input
+%{tables/cf_unilateral_mp_lib.tex}}}%
+%BeginExpansion
+\newpage\input{tables/cf_unilateral_mp_lib.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{cf_baseline}{\newpage\input{tables/cf_baseline.tex}}}%
+%BeginExpansion
+\newpage\input{tables/cf_baseline.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{calib_cbp_only}{\newpage\input{tables/calib_cbp_only.tex}%
+%}}%
+%BeginExpansion
+\newpage\input{tables/calib_cbp_only.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{cf_cbp_only}{\newpage\input{tables/cf_cbp_only.tex}}}%
+%BeginExpansion
+\newpage\input{tables/cf_cbp_only.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{calib_exogenous_toe}{\newpage\input
+%{tables/calib_exogenous_toe.tex}}}%
+%BeginExpansion
+\newpage\input{tables/calib_exogenous_toe.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{cf_exogenous_toe}{\newpage\input
+%{tables/cf_exogenous_toe.tex}}}%
+%BeginExpansion
+\newpage\input{tables/cf_exogenous_toe.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{calib_mobileK}{\newpage\input{tables/calib_mobileK.tex}}}%
+%BeginExpansion
+\newpage\input{tables/calib_mobileK.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{cf_mobileK}{\newpage\input{tables/cf_mobileK.tex}}}%
+%BeginExpansion
+\newpage\input{tables/cf_mobileK.tex}%
+%EndExpansion
+
+
+\section{Figures}%
+
+%TCIMACRO{\TeXButton{reset_counter}{\setcounter{figure}{0}
+%\renewcommand{\thefigure}{A\arabic{figure}}}}%
+%BeginExpansion
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{A\arabic{figure}}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{cf_cbp_only}{\begin{figure}[ptbh]\caption
+%{Counterfactual labor shares: CBP only}\label{fig:cf_labor_share_cbp_only}
+%\centering\includegraphics[scale=0.9]{{cf_labor_share_cbp_only.pdf}%
+%}\end{figure}}}%
+%BeginExpansion
+\begin{figure}[ptbh]\caption{Counterfactual labor shares: CBP only}%
+\label{fig:cf_labor_share_cbp_only}
+\centering\includegraphics[scale=0.9]{{cf_labor_share_cbp_only.pdf}%
+}\end{figure}%
+%EndExpansion
+
+
+
+\end{document}
