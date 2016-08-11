@@ -9,13 +9,56 @@ log using "$logDir/eurostat_ind_agg.smcl", replace
 local data_in = "processed_data/temp/eurostat"
 local data_out = "processed_data/eurostat"
 capture mkdir "`data_out'"
+local exchRateList exchRate_wdi lcu_to_eur_es euroExchRate fixedRate year_of_adoption
+local outputPath = "$tableDir/eurostat_ind_agg.csv"
+capture rm `outputPath'
 
 program drop _all
+
 program checkMiss
     display "check causes for missing values"
     tab value2 if missing(value1), missing sort // causes for missing values
     display "check flags for nonmissing values"
     tab value2 if ~missing(value1), missing sort // flags for nonmissing values
+end
+
+program adj_exch_rate_es_fats
+    syntax [varlist]
+    foreach x in `varlist' {
+        gen temp = .
+        replace temp = `x' * euroExchRate * 1e6 if year>=1999
+        replace temp = `x' * lcu_to_eur_es / exchRate_wdi * 1e6 if year<1999 // change to LCU then use WDI exchange rates
+        count if temp==. & `x'<.
+        if `r(N)'==0 {
+            drop `x'
+            ren temp `x'
+            label var `x' "Unit: USD"
+        }
+        else {
+            display as error "Exchange rate adjustments did not cover some obs for `x'. Check."
+            tab year iso3 if temp==. & `x'<.
+            error 1
+        }
+    }
+end
+
+program adj_exch_rate_es_fdi
+    syntax [varlist]
+    foreach x in `varlist' {
+        gen temp = .
+        replace temp = `x' * euroExchRate * 1e6 // before 1999 ECU; after 1999 EURO
+        count if temp==. & `x'<.
+        if `r(N)'==0 {
+            drop `x'
+            ren temp `x'
+            label var `x' "Unit: USD"
+        }
+        else {
+            display as error "Exchange rate adjustments did not cover some obs for `x'. Check."
+            tab year iso3 if temp==. & `x'<.
+            error 1
+        }
+    }
 end
 
 ****************
@@ -35,7 +78,6 @@ import excel using "processed_data/select_var.xlsx", clear firstrow sheet("euros
 drop if missing(varName)
 tempfile selected_var_out
 save `selected_var_out', replace
-
 
 *****************************
 ** fats tables industry aggregate
@@ -128,6 +170,35 @@ ren flag* flag_*_totXfin
 append using `fats_g1b_08'
 append using `fats_g1b_03'
 
+** standardize iso codes
+replace geo = "GB" if geo == "UK"
+replace geo = "GR" if geo == "EL"
+ren geo iso2
+merge m:1 iso2 using "processed_data/isoStandard.dta", keepusing(iso3) keep(match) nogen
+ren iso2 geo
+** exchange rate adjustment
+merge m:1 iso3 year using "processed_data/exchRate.dta", keep(master match) nogen ///
+    keepusing(`exchRateList')
+adj_exch_rate_es_fats inv_tangi* psn_cost* purchase* rev* vadd* 
+drop iso3 `exchRateList'
+
+*** check growth rates for outliers
+egen id_pair = group(geo c_ctrl)
+xtset id_pair year
+ds *, has(type numeric)
+foreach x in `r(varlist)' {
+    gen diff_log_`x' = log(`x') - log(l.`x')
+}
+estpost summarize diff_log_*, quietly detail
+esttab . using "`outputPath'", append cells("count(fmt(a3)) mean sd min p1 p5 p10 p25 p50 p75 p90 p95 p99 max") noobs ///
+    title("summary stats for log growth rates - inward fats")
+estpost tabstat diff_log_*, by(year) statistics(mean count) ///
+    columns(statistics) quietly
+esttab . using "`outputPath'", append main(mean) aux(count) nogap nostar ///
+    unstack noobs nonote label ///
+    title("mean (N) log growth rates - inward fats")    
+drop diff_log_* id_pair
+
 compress
 duplicates report year geo c_ctrl
 duplicates drop
@@ -208,7 +279,6 @@ merge 1:1 geo partner year using `fats_out2_r2_fin', nogen
 tempfile fats_out2_r2
 save `fats_out2_r2', replace
 
-
 *** append other years
 clear
 foreach f in fats_out1 fats_out2 fats_out2_r2 {
@@ -216,6 +286,36 @@ append using ``f''
 }
 duplicates report geo partner year
 duplicates drop
+
+** standardize iso codes
+replace geo = "GB" if geo == "UK"
+replace geo = "GR" if geo == "EL"
+ren geo iso2
+merge m:1 iso2 using "processed_data/isoStandard.dta", keepusing(iso3) keep(match) nogen
+ren iso2 geo
+** exchange rate adjustment
+merge m:1 iso3 year using "processed_data/exchRate.dta", keep(master match) nogen ///
+    keepusing(`exchRateList')
+adj_exch_rate_es_fats rev*
+drop iso3 `exchRateList'
+
+*** check growth rates for outliers
+egen id_pair = group(geo partner)
+xtset id_pair year
+ds *, has(type numeric)
+foreach x in `r(varlist)' {
+    gen diff_log_`x' = log(`x') - log(l.`x')
+}
+estpost summarize diff_log_*, quietly detail
+esttab . using "`outputPath'", append cells("count(fmt(a3)) mean sd min p1 p5 p10 p25 p50 p75 p90 p95 p99 max") noobs ///
+    title("summary stats for log growth rates - outward fats")
+estpost tabstat diff_log_*, by(year) statistics(mean count) ///
+    columns(statistics) quietly
+esttab . using "`outputPath'", append main(mean) aux(count) nogap nostar ///
+    unstack noobs nonote label ///
+    title("mean (N) log growth rates - outward fats")    
+drop diff_log_* id_pair
+
 compress
 save "`data_out'/fats_out.dta", replace
 
@@ -273,6 +373,26 @@ keep iso2_o iso2_d year eurostat_out_stock_flag eurostat_out_stock
 merge 1:1 iso2_o iso2_d year using `eurostat_out_flow', nogen
 merge 1:1 iso2_o iso2_d year using `eurostat_in_flow', nogen
 merge 1:1 iso2_o iso2_d year using `eurostat_in_stock', nogen
+
+** exchange rate adjustment
+foreach direc in in out {
+    if "`direc'" == "in" {
+        local x d
+    }
+    else {
+        local x o
+    }
+    ren iso2_`x' iso2
+    replace iso2 = "GB" if iso2 == "UK"
+    replace iso2 = "GR" if iso2 == "EL"
+    replace iso2 = "CN" if iso2 == "CN_X_HK"
+    merge m:1 iso2 using "processed_data/isoStandard.dta", keep(match) keepusing(iso3) nogen
+    ren iso2 iso2_`x'
+    merge m:1 iso3 year using "processed_data/exchRate.dta", keep(master match) nogen ///
+    keepusing(euroExchRate)
+    adj_exch_rate_es_fdi eurostat_`direc'_stock eurostat_`direc'_flow
+    drop iso3 euroExchRate
+}
 
 compress
 duplicates report iso2_o iso2_d year
@@ -388,6 +508,27 @@ forvalues i = 1/2 {
 
 use `eurostat_stock_flow_r2', clear
 merge 1:1 iso2_o iso2_d year using `eurostat_stock_flow_r1', nogen
+
+** exchange rate adjustment
+foreach direc in in out {
+    if "`direc'" == "in" {
+        local x d
+    }
+    else {
+        local x o
+    }
+    ren iso2_`x' iso2
+    replace iso2 = "GB" if iso2 == "UK"
+    replace iso2 = "GR" if iso2 == "EL"
+    replace iso2 = "CN" if iso2 == "CN_X_HK"
+    merge m:1 iso2 using "processed_data/isoStandard.dta", keep(match) keepusing(iso3) nogen
+    ren iso2 iso2_`x'
+    merge m:1 iso3 year using "processed_data/exchRate.dta", keep(master match) nogen ///
+    keepusing(euroExchRate)
+    adj_exch_rate_es_fdi eurostat_`direc'_stock_r? eurostat_`direc'_flow_r?
+    drop iso3 euroExchRate
+}
+
 compress
 duplicates report iso2_o iso2_d year
 save "`data_out'/bop_stock_flow", replace

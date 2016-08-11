@@ -1,10 +1,6 @@
 *******************************************
 ** master file for the folder analysis
 *******************************************
-clear all
-set more off
-set matsize 1000
-
 cd $cdDir
 global codeDir "code/analysis"
 global figureDir "output/analysis/figures"

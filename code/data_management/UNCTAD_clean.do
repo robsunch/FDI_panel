@@ -137,5 +137,12 @@ drop iso3_report
 ren (stock* flow*) (UNCTAD_out_stock* UNCTAD_out_flow*)
 merge 1:1 iso3_o iso3_d year using `inwardFDI', nogen
 
+*** monetary value from mil of USD to USD
+foreach direc in in out {
+foreach x in flow stock {
+    replace UNCTAD_`direc'_`x' = UNCTAD_`direc'_`x' * 1e6
+}
+}
+
 compress
 save "processed_data/UNCTAD_FDI.dta", replace

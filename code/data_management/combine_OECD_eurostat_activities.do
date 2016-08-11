@@ -1,8 +1,7 @@
 ****************************************************
 ** this do-file combines OECD and Eurostat inward and outward
-** activities, convert monetary variables to USD
-** and compare four definitions for each variable: 
-** inward OECD, outward OECD, inward Eurostat, outward Eurostat
+** activities
+** n_emp and n_psn_emp are consolidated
 ****************************************************
 
 log close _all
@@ -166,6 +165,8 @@ foreach x2 in in out {
 }
 save "processed_data/activity_reporting_OECD_eurostat.dta", replace
 
+
+
 clear
 use `es_out_to_merge', clear
 merge 1:1 iso3_o iso3_d year using `es_in_to_merge', nogen
@@ -195,174 +196,16 @@ foreach x in in_rev_totXfin out_rev_fin out_rev_tot {
 estpost summarize diff_in_rev_totXfin diff_out_rev_*, detail quietly
 esttab . using "`outputPath'", append cell("mean sd min p10 p25 p50 p75 p90 max count") ///
     noobs title("% diff in OECD and Eurostat variables BEFORE exchange rate adjustments")
-    
-local keepList lcu_to_eur_es fixedRate year_of_adoption   
- 
-ren iso3_d iso3
-merge m:1 iso3 year using "processed_data/exchRate.dta", keep(master match) nogen keepusing(`keepList')
-** attempt to adjust es_in_rev to Euros used in OECD
-gen adj_es_in_rev_totXfin = es_in_rev_totXfin * lcu_to_eur_es if year_of_adoption == .
-replace adj_es_in_rev_totXfin = es_in_rev_totXfin if year_of_adoption < . & year >= year_of_adoption
-replace adj_es_in_rev_totXfin = es_in_rev_totXfin * lcu_to_eur_es / fixedRate if year_of_adoption < . & year < year_of_adoption
-quietly count if adj_es_in_rev_totXfin == . & es_in_rev_totXfin < .
-if `r(N)' > 0 {
-    disp as error "Some es_in_rev_totXfin cannot be adjusted using LCU-EUR exchange rates. Check."
-    error 1 
-}
-ren iso3 iso3_d
-drop `keepList'
-
-ren iso3_o iso3
-merge m:1 iso3 year using "processed_data/exchRate.dta", keep(master match) nogen keepusing(`keepList')
-** attempt to adjust es_out_rev_tot es_out_rev_fin to Euros used in OECD
-foreach x in tot fin {
-    gen adj_es_out_rev_`x' = es_out_rev_`x' * lcu_to_eur_es if year_of_adoption == .
-    replace adj_es_out_rev_`x' = es_out_rev_`x' if year_of_adoption < . & year >= year_of_adoption
-    replace adj_es_out_rev_`x' = es_out_rev_`x' * lcu_to_eur_es / fixedRate if year_of_adoption < . & year < year_of_adoption
-    quietly count if adj_es_out_rev_`x' == . & es_out_rev_`x' < .
-    if `r(N)' > 0 {
-        disp as error "Some es_out_rev_`x' cannot be adjusted using LCU-EUR exchange rates. Check."
-        error 1 
-    }
-}
-ren iso3 iso3_o
-drop `keepList'
-    
-foreach x in in_rev_totXfin out_rev_tot out_rev_fin {
-    gen diff_adj_`x' = (oecd_`x' - adj_es_`x') /  (oecd_`x' + adj_es_`x') * 2
-}    
-
-estpost summarize diff_adj_*, detail quietly
-esttab . using "`outputPath'", append cell("mean sd min p10 p25 p50 p75 p90 max count") ///
-    noobs title("% diff in OECD and Eurostat variables AFTER exchange rate adjustments")
-drop diff_adj_*    
 restore
 
-***********************************
-** exchange rate  adjustment for OECD and
-** Eurostat datasets
-************************************
-foreach f in out in {
-    if "`f'" == "in" {
-        local direc d
-    }
-    else if "`f'" == "out" {
-        local direc o
-    }
-
-    ren iso3_`direc' iso3
-    
-    local keepList exchRate_wdi lcu_to_eur_es euroExchRate fixedRate year_of_adoption
-    merge m:1 iso3 year using "processed_data/exchRate.dta", keep(master match) nogen ///
-        keepusing(`keepList')
-    
-    ** Eurostat
-    quietly ds es_`f'*rev*
-    foreach x in `r(varlist)' {
-        if ~regexm("`x'","flag") {
-            count if ~missing(`x') & year<=1998
-            if `r(N)' > 0 {
-                estpost tabulate iso3 year if ~missing(`x') & year<=1998
-                esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Eurostat `x' before 1998") ///
-                eqlabels(, lhs("iso3_`direc' \ year")) varlabels(`e(labels)')
-            }
-            
-            gen temp = .
-            replace temp = `x' * euroExchRate * 1e6 if year>=1999
-            replace temp = `x' * lcu_to_eur_es / exchRate_wdi * 1e6 if year<1999 // change to LCU then use WDI exchange rates
-            count if temp==. & `x'<.
-            if `r(N)'==0 {
-                drop `x'
-                ren temp `x'
-                label var `x' "Unit: USD"
-            }
-            else {
-                display as error "Exchange rate adjustments did not cover some obs for `x'. Check."
-                tab year iso3 if temp==. & `x'<.
-                drop `x'
-                ren temp `x'
-                label var `x' "Unit: USD"
-                ** error 1
-            }            
-        }
-    }
-    
-    ** OECD
-    quietly ds oecd_`f'*rev*
-    foreach x in `r(varlist)' {
-        if ~regexm("`x'","flag") {
-            count if ~missing(`x') & year<=1998
-            if `r(N)' > 0 {
-                estpost tabulate iso3 year if ~missing(`x') & year<=1998
-                esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("OECD `x' before 1998") ///
-                eqlabels(, lhs("iso3_`direc' \ year")) varlabels(`e(labels)')
-            }
-            
-            gen temp = .
-            replace temp = `x' * euroExchRate * 1e6 if year>=year_of_adoption & year_of_adoption < . // EMU country years
-            replace temp = `x' * fixedRate / exchRate_wdi * 1e6 if year<year_of_adoption & year_of_adoption < . // Pre-EMU
-            replace temp = `x' / exchRate_wdi * 1e6 if year_of_adoption == . // non-EMU
-            count if temp==. & `x'<.
-            if `r(N)'==0 {
-                drop `x'
-                ren temp `x'
-                label var `x' "Unit: USD"
-            }
-            else {
-                display as error "Exchange rate adjustments did not cover some obs for `x'. Check."
-                tab year iso3 if temp==. & `x'<.
-                drop `x'
-                ren temp `x'
-                label var `x' "Unit: USD"
-                ** error 1
-            }            
-        }
-    }
-    
-    ren iso3 iso3_`direc'
-    drop `keepList'
-}
-
-*** adjust for Germany's monetary values in 2007 in OECD outward
-egen id_pair = group(iso3_o iso3_d)
-xtset id_pair year
-ds oecd_out*, has(type numeric)
-foreach x in `r(varlist)' {
-    gen gr_`x' = `x' / l.`x' - 1
-}
-estpost tabstat gr_* if iso3_o == "DEU", by(year) statistics(mean count) ///
-    columns(statistics) quietly
-esttab . using "`outputPath'", append main(mean) aux(count) nogap nostar ///
-    unstack noobs nonote label ///
-    title("mean (N) growth rates - Germany - before 2007 adjustment")
-
-
-ds oecd_out*rev*, has(type numeric)
-foreach x in `r(varlist)' {
-    replace `x' = `x' / 1000 if year == 2007 & iso3_o == "DEU"
-    replace gr_`x' = `x' / l.`x' - 1
-}
-estpost tabstat gr_* if iso3_o == "DEU", by(year) statistics(mean count) ///
-    columns(statistics) quietly
-esttab . using "`outputPath'", append main(mean) aux(count) nogap nostar ///
-    unstack noobs nonote label ///
-    title("mean (N) growth rates - Germany - after 2007 adjustment")       
-drop gr_* id_pair
-  
-estpost tabulate year if iso3_o==iso3_d, elabels missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
-    title("Cases where home country is the same as host country")
+** cases where home country = host country
 estpost tabulate iso3_o if iso3_o==iso3_d, elabels missing
 esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
     title("Cases where home country is the same as host country")
-    
 drop if iso3_o==iso3_d
   
 compress
 sort iso3_o iso3_d year
 save "processed_data/activity_OECD_eurostat_combined.dta", replace
-
 
 log close _all

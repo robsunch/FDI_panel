@@ -12,11 +12,6 @@ local data_out = "processed_data/OECD"
 local outputPath = "$tableDir/OECD_combine_isic3_isic4.csv"
 capture rm "`outputPath'"
 
-*** EUR to USD exchange rate
-use iso3 fixedRate if iso3=="SVN" using "processed_data/exchRate.dta", clear
-quietly sum fixedRate
-local fixedRate_SVN = `r(mean)' // for SVN
-
 *** compare outward MP
 use using "`data_in'/AMNE_OUT4_bilat_tot.dta", clear
 merge 1:1 iso3_o iso3_d year using "`data_in'/FATS_OUT3_bilat_tot_fin.dta"
@@ -51,21 +46,8 @@ estpost summarize diff*, detail quietly
 esttab . using "`outputPath'", append cell("mean sd min p10 p25 p50 p75 p90 max count") ///
     noobs title("% diff (isic3 vs isic4)")
 
-estpost tabulate iso3_o year if (diff_rev > 1 & diff_rev < .) | diff_rev < -0.5
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-            title("Number of cases for where % diff in revenue > 1 or < -0.5 before SVN exchange rate adjustment") ///
-            eqlabels(, lhs("year \ iso3_o"))
-foreach x in 6895 9999 {
-    replace rev_ind`x' = rev_ind`x' / `fixedRate_SVN' if iso3_o == "SVN"
-}
-replace diff_rev = rev_ind9999 / rev_C9999 - 1
-estpost summarize diff_rev, detail quietly
-esttab . using "`outputPath'", append cell("mean sd min p10 p25 p50 p75 p90 max count") ///
-    noobs title("% diff (isic3 vs isic4) after adjusting for exchange rate for SVN")
-
 **************************************************
-*** combine the two data sets
-*** before 2007 (including 2007) use isic3 ; after 2007 use isic4
+*** combine the two data sets (outward FATS)
 **************************************************
 use "`data_in'/AMNE_OUT4_world_tot_fin.dta", clear // note for outward world total/fin, data is in a separate table
 ren (*C6466 *C9999) (*fin *tot)
@@ -79,15 +61,32 @@ keep iso3* year *tot
 tempfile AMNE_OUT4_world_tot
 save `AMNE_OUT4_world_tot', replace
 
-use if year<=2007 using "`data_in'/FATS_OUT3_bilat_tot_fin.dta", clear
-ren *_ind6895 *_fin
-ren *_ind9999 *_tot
-tempfile before07
-save `before07', replace
+use "`data_in'/FATS_OUT3_bilat_tot_fin.dta", clear
+ren *_ind6895 *_fin_isic3
+ren *_ind9999 *_tot_isic3
+tempfile isic3_out
+save `isic3_out', replace
 
-use if year>=2008 using "`data_in'/AMNE_OUT4_bilat_tot.dta", clear
-ren *_C9999 *_tot
-append using `before07'
+use "`data_in'/AMNE_OUT4_bilat_tot.dta", clear
+merge 1:1 iso3_o iso3_d year using `isic3_out', nogen
+foreach x in n_emp n_ent n_psn_emp rev {
+    gen `x'_tot = `x'_C9999 if year>=2008
+    if "`x'" ~= "n_psn_emp" {
+        replace `x'_tot = `x'_tot_isic3 if year>=2008 & `x'_tot==.
+        replace `x'_tot = `x'_tot_isic3 if year<=2007
+    }
+    replace `x'_tot = `x'_C9999 if year <= 2007 & `x'_tot==.
+    
+    gen flag_`x'_tot = flag_`x'_C9999 if year>=2008
+    if "`x'" ~= "n_psn_emp" {
+        replace flag_`x'_tot = flag_`x'_tot_isic3 if year>=2008 & flag_`x'_tot==""
+        replace flag_`x'_tot = flag_`x'_tot_isic3 if year<=2007
+    }
+    replace flag_`x'_tot = flag_`x'_C9999 if year <= 2007 & flag_`x'_tot==""
+}
+ren *_fin_isic3 *_fin // only ISIC3 contains data on financial sector
+drop *C9999 *isic3
+
 merge 1:1 iso3_o iso3_d year using `AMNE_OUT4_world_fin', update
 estpost tabulate year _merge, elabels
 esttab using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
@@ -115,18 +114,52 @@ esttab using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varl
 
 **************************************************
 *** combine the two data sets
-*** before 2007 (including 2007) use isic3 ; after 2007 use isic4
+*** before 2007 use isic3 as primary
+*** after 2007 use isic4 as primary
 **************************************************
-use if year<=2007 using "`data_in'/FATS_IN3_bilat_tot_fin.dta", clear
-ren (*_ind9994 *_ind6895 *_ind9999) (*_totXfin *_fin *_tot)
-tempfile before07
-save `before07', replace
+use "`data_in'/FATS_IN3_bilat_tot_fin.dta", clear
+merge 1:1 iso3_o iso3_d year using "`data_in'/AMNE_IN4_bilat_tot.dta", nogen
 
-use if year>=2008 using "`data_in'/AMNE_IN4_bilat_tot.dta", clear
-ren (*_C9999 *_C9994) (*_tot *_totXfin)
-append using `before07'
+foreach x in n_emp n_ent rev {
+    gen `x'_tot = `x'_ind9999 if year<=2007
+    replace `x'_tot = `x'_C9999 if year<=2007 & `x'_tot==.
+    replace `x'_tot = `x'_C9999 if year>=2008
+    replace `x'_tot = `x'_ind9999 if year>=2008 & `x'_tot==.
+    gen flag_`x'_tot = flag_`x'_ind9999 if year<=2007
+    replace flag_`x'_tot = flag_`x'_C9999 if year<=2007 & flag_`x'_tot==""
+    replace flag_`x'_tot = flag_`x'_C9999 if year>=2008
+    replace flag_`x'_tot = flag_`x'_ind9999 if year>=2008 & flag_`x'_tot==""
 
+    gen `x'_totXfin = `x'_ind9994 if year<=2007
+    replace `x'_totXfin = `x'_C9994 if year<=2007 & `x'_tot==.
+    replace `x'_totXfin = `x'_C9994 if year>=2008
+    replace `x'_totXfin = `x'_ind9994 if year>=2008 & `x'_tot==.
+    gen flag_`x'_totXfin = flag_`x'_ind9994 if year<=2007
+    replace flag_`x'_totXfin = flag_`x'_C9994 if year<=2007 & flag_`x'_tot==""
+    replace flag_`x'_totXfin = flag_`x'_C9994 if year>=2008
+    replace flag_`x'_totXfin = flag_`x'_ind9994 if year>=2008 & flag_`x'_tot==""
+}    
 
+ren *_ind6895 *_fin
+ren *n_psn_emp_C9994 *n_psn_emp_totXfin
+ren *n_psn_emp_C9999 *n_psn_emp_tot
+
+drop *_ind* *_C*
+
+*** check growth rates
+egen id_pair = group(iso3_o iso3_d)
+xtset id_pair year
+ds *n_psn_emp* *n_ent* *_n_emp* *rev*, has(type numeric)
+foreach x in `r(varlist)' {
+    gen diff_log_`x' = log(`x') - log(l.`x')
+}
+estpost tabstat diff_log_*, by(year) statistics(mean count) ///
+    columns(statistics) quietly
+esttab . using "`outputPath'", append main(mean) aux(count) nogap nostar ///
+    unstack noobs nonote label ///
+    title("diff log points growth - check break")    
+drop diff_log_* id_pair
+    
 sort iso3_o iso3_d year
 compress
 save "`data_out'/activity_in.dta", replace

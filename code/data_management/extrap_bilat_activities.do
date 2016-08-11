@@ -4,16 +4,14 @@
 ** following the procedure described in the documentation
 **********************************************
 
-local csvPath = "$tableDir/extrap_bilat_activities.csv"
+local csvPath = "$tableDir/extrap_bilat_in_rev.csv"
 capture rm "`csvPath'"
 
 local xlsxPath = "$tableDir/potential_outliers.xlsx"
 capture rm "`xlsxPath'"
 
-use "processed_data/nonfin_OECD_eurostat_activity.dta", clear
-
 local outlier_thresh = 5
-
+   
 program drop _all
 program countCountry
     egen tag_home = tag(iso3_o) if e(sample)
@@ -25,49 +23,44 @@ program countCountry
     drop tag_home tag_host
 end
 
-******************************************
-** Step 1: combine two variables on employment
-******************************************
-foreach s in oecd es {
+*********************************
+** combine stock information
+*********************************
+use "processed_data/OECD_ES_UNCTAD_flow_stock.dta", clear
 foreach direc in in out {
-    gen `s'_`direc'_emp_totXfin = .
-    gen source = ""
-    capture confirm variable `s'_`direc'_n_psn_emp_totXfin
-    if ~_rc {
-        disp as text "Use Number of Persons employed as primary source for `s' `direc'."
-        replace `s'_`direc'_emp_totXfin = `s'_`direc'_n_psn_emp_totXfin
-        replace source = "psn_emp" if `s'_`direc'_n_psn_emp_totXfin < .
-        capture confirm variable `s'_`direc'_n_emp_totXfin
-        if ~_rc {
-            disp as text "Supplement with Number of employmees."
-            replace source = "emp" if `s'_`direc'_emp_totXfin==. ///
-                & `s'_`direc'_n_emp_totXfin<.
-            replace `s'_`direc'_emp_totXfin = `s'_`direc'_n_emp_totXfin ///
-                if `s'_`direc'_emp_totXfin==. ///
-                & `s'_`direc'_n_emp_totXfin<.
-        }            
-    }
-    else {
-        disp as text "Use Number of employees as primary source for `s' `direc'."
-        replace source = "emp" if `s'_`direc'_n_emp_totXfin<.
-        replace `s'_`direc'_emp_totXfin = `s'_`direc'_n_emp_totXfin
-    }    
     
-    estpost tabulate source, missing
-    esttab . using "`csvPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
-        title("Source of employment of `s' `direc'")
-    drop source
-}
+    ** compare differences between oecd and ES stock
+    gen diff_log_`direc'_stock = log(es_`direc'_stock) - ///
+        log(oecd_`direc'_stock)
+    
+    gen `direc'_stock = es_`direc'_stock // use ES as primary source
+    gen source_`direc'_stock = "es" if es_`direc'_stock<.
+    replace source_`direc'_stock = "oecd" if oecd_`direc'_stock<. & `direc'_stock==.
+    replace `direc'_stock = oecd_`direc'_stock if source_`direc'_stock == "oecd"
+    estpost tabulate source_`direc'_stock, missing
+    esttab . using "`csvPath'", append cell(b) unstack noobs nonumber nomtitle ///
+        title("Sources for `direc' stock") varlabels(`e(labels)')      
 }
 
+estpost summarize diff_log_*, detail quietly
+esttab . using "`csvPath'", append cell("mean sd min p1 p5 p10 p25 p50 p75 p90 p95 p99 max count") ///
+    noobs title("summary of diff log points")
+
+keep iso3_o iso3_d year in_stock out_stock
+tempfile stock_combined
+save `stock_combined', replace
+
+
+use "processed_data/nonfin_OECD_eurostat_activity.dta", clear
+
 ***********************************
-** Step 2: drop time series anomalies ***
+** drop time series anomalies ***
 ***********************************
-ren (*_rev_totXfin *_emp_totXfin *n_ent_totXfin) (*_rev *_emp *ent) // shorten variable names
+ren (*_rev_totXfin *n_emp_totXfin *n_ent_totXfin) (*_rev *n_emp *n_ent) // shorten variable names
 sort iso3_o iso3_d year
 egen id_pair = group(iso3_o iso3_d)
 xtset id_pair year
-foreach x in emp rev ent { 
+foreach x in n_emp rev n_ent { 
 foreach s in oecd es {
 foreach direc in in out {
     egen temp = mean(log(`s'_`direc'_`x')), by(id_pair)
@@ -96,7 +89,7 @@ foreach direc in in out {
 }
 }
 
-foreach x in emp rev ent { 
+foreach x in n_emp rev n_ent { 
 foreach s in oecd es {
 foreach direc in in out {
     replace `s'_`direc'_`x' = . if tag_outlier_`s'_`direc'_`x'
@@ -111,89 +104,97 @@ esttab . using "`csvPath'", append cells("sum count") noobs ///
 drop id_pair tag_*
     
 *********************************
-** step 3: supplement missing data in 
-** Eurostat with OECD
-** step 4 : impute zeros using FDI stocks
-** or employment and number of enterprises
+** supplement missing country in Eurostat
+** with OECD
+*********************************
+foreach direc in in out {
+    if "`direc'" == "in" {
+        local suf = "d"
+    }
+    else {
+        local suf = "o"
+    }
+    
+    ren iso3_`suf' iso3 
+    merge m:1 iso3 using "processed_data/activity_reporting_OECD_eurostat.dta", nogen
+    ren iso3 iso3_`suf'
+    
+    foreach x in rev n_emp n_ent {
+        gen `direc'_`x' = es_`direc'_`x' if report_es_`direc'==1
+        replace `direc'_`x' = oecd_`direc'_`x' if report_oecd_`direc'==1 & ///
+            report_es_`direc'~=1
+    }
+    
+    foreach x in rev n_emp n_ent {
+        gen impute_`direc'_`x' = 0 if `direc'_`x'<.
+    }
+    
+}
+
+    
+*********************************
+** filling zeros: 
+** step 1 : impute zeros using the other source
+** step 2: impute zeros using FDI stocks 
+** step 3: impute zero revenue using employment or # of enterprises
 *********************************
 
 foreach direc in in out {
     if "`direc'" == "in" {
         local suf = "d"
-        local reverse_direc = "out"
     }
     else {
         local suf = "o"
-        local reverse_direc = "in"
     }
     
+    merge 1:1 iso3_o iso3_d year using `stock_combined', ///
+        keep(master match) nogen
+  
     preserve
-    ren iso3_`suf' iso3
-    merge m:1 iso3 using "processed_data/activity_reporting_OECD_eurostat.dta", nogen
-    ren iso3 iso3_`suf'
-   
-    drop if report_oecd_`direc'~=1 & report_es_`direc'~=1
-    merge 1:1 iso3_o iso3_d year using "processed_data/OECD_ES_UNCTAD_flow_stock.dta", ///
-        keep(master match) nogen keepusing(*_`direc'_stock)
-    
-    ** combine stock information   
-    gen `direc'_stock = es_`direc'_stock
-    gen source_`direc'_stock = "es" if es_`direc'_stock<.
-    replace source_`direc'_stock = "oecd" if oecd_`direc'_stock<. & `direc'_stock==.
-    replace `direc'_stock = oecd_`direc'_stock if source_`direc'_stock == "oecd"
-    estpost tabulate source_`direc'_stock, missing
-    esttab . using "`csvPath'", append cell(b) unstack noobs nonumber nomtitle ///
-        title("Sources for `direc' stock") varlabels(`e(labels)')    
-    
-    foreach x in rev emp ent {
-        
-        gen `direc'_`x' = es_`direc'_`x' if report_es_`direc'==1
-        replace `direc'_`x' = oecd_`direc'_`x' if report_oecd_`direc'==1 & ///
-            report_es_`direc'~=1
-        gen impute_`direc'_`x' = "orginal_es_or_oecd" if `direc'_`x'<.
-        
-        ** step 3
-        replace impute_`direc'_`x' = "es_suppBy_oecd_to_0" if report_es_`direc'==1 & ///
-            `direc'_`x'==. & oecd_`direc'_`x' == 0
-        replace `direc'_`x' = 0 if impute_`direc'_`x' == "es_oecd_to_0"
-        
-        replace impute_`direc'_`x' = "es_suppBy_oecd_to_+" if report_es_`direc'==1 & ///
-            `direc'_`x'==. & oecd_`direc'_`x' > 0 & oecd_`direc'_`x'<.
-        replace `direc'_`x' = oecd_`direc'_`x' if impute_`direc'_`x' == "es_suppBy_oecd_to_+"
+    foreach x in rev n_emp n_ent {
 
-        ** step 4
-        replace impute_`direc'_`x' = "non-positive FDI stock" ///
+        ** step 1
+        replace impute_`direc'_`x' = 10 if report_es_`direc'==1 & ///
+            `direc'_`x'==. & oecd_`direc'_`x' == 0 
+        replace `direc'_`x' = 0 if impute_`direc'_`x' == 10
+        
+        replace impute_`direc'_`x' = 11 if report_es_`direc'==1 & ///
+            `direc'_`x'==. & oecd_`direc'_`x' > 0 & oecd_`direc'_`x'<.
+        replace `direc'_`x' = oecd_`direc'_`x' if impute_`direc'_`x' == 11
+
+        ** step 2
+        replace impute_`direc'_`x' = 20 ///
             if `direc'_stock<=0 & `direc'_`x'==.
-        replace `direc'_`x' = 0 if impute_`direc'_`x' == "non-positive FDI stock"        
+        replace `direc'_`x' = 0 if impute_`direc'_`x' == 20       
         
     }
     
-    replace impute_`direc'_rev = "zero employment and number of enterprises" ///
+    ** step 3
+    replace impute_`direc'_rev = 30 ///
         if `direc'_rev == . & ///
-           ( (`direc'_emp == 0 & `direc'_ent==.) | ///
-           (`direc'_emp == . & `direc'_ent==0) | ///
-           (`direc'_emp ==0 & `direc'_ent==0) )
+           ( (`direc'_n_emp == 0 & `direc'_n_ent==.) | ///
+           (`direc'_n_emp == . & `direc'_n_ent==0) | ///
+           (`direc'_n_emp ==0 & `direc'_n_ent==0) )
            
-    replace `direc'_rev = 0 if impute_`direc'_rev == "zero employment and number of enterprises"
+    replace `direc'_rev = 0 if impute_`direc'_rev == 30
     
-    keep iso3_o iso3_d year `direc'_emp `direc'_rev `direc'_ent `direc'_stock impute_*
-    tempfile `direc'_step4
-    save ``direc'_step4', replace
+    keep iso3_o iso3_d year `direc'_n_emp `direc'_rev `direc'_n_ent `direc'_stock impute_*
+    tempfile `direc'_step3
+    save ``direc'_step3', replace
     restore
-
 }
 
 foreach direc in in out {    
-    use ``direc'_step4', clear
-    foreach x in rev emp ent {
+    use ``direc'_step3', clear
+    foreach x in rev n_emp n_ent {
         estpost tabulate impute_`direc'_`x', elabels
         esttab . using "`csvPath'", append cell(b) unstack noobs nonumber nomtitle ///
-            title("Impute cases after Step 4 : `direc' `x'") varlabels(`e(labels)')
+            title("Impute cases after Step 3 : `direc' `x'") varlabels(`e(labels)')
     }
 }
 
-use `in_step4', clear
-merge 1:1 iso3_o iso3_d year using `out_step4', nogen
+use `in_step3', clear
+merge 1:1 iso3_o iso3_d year using `out_step3', nogen
 foreach direc in in out {
     if "`direc'" == "in" {
         local reverse_direc = "out"
@@ -202,20 +203,26 @@ foreach direc in in out {
         local reverse_direc = "in"
     }
     
-    *** impute additional zero revenue using opposite direction
-    gen temp1 = `reverse_direc'_rev<=0 | `reverse_direc'_ent==0 | `reverse_direc'_emp==0
+    *** step 4: impute additional zero revenue using opposite direction
+    gen temp1 = `reverse_direc'_rev<=0 | `reverse_direc'_n_ent==0 | `reverse_direc'_n_emp==0
     gen temp2 = (`reverse_direc'_rev>0 & `reverse_direc'_rev<.) | ///
-                (`reverse_direc'_ent>0 & `reverse_direc'_ent<.) | ///
-                (`reverse_direc'_emp>0 & `reverse_direc'_emp<.)
-    replace impute_`direc'_rev = "non-positive opposite direction and missing stock" ///
+                (`reverse_direc'_n_ent>0 & `reverse_direc'_n_ent<.) | ///
+                (`reverse_direc'_n_emp>0 & `reverse_direc'_n_emp<.)
+    replace impute_`direc'_rev = 40 ///
         if `direc'_rev==. & temp1 & ~temp2 & `direc'_stock==.
-    replace `direc'_rev = 0 if impute_`direc'_rev == ///
-        "non-positive opposite direction and missing stock"
+    replace `direc'_rev = 0 if impute_`direc'_rev == 40
     drop temp*
-    foreach x in rev emp ent {
+    foreach x in rev n_emp n_ent {
         ren `direc'_`x' `direc'_`x'_step4
     }
 }
+
+capture label drop lab_impute_steps
+do "$codeDir/lab_impute_steps.do"
+label values impute_* lab_impute_steps
+
+compress
+save "processed_data/extrap_bilat_activities.dta", replace
 
 *******************************************
 ** step 5 : cross-section regression extrapolation
@@ -293,10 +300,6 @@ foreach x in out_rev in_stock {
     countCountry
     predict temp_`x' if inrange(year,`beginYr',`endYr') ///
         & num_nonmiss_o>=3 & num_nonmiss_d>=3, xb
-    estpost tabulate year if temp_`x' < . & in_rev_step4==., elabels
-    esttab . using "`csvPath'", append cell(b) unstack noobs nonumber nomtitle noabbrev ///
-                title("Additional missing in_rev that can be updated by extrapolation using `x'") ///
-                varlabels(`e(labels)')
     estpost tabulate year if temp_`x' < . & in_rev_step4==. & num_nonmiss_o>=3 & num_nonmiss_d>=3
     esttab . using "`csvPath'", append cell(b) unstack noobs nonumber nomtitle noabbrev ///
                 title("Additional missing in_rev that can be updated by extrapolation using `x' (home and host at least three obs)") ///
@@ -309,14 +312,14 @@ esttab * using "`csvPath'", append se r2 nogaps drop(*.id_*) ///
     title("Estimate cross-sectional extrapolation for `direc' revenue 2001 - 2012")
 
 gen in_rev_step5 = in_rev_step4
-replace impute_in_rev = "cross-section extrap using inward stock" ///
+replace impute_in_rev = 50 ///
     if in_rev_step5 == . & temp_in_stock<.
 replace in_rev_step5 = exp(temp_in_stock) if ///
-    impute_in_rev == "cross-section extrap using inward stock"
-replace impute_in_rev = "cross-section extrap using outward revenue" ///
+    impute_in_rev == 50
+replace impute_in_rev = 51 ///
     if in_rev_step5 == . & temp_out_rev<.
 replace in_rev_step5 = exp(temp_out_rev) if ///
-    impute_in_rev == "cross-section extrap using outward revenue"
+    impute_in_rev == 51
    
 *******************************
 **  Step 6 : time series extrapolation
@@ -344,20 +347,20 @@ quietly reg log_in_rev_step5 i.id_pair i.id_iso3_o#c.year i.id_iso3_d#c.year i.y
 predict temp if nonmiss_0112 >= `minYr' & ///
     inrange(year,`beginYr',`endYr'), xb
 gen in_rev_step6 = in_rev_step5
-replace impute_in_rev = "time-series extrap 2001-2012" if ///
+replace impute_in_rev = 60 if ///
     in_rev_step6==. & temp<.
-replace in_rev_step6 = exp(temp) if impute_in_rev == "time-series extrap 2001-2012"
+replace in_rev_step6 = exp(temp) if impute_in_rev == 60
 
 ******************************
 ** impute additional zeros
 ******************************
 ** first identify missing values that cannot be zero (positive stock, or any positive inward/outward activities)
 gen cannot_be_zero = (in_stock>0 & in_stock<.) | ///
-      (in_ent_step4>0 & in_ent_step4<.) | ///
-      (in_emp_step4>0 & in_emp_step4<.) | ///
+      (in_n_ent_step4>0 & in_n_ent_step4<.) | ///
+      (in_n_emp_step4>0 & in_n_emp_step4<.) | ///
       (out_rev_step4>0 & out_rev_step4<.) | ///
-      (out_emp_step4>0 & out_emp_step4<.) | ///
-      (out_ent_step4>0 & out_ent_step4<.) 
+      (out_n_emp_step4>0 & out_n_emp_step4<.) | ///
+      (out_n_ent_step4>0 & out_n_ent_step4<.) 
       
 ** identify runs of consecutive zeros and missing
 preserve
@@ -375,15 +378,15 @@ gen zero_seq = _seq if in_rev_step6==0
 egen first_zero_seq = min(zero_seq), by(id_pair _spell)
 egen last_zero_seq = max(zero_seq), by(id_pair _spell)
 
-replace impute_in_rev = "runs of missing between zeros" if ///
-    in_rev_step6 == . & _spell > 0 & _seq<last_zero_seq & _seq>first_zero_seq
-replace in_rev_step6 = 0 if impute_in_rev == "runs of missing between zeros"
+gen in_rev_step7 = in_rev_step6
+replace impute_in_rev = 70 if ///
+    in_rev_step7 == . & _spell > 0 & _seq<last_zero_seq & _seq>first_zero_seq
+replace in_rev_step7 = 0 if impute_in_rev == 70
 
-codebook in_rev_step6 if report_o==1 & report_d==1 & year>=2006 & year<=2011
 drop nonmiss_* tag_pair
-egen nonmiss_0112 = total(in_rev_step6<. & inrange(year,2001,2012)), by(id_pair)
-egen nonmiss_9601 = total(in_rev_step6<. & inrange(year,1996,2001)), by(id_pair)
-egen nonmiss_0611 = total(in_rev_step6<. & inrange(year,2006,2011)), by(id_pair)
+egen nonmiss_0112 = total(in_rev_step7<. & inrange(year,2001,2012)), by(id_pair)
+egen nonmiss_9601 = total(in_rev_step7<. & inrange(year,1996,2001)), by(id_pair)
+egen nonmiss_0611 = total(in_rev_step7<. & inrange(year,2006,2011)), by(id_pair)
 egen tag_pair = tag(id_pair)
 
 foreach yrRange in 0112 9601 0611 {
@@ -398,7 +401,12 @@ ds iso3_* year, not
 egen anyInfo = rownonmiss(`r(varlist)'), strok
 drop if anyInfo==0
 drop anyInfo
+
+capture label drop lab_impute_steps
+do "$codeDir/lab_impute_steps.do"
+label values impute_in_rev lab_impute_steps
+
 compress
-save "processed_data/extrap_bilat_activities.dta", replace
+save "processed_data/extrap_bilat_in_rev.dta", replace
 
 

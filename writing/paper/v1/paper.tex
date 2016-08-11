@@ -19,7 +19,7 @@
 %TCIDATA{Codepage=65001}
 %TCIDATA{CSTFile=aer.cst}
 %TCIDATA{Created=Tuesday, July 23, 2013 22:04:26}
-%TCIDATA{LastRevised=Friday, August 05, 2016 22:39:04}
+%TCIDATA{LastRevised=Tuesday, August 09, 2016 23:44:00}
 %TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
 %TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
 %TCIDATA{BibliographyScheme=BibTeX}
@@ -69,45 +69,17 @@
 \begin{document}
 
 \title{A note on constructing panel data set on multinational production}
-\author{Chang Sun%
-%TCIMACRO{\TeXButton{thanks}{\thanks
-%{I thank Natalia Ramondo for generously providing her data on multinational production.}%
-%}}%
-%BeginExpansion
-\thanks
-{I thank Natalia Ramondo for generously providing her data on multinational production.}%
-%EndExpansion
-\\\emph{Preliminary and Incomplete}}
-\maketitle
 
-\begin{abstract}
-This note discusses the methods I use when constructing the panel data set on
-multinational production in my paper.
-
-\end{abstract}
-
-\section{Introduction}
+\section{{Introduction}}
 
 There is no ready-to-use panel data set on multinational production. I combine
 OECD and Eurostat FATS data set to construct one. The primary goal of the data
 set is to provide bilateral statistics on total non-financial MP sales,
-employment and number of firms used in my job market project : the factor bias
-in multinational production and the labor share. This note details the data
-sources, choice of variables and extrapolation.%
+employment and number of firms used in my job market project : \emph{the
+factor bias in multinational production and the labor share}. This note
+details the data sources, choice of variables and extrapolation.
 
-%TCIMACRO{\TeXButton{tech_origin}{\input{tables/tech_origin.tex}}}%
-%BeginExpansion
-\input{tables/tech_origin.tex}%
-%EndExpansion
-
-
-\bibliographystyle{econometrica}
-\bibliography{myLib160429}
-
-
-\appendix{}
-
-\section{Data sources}
+\section{Data sources for FATS}
 
 \cite{ramondo_multinational_2015} use UNCTAD as a basic source of FATS
 (foreign affiliate statistics) data. However, according to email exchange with
@@ -119,33 +91,21 @@ major data source for the construction of my panel data.
 \subsection{Eurostat}
 
 The following tables are downloaded from Eurostat and used in the construction
-of my data.%
+of my FATS data.%
 
 \begin{tabular}
-[c]{lllll}%
-Table & TableDes & Years & Variables & Industry\\
-fats\_96/fats\_sum &  & 1999-2002 & V12110 & NACE Rev. 1.1 C-K\_X\_J\\
-fats\_g1b\_03 & total inward MP activities & 2003-2007 & V12110 & NACE Rev.
-1.1 C-K\_X\_J\\
-fats\_g1b\_08 & total inward MP activities & 2008-2012 & V12110 & NACE Rev2
-B-N\_S95\_X\_K\\
-fats\_out1 & outward MP activities by broad industries & 2004-2006 & TUR &
-NACE Rev1 A-O\_X\_L\\
-fats\_out2 & outward MP activities by broad industries & 2007-2009 & TUR &
-Nace Rev1 A-O\_X\_L\\
-fats\_out2\_r2 &  & 2010-2012 & TUR & Nace Rev2 B-S\_X\_O
+[c]{llll}%
+Table & Direction & Years & Def of Agg Economy\\
+fats\_96/fats\_sum & inward & 1999-2002 & NACE Rev. 1.1 C-K\_X\_J\\
+fats\_g1b\_03 & inward & 2003-2007 & NACE Rev. 1.1 C-K\_X\_J\\
+fats\_g1b\_08 & inward & 2008-2012 & NACE Rev2 B-N\_S95\_X\_K\\
+fats\_out1 & outward & 2004-2006 & NACE Rev1 A-O\_X\_L\\
+fats\_out2 & outward & 2007-2009 & NACE Rev1 A-O\_X\_L\\
+fats\_out2\_r2 & outward & 2010-2012 & NACE Rev2 B-S\_X\_O
 \end{tabular}
 
 
-Variable definitions: 
-
-\begin{itemize}
-\item V12110: Turnover or gross premiums written; 
-
-\item TUR: Turnover - Million ECU/EUR.
-\end{itemize}
-
-Industry definitions:
+Definition of aggregate economy:
 
 \begin{itemize}
 \item NACE Rev. 1.1 C-K\_X\_J: Business economy - Industry and services
@@ -168,7 +128,43 @@ For years before 2002, only 11 countries voluntarily report bilateral FATS
 tables. Among them, Ireland and Germany do not report total values (sector
 C-K\_X\_J). I aggregate industry level values to get the total. For Ireland, I
 aggregate NACE Rev1.1 sectors \textquotedblleft C D E G H I
-K\textquotedblright, requiring no missing values in any of the sectors. 
+K\textquotedblright, requiring no missing values in any of the sectors.
+
+Variable definition (inward FATS)%
+
+\begin{tabular}
+[c]{lll}%
+Original code & Description & new name\\
+V11110 & Number of enterprises & n\_ent\\
+V12110 & Turnover or gross premiums written & rev\\
+V12120 & Production value & prod\_v\\
+V12150 & Value added at factor cost & vadd\\
+V13110 & Total purchases of goods and services & purchase\\
+V13310 & Personnel costs & psn\_cost\\
+V15110 & Gross investment in tangible goods & inv\_tangi\\
+V16110 & Number of persons employed & n\_psn\_emp\\
+V16120 & Number of unpaid persons employed & n\_unpaid\_emp\\
+V16130 & Number of employees & n\_emp
+\end{tabular}
+
+
+Variable definitions (outward FATS)%
+
+\begin{tabular}
+[c]{llll}%
+Original code & Description & new name & inward FATS code\footnote{see FATS
+manual P103.}\\
+ENT & Number of enterprises & n\_ent & V11110\\
+EMP & Number of persons employed & n\_psn\_emp & V16110\\
+TUR & Turnover - Million ECU/EUR & rev & V12110
+\end{tabular}
+
+
+\subsubsection{Exchange rate adjustment}
+
+Monetary values are in millions of Euros. For years before 1999, I first use
+the table fats\_esms\_an1 to adjust ECU to local currencies and then convert
+it to USD using exchange rate from WDI.
 
 \subsection{OECD}
 
@@ -181,7 +177,7 @@ on bilateral aggregate statistics, which are used here.%
 \begin{tabular}
 [c]{lll}%
 Table & Years & Industry\\
-Inward, ISIC3 (service) & 1995-2008 & 01-93 excl. 75\\
+Inward, ISIC3 (service) & 1995-2008 & 10-74 minus 65-67\\
 Inward, ISIC4 & 2008-2013 & sec B to N excl. K\\
 Outward, ISIC3 (service) & 1995-2009 & 01-93 minus 75\\
 Outward, ISIC4 & 2007-2013 & sec B to S excl. O
@@ -191,13 +187,33 @@ Outward, ISIC4 & 2007-2013 & sec B to S excl. O
 Note that only inward statistics ISIC4 exclude the financial sector. All the
 other statistics need adjustment.
 
-For years before 2007 (including 2007), ISIC Rev 3 data provide most of the
-information, while for years after 2007, ISIC Rev 4 data provide most of the
-information. Thus I ignore ISIC Rev 3 data for 2008 and 2009, and ignore ISIC
-Rev 4 data for 2007.
+Variable definition (inward and outward, ISIC4)%
+
+\begin{tabular}
+[c]{lll}%
+Original code & Description & new name\\
+ENT & Number of enterprises & n\_ent\\
+EMP & Number of persons employed & n\_psn\_emp\\
+TUR & Turnover (Mil LCU) & rev\\
+EMPE & Number of employees & n\_emp
+\end{tabular}
+
+
+Variable definition (inward and outward, ISIC3)%
+
+\begin{tabular}
+[c]{lll}%
+Original code & Description & new name\\
+NOE & Number of enterprises & n\_ent\\
+EMP & Number of employees & n\_emp\\
+TUR & Turnover (Mil LCU) & rev
+\end{tabular}
+
+
+\subsubsection{Exchange rate adjustment}
 
 The monetary variables are in millions of local currency. According to the
-meta data in the online database, 
+meta data in the online database,
 
 \begin{quotation}
 For Euro area countries, national currency data is expressed in euro beginning
@@ -210,25 +226,34 @@ euro are a notional unit and should not be used to form area aggregates or to
 carry out cross-country comparisons.
 \end{quotation}
 
+\subsubsection{Overlapping years}
+
+Which data shall we use for the overlapping years between ISIC3 and ISIC4?
+
+Concerning inward FATS, for years before 2007 (including 2007), ISIC Rev 3
+data provide most of the information, while for years after 2007, ISIC Rev 4
+data provide most of the information. To obtain the most comprehensive
+bilateral FATS, I use ISIC3 as the primary data in 2007, and complement with
+ISIC4 data. For years 2008 and 2009, vice versa.
+
+Concerning inward FATS, I use ISIC4 as the primary data for 2008 and
+complement with ISIC3 (very few observations).
+
 \subsubsection{Anomalies}
 
-German data on outward MNE sales are outliers in 2007. It seems the
-undocumented table \textquotedblleft Outward Activity of Multinationals in
-ISIC Rev 3 (services)\textquotedblright\ present values that are 1000 times
-larger. For example, in the OECD database, table \textquotedblleft Outward
+Germany in 2007 is an outliers. It seems dividing the monetary variables in
+2007 makes the time series stable. data on outward MNE sales are outliers in
+2007. For example, in the OECD database, table \textquotedblleft Outward
 Activity of multinationals by industrial sector (manufacturing) -- ISIC Rev
 3\textquotedblright\ shows that Germany's total outward sales (Total Business
 Enterprise) is 1.497 million Euros in 2007. This number, however, is 1.486
-billion Euros in the first table. Thus, I rescale all values for Germany in
-2007 by 1000 times. 
-
-Slovenia presents another anomaly in the data. The grand total outward sales
-to the WORLD are 3394715 million in local currency in 2007, and there seems to
-be no break after that (Slovenia adopted Euro in 2007, and the table only
-contains data for 2007-2009). I suspect that they are still denominated in
-Slovenian Tolar rather than Euros. Thus for these three years, I transformed
-the Euro exchange rate to notional Tolar exchange rate using the fixed
-exchange rate for Solvenia.
+billion Euros in the first table. Therefore, it seems the undocumented table
+\textquotedblleft Outward Activity of Multinationals in ISIC Rev 3
+(services)\textquotedblright\ present values that are 1000 times larger. Thus,
+I rescale all values for Germany in 2007 by 1000 times. Slovenia is a similar
+case. The only difference is that the ISIC3 data contains values of financial
+sector revenues after 2007 which are used to complement ISIC4 data. These
+years are also misscaled besides 2007.
 
 \subsection{Measure of employment}
 
@@ -243,8 +268,44 @@ of employment is provided.
 
 For country-pair-years which both variables are nonmissing, I can calculate
 the difference between the two variables. Most of them are exactly the same,
-and (2) is in general larger than (1). When possible, I use (2) as a measure
-of employment and supplement (1) if (2) is missing or zero but (1) is positive.
+and (2) is in general larger than (1). Since Eurostat outward FATS only
+provide (2), I use (2) as the primary data. When possible, I use (2) as a
+measure of employment and supplement (1) if (2) is missing or zero but (1) is positive.
+
+\subsection{Exclude financial sector}
+
+In contrast to inward FATS, outward FATS do not exclude financial sector. 
+
+\section{Data sources for FDI}
+
+\subsection{Eurostat}
+
+There are two sources for FDI statistics in Eurostat, TEC tables and BOP tables.
+
+tec00049\qquad Direct investment inward flows by main investing country
+
+tec00051\qquad Direct investment inward stocks by main origin of investment
+
+tec00053\qquad Direct investment outward flows by main destinations
+
+tec00052\qquad Direct investment outward stocks by main destinations
+
+bop\_fdi\_pos\_r2, bop\_fdi\_flow\_r2\qquad EU direct investment positions,
+breakdown by country and economic activity (NACE Rev. 2), 2008-2012.
+
+bop\_fdi\_pos, bop\_fdi\_flows\qquad NACE Rev.1, 1994 to 2009
+
+\subsubsection{Exchange rate adjustment}
+
+According to the meta data for BOP\_FDI tables (http://goo.gl/OLT4xr), the
+data are in units of Euros/ECU (EUR million starting from 1999, ECU million
+before 1999.
+
+\subsection{OECD}
+
+\subsection{UNCTAD}
+
+UNCTAD bilateral FDI stocks and flows, 2001-2012
 
 \section{Construction}
 
@@ -255,20 +316,11 @@ use the following steps.
 
 \subsection{Consolidate three sources of FDI statistics}
 
-\begin{enumerate}
-\item Combine information in number of employees (n\_emp) and number of
-persons employed (n\_psn\_emp). Use number of persons employed as the primary
-source and supplement with number of employees. See the do file
-\texttt{code/check\_data/emp\_vs\_psn\_emp.do} and the companion output for
-the comparison between the two variables. Most of the numbers are the same,
-but on average, number of employees are smaller than number of persons
-employed since the former only include workers with employment contract.
-
-\item Drop outliers in bilateral relationships defined using year-to-year
-growth rates. I look for outliers within a home-host country pair. I compute
-both the deviation from the log mean and the log change in a certain variable,
-and define an observation to be an outlier if it satisfies two conditions (1)
-the log change from last period
+First I drop outliers by looking at year-to-year growth rates within a country
+pair.I look for outliers within a home-host country pair. I compute both the
+deviation from the log mean and the log change in a certain variable, and
+define an observation to be an outlier if it satisfies two conditions (1) the
+log change from last period
 %TCIMACRO{\TEXTsymbol{>} }%
 %BeginExpansion
 $>$
@@ -311,21 +363,37 @@ away from the mean. In the tables in \textquotedblleft%
 \textquotedblright, I list all the country pairs which have at least one
 observation satisfying condition (2).
 
-\item Supplement missing data in Eurostat with OECD -- document them well.
-First, identify countries that report Eurostat or OECD. If a country reports
-in Eurostat, use Eurostat as the primary source. If a country reports in OECD,
-use OECD as the primary source.
+Next, I supplement missing reporting countries in Eurostat with OECD. The idea
+is to use Eurostat as the primary data source while OECD as secondary when the
+country is not a reporting country in Eurostat.
 
-\item Impute additional zeros using FDI stocks.
+Now I am ready to impute missing values. I proceed in several steps:
 
-If one of the Eurostat or OECD stock is non-positive, and the other is missing
-or non-positive, impute the missing MNE activities (employment or revenue) to
-be zero. If employment is zero, impute revenue to be zero too (very few observations).
+\begin{enumerate}
+\item Impute additional zeros (or positive numbers) in employment, number of
+enterprises and revenue using the same variable in the secondary data source (OECD).
 
-\item Extrapolate still missing sales data with inward FDI stocks (and outward
-revenue) using both cross-sectional and over time variation. For the period
-1995 -- 2012, I run the following regression for host and home countries with
-at least three observations%
+\item Impute additional zeros in employment, number of enterprises and revenue
+if FDI stock (same direction, inward or outward) is zero.
+
+\item From now on, the focus is to impute missing revenue. The imputation of
+employment and number of enterprises are done.
+
+In this step, I impute revenue to be zero if at least one of employment or
+number of enterprises is zero, and the other is missing or zero.
+
+\item Impute additional zeros in revenue using variables of the opposite
+direction. For example, I impute inward revenue from A to B as zero if outward
+revenue, employment and number of enterprises from A to B (reported by A) have
+at least one non-positive and the others are missing or non-positive. It also
+requires inward stock to be missing.
+
+\item After step 4, the imputation of inward and outward revenue is done
+independently. From step 5, I will use outward revenue to impute missing
+inward revenue. Extrapolate still missing sales data with inward FDI stocks
+(and outward revenue) using both cross-sectional and over time variation. For
+the period 1995 -- 2012, I run the following regression for host and home
+countries with at least three observations%
 \[
 \log X_{ilt}=\beta\log Q_{ilt}+\delta_{i}+\delta_{l}+\delta_{i}\times
 t+\delta_{l}\times t+\varepsilon_{ilt},
@@ -350,14 +418,14 @@ imprecisely estimated with only a few observations within a pair. Instead, I
 impose the growth rates to have host and home specific components, and also a
 global trend, which is not restricted to be linear.
 
-Besides the linear growth model extrapolation for observations with positive
-sales, I also impute additional zeros using the time series data. I first
-identify consecutive runs of missing values or zeros. I require the missing
-values can potentially be replaced as zeros, i.e., it cannot have positive
-stock and other MNE activities (inward employment, number of enterprises and
-outward employment, sales and number of enterprises). \qquad After such runs
-are identified, I identify missing values that are \textquotedblleft
-squeezed\textquotedblright\ between two zeros. These values are replaced with zeros.
+\item Impute additional zeros by identifying missing values between
+consecutive runs of missing values or zeros (start and end with zeros). In
+practice, I require the missing values can potentially be replaced as zeros,
+i.e., it cannot have positive stock and other MNE activities (inward
+employment, number of enterprises and outward employment, sales and number of
+enterprises). After such runs are identified, I identify missing values that
+are \textquotedblleft squeezed\textquotedblright\ between two zeros. These
+values are replaced with zeros.
 \end{enumerate}
 
 \subsection{Extrapolation for total inward activities}
@@ -367,10 +435,6 @@ are similar to the extrapolation of bilateral activities. I describe the
 procedures as follows.
 
 \begin{enumerate}
-\item Combine information in number of employees (n\_emp) and number of
-persons employed (n\_psn\_emp). Use number of persons employed as the primary
-source and supplement with number of employees.
-
 \item Drop outliers in total inward/outward variables defined using
 year-to-year growth rates
 
@@ -406,7 +470,7 @@ $>$
 %BeginExpansion
 $<$
 %EndExpansion
--5. 
+-5.
 
 \item Supplement missing data in Eurostat with OECD -- document them well
 
@@ -457,7 +521,7 @@ outward sales as the primary source. First, they argue statistics reported by
 th host country is more likely on \textquotedblleft immediate
 owners\textquotedblright\ rather than \textquotedblleft ultimate beneficiary
 owners (UBO)\textquotedblright. Second, sales reported by the host country may
-be only for local sales and miss sales from all other countries. 
+be only for local sales and miss sales from all other countries.
 
 This may be true for their UNCTAD data (though I highly doubt since some of
 the UNCTAD data should come from Eurostat and OECD). However, I cannot find
@@ -507,6 +571,12 @@ cannot find any information about their second argument.
 
 In this section I describe the data I have constructed.
 
+\bibliographystyle{econometrica}
+\bibliography{myLib160429}
+
+
+\appendix{}
+
 \section{Tables}%
 
 %TCIMACRO{\TeXButton{reset_counter}{\setcounter{table}{0}
@@ -517,10 +587,114 @@ In this section I describe the data I have constructed.
 %EndExpansion
 %
 
-%TCIMACRO{\TeXButton{frequency_by_host}{\newpage\input
-%{tables/frequency_by_host.tex}}}%
+%TCIMACRO{\TeXButton{oecd_overlap_years_coverage_out}{\newpage\input
+%{tables/oecd_overlap_years_coverage_out.tex}}}%
 %BeginExpansion
-\newpage\input{tables/frequency_by_host.tex}%
+\newpage\input{tables/oecd_overlap_years_coverage_out.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{oecd_overlap_years_diff_out}{\input
+%{tables/oecd_overlap_years_diff_out.tex}}}%
+%BeginExpansion
+\input{tables/oecd_overlap_years_diff_out.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{oecd_overlap_years_coverage_in}{\newpage\input
+%{tables/oecd_overlap_years_coverage_in.tex}}}%
+%BeginExpansion
+\newpage\input{tables/oecd_overlap_years_coverage_in.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{oecd_overlap_years_diff_in}{\input
+%{tables/oecd_overlap_years_diff_in.tex}}}%
+%BeginExpansion
+\input{tables/oecd_overlap_years_diff_in.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{emp_psn_emp_cover_oecd_in_tot}{\newpage\input
+%{tables/emp_psn_emp_cover_oecd_in_tot.tex}}}%
+%BeginExpansion
+\newpage\input{tables/emp_psn_emp_cover_oecd_in_tot.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{emp_psn_emp_cover_oecd_in_totXfin}{\input
+%{tables/emp_psn_emp_cover_oecd_in_totXfin.tex}}}%
+%BeginExpansion
+\input{tables/emp_psn_emp_cover_oecd_in_totXfin.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{emp_psn_emp_diff_oecd_in}{\input
+%{tables/emp_psn_emp_diff_oecd_in.tex}}}%
+%BeginExpansion
+\input{tables/emp_psn_emp_diff_oecd_in.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{emp_psn_emp_cover_oecd_out_tot}{\newpage\input
+%{tables/emp_psn_emp_cover_oecd_out_tot.tex}}}%
+%BeginExpansion
+\newpage\input{tables/emp_psn_emp_cover_oecd_out_tot.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{emp_psn_emp_cover_oecd_out_fin}{\input
+%{tables/emp_psn_emp_cover_oecd_out_fin.tex}}}%
+%BeginExpansion
+\input{tables/emp_psn_emp_cover_oecd_out_fin.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{emp_psn_emp_diff_oecd_out}{\input
+%{tables/emp_psn_emp_diff_oecd_out.tex}}}%
+%BeginExpansion
+\input{tables/emp_psn_emp_diff_oecd_out.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{emp_psn_emp_cover_es_in_totXfin}{\newpage\input
+%{tables/emp_psn_emp_cover_es_in_totXfin.tex}}}%
+%BeginExpansion
+\newpage\input{tables/emp_psn_emp_cover_es_in_totXfin.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{emp_psn_emp_diff_es_in}{\input
+%{tables/emp_psn_emp_diff_es_in.tex}}}%
+%BeginExpansion
+\input{tables/emp_psn_emp_diff_es_in.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{exclude_fin_oecd_in}{\newpage\input
+%{tables/exclude_fin_oecd_in.tex}}}%
+%BeginExpansion
+\newpage\input{tables/exclude_fin_oecd_in.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{exclude_fin_oecd_out}{\input
+%{tables/exclude_fin_oecd_out.tex}}}%
+%BeginExpansion
+\input{tables/exclude_fin_oecd_out.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{exclude_fin_es_out}{\input{tables/exclude_fin_es_out.tex}%
+%}}%
+%BeginExpansion
+\input{tables/exclude_fin_es_out.tex}%
+%EndExpansion
+%
+
+%TCIMACRO{\TeXButton{newpage}{\newpage}}%
+%BeginExpansion
+\newpage
 %EndExpansion
 
 
@@ -534,15 +708,16 @@ In this section I describe the data I have constructed.
 %EndExpansion
 %
 
-%TCIMACRO{\TeXButton{cf_cbp_only}{\begin{figure}[ptbh]\caption
-%{Counterfactual labor shares: CBP only}\label{fig:cf_labor_share_cbp_only}
-%\centering\includegraphics[scale=0.9]{{cf_labor_share_cbp_only.pdf}%
-%}\end{figure}}}%
+%TCIMACRO{\TeXButton{in_output_share_HUN}{\newpage\begin{figure}[ptbh]\caption
+%{Inward MP output share in Hungary}\label{fig:in_output_share_HUN}
+%\centering\includegraphics[scale=0.9]{{in_output_share_HUN.pdf}}\end{figure}%
+%}}%
 %BeginExpansion
-\begin{figure}[ptbh]\caption{Counterfactual labor shares: CBP only}%
-\label{fig:cf_labor_share_cbp_only}
-\centering\includegraphics[scale=0.9]{{cf_labor_share_cbp_only.pdf}%
-}\end{figure}%
+\newpage\begin{figure}[ptbh]\caption{Inward MP output share in Hungary}%
+\label{fig:in_output_share_HUN}
+\centering\includegraphics[scale=0.9]{{in_output_share_HUN.pdf}}\end{figure}%
 %EndExpansion
+
+
 
 \end{document}

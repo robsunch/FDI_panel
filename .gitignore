@@ -19,6 +19,7 @@ source_data/
 ## Core latex/pdflatex auxiliary files:
 ##----------------------------------------------
 *.aux
+*.aut
 *.lof
 *.log
 *.lot

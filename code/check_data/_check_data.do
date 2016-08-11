@@ -17,12 +17,13 @@ capture mkdir $figureDir
 capture mkdir $tableDir
 capture mkdir $logDir
 
-do "$codeDir/total_output.do"
-do "$codeDir/emp_vs_psn_emp.do"
-do "$codeDir/activity_oecd_vs_eurostat.do"
-do "$codeDir/eurostat_bop_vs_tec.do"
-do "$codeDir/flow_stock_oecd_vs_eurostat_vs_unctad.do"
+** do "$codeDir/total_output.do"
+** do "$codeDir/emp_vs_psn_emp.do"
+** do "$codeDir/activity_oecd_vs_eurostat.do"
+** do "$codeDir/eurostat_bop_vs_tec.do"
+** do "$codeDir/flow_stock_oecd_vs_eurostat_vs_unctad.do"
 
-do "$codeDir/activity_inward_vs_outward.do"
+** do "$codeDir/activity_inward_vs_outward.do"
 
+do "$codeDir/bilat_completeness.do"
 ** do "$codeDir/fully_connected.do"

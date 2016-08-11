@@ -1,14 +1,7 @@
-********************************************************
-** this do file exclude financial activities from 
-** total business for OECD inward (year <= 2007)
-** and outward (all years) and for Eurostat (all years)
-********************************************************
-
-log close _all
-log using "$logDir/exclude_fin.smcl", replace
-
-local outputPath = "$tableDir/exclude_fin.csv"
-capture rm "`outputPath'"
+***********************************
+** information related to adjustment of the 
+** financial sector
+***********************************
 
 ** prepare for country level nonfinancial output or gdp share
 use "processed_data/nonfin_output_share.dta", clear
@@ -93,31 +86,20 @@ drop if anyData == 0
 
 ** step 0 : simple subtraction
 foreach x in n_ent n_emp rev {
-    replace oecd_in_flag_`x'_totXfin = "" if oecd_in_flag_`x'_tot ~= ///
-        oecd_in_flag_`x'_fin & oecd_in_`x'_tot<. & oecd_in_`x'_fin<. ///
-        & oecd_in_`x'_totXfin == .
     replace oecd_in_`x'_totXfin = oecd_in_`x'_tot - oecd_in_`x'_fin ///
         if oecd_in_`x'_totXfin == .
 }
 local countVarList "oecd_in_n_ent_totXfin oecd_in_n_emp_totXfin oecd_in_rev_totXfin"
 egen nonmiss0 = rownonmiss(`countVarList')
 gen exclude_fin_adj = 0 if nonmiss0 > 0
-estpost tabulate nonmiss0, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in OECD inward activities after step 0: simple subtraction") varlabels(`e(labels)')
 
 ** step 1: use nonfinancial share of total inward MP
 merge m:1 iso3_d year using `WRX_in_nonfin_share', keep(master match) nogen
 foreach x in n_ent n_emp rev {
-    replace oecd_in_flag_`x'_totXfin = "" if nonmiss0 == 0 & iso3_d~="WRT" ///
-        & oecd_in_`x'_tot < . & WRX_in_nonfin_share_`x' < .
     replace oecd_in_`x'_totXfin = oecd_in_`x'_tot * WRX_in_nonfin_share_`x' ///
         if nonmiss0 == 0 & iso3_d~="WRT" // national total better use total nonfinancial output share
 }
 egen nonmiss1 = rownonmiss(`countVarList')
-estpost tabulate nonmiss1, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in OECD inward activities after step 1: use nonfinancial share of total inward MP") varlabels(`e(labels)')
 replace exclude_fin_adj = 1 if nonmiss1 > nonmiss0
 drop WRX_in_nonfin_share*
 
@@ -126,15 +108,10 @@ ren iso3_d iso3
 merge m:1 iso3 year using `nonfin_output_share', keep(master match) nogen
 ren iso3 iso3_d
 foreach x in n_ent n_emp rev {
-    replace oecd_in_flag_`x'_totXfin = "" if oecd_in_`x'_tot<. & ///
-        nonfin_output_share < . & nonmiss1 == 0
     replace oecd_in_`x'_totXfin = oecd_in_`x'_tot * nonfin_output_share ///
         if nonmiss1 == 0
 }        
 egen nonmiss2 = rownonmiss(`countVarList')
-estpost tabulate nonmiss2, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in OECD inward activities after step 2: use nonfinancial output share of the host country") varlabels(`e(labels)')
 replace exclude_fin_adj = 2 if nonmiss2 > nonmiss1
 drop nonfin_output_share
 
@@ -143,15 +120,10 @@ ren iso3_o iso3
 merge m:1 iso3 year using `nonfin_output_share', keep(master match) nogen
 ren iso3 iso3_o
 foreach x in n_ent n_emp rev {
-    replace oecd_in_flag_`x'_totXfin = "" if oecd_in_`x'_tot<. & ///
-        nonfin_output_share<. & nonmiss2 == 0
     replace oecd_in_`x'_totXfin = oecd_in_`x'_tot * nonfin_output_share ///
         if nonmiss2 == 0
 }        
 egen nonmiss3 = rownonmiss(`countVarList')
-estpost tabulate nonmiss3, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in OECD inward activities after step 3: use nonfinancial output share of the home country") varlabels(`e(labels)')
 replace exclude_fin_adj = 3 if nonmiss3 > nonmiss2
 drop nonfin_output_share
 
@@ -162,13 +134,14 @@ label define lab_exclude_fin_adj 0 "no adjustment needed" ///
     3 "adj using home country nonfinancial output share" 
 label values exclude_fin_adj lab_exclude_fin_adj
 
-estpost tabulate exclude_fin_adj year, missing elabel
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Cases excluding financial sector in different steps (OECD inward)") varlabels(`e(labels)')
-
-keep iso3* year oecd_in_*_totXfin
-tempfile oecd_in
-save `oecd_in', replace
+estpost tabulate year exclude_fin_adj, missing
+esttab . using "$tableDir/exclude_fin_oecd_in.tex", replace cell(b) unstack ///
+    noobs nonumber nomtitle nodepvars nostar varlabels(`e(labels)') collabels(none) ///
+    title("Cases excluding financial sector in different steps (OECD inward)") booktabs ///
+    addnotes("0 - no adjustment needed" ///
+        "1 - adj using total inward nonfinancial share" ///
+        "2 - adj using host country nonfinancial output share" ///
+        "3 - adj using home country nonfinancial output share")
 
 **********************
 ** OECD outward
@@ -213,16 +186,11 @@ drop if anyData == 0
 
 ** step 0 : simple subtraction
 foreach x in n_ent n_emp rev {
-    gen oecd_out_flag_`x'_totXfin = oecd_out_flag_`x'_tot if oecd_out_flag_`x'_tot ///
-        == oecd_out_flag_`x'_fin & oecd_out_`x'_tot<. & oecd_out_`x'_fin<.
     gen oecd_out_`x'_totXfin = oecd_out_`x'_tot - oecd_out_`x'_fin
 }
 local countVarList "oecd_out_n_ent_totXfin oecd_out_n_emp_totXfin oecd_out_rev_totXfin"
 egen nonmiss0 = rownonmiss(`countVarList')
 gen exclude_fin_adj = 0 if nonmiss0 > 0
-estpost tabulate nonmiss0, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in OECD outward activities after step 0: simple subtraction") varlabels(`e(labels)')
 ** step 1: use nonfinancial share of total outward MP
 merge m:1 iso3_o year using `WRX_out_nonfin_share', keep(master match) nogen
 foreach x in n_ent n_emp rev {
@@ -230,9 +198,6 @@ foreach x in n_ent n_emp rev {
         if nonmiss0 == 0
 }
 egen nonmiss1 = rownonmiss(`countVarList')
-estpost tabulate nonmiss1, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in OECD outward activities after step 1: use nonfinancial share of total outward MP") varlabels(`e(labels)')
 replace exclude_fin_adj = 1 if nonmiss1 > nonmiss0
 drop WRX_out_nonfin_share*
 ** step 2: use host country's share of nonfinancial output
@@ -244,9 +209,6 @@ foreach x in n_ent n_emp rev {
         if nonmiss1 == 0
 }        
 egen nonmiss2 = rownonmiss(`countVarList')
-estpost tabulate nonmiss2, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in OECD outward activities after step 2: use nonfinancial output share of the host country") varlabels(`e(labels)')
 replace exclude_fin_adj = 2 if nonmiss2 > nonmiss1
 drop nonfin_output_share
 ** step 3: use home country's share of nonfinancial output
@@ -258,9 +220,6 @@ foreach x in n_ent n_emp rev {
         if nonmiss2 == 0
 }        
 egen nonmiss3 = rownonmiss(`countVarList')
-estpost tabulate nonmiss3, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in OECD outward activities after step 3: use nonfinancial output share of the home country") varlabels(`e(labels)')
 replace exclude_fin_adj = 3 if nonmiss3 > nonmiss2
 drop nonfin_output_share
 
@@ -271,13 +230,14 @@ label define lab_exclude_fin_adj 0 "no adjustment needed" ///
     3 "adj using home country nonfinancial output share" 
 label values exclude_fin_adj lab_exclude_fin_adj
 
-estpost tabulate exclude_fin_adj year, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Cases excluding financial sector in different steps (OECD outward)") varlabels(`e(labels)')
-keep iso3* year oecd_out_*_totXfin
-tempfile oecd_out
-save `oecd_out', replace
-
+estpost tabulate year exclude_fin_adj, missing
+esttab . using "$tableDir/exclude_fin_oecd_out.tex", replace cell(b) unstack ///
+    noobs nonumber nomtitle nodepvars nostar varlabels(`e(labels)') collabels(none) ///
+    title("Cases excluding financial sector in different steps (OECD outward)") booktabs ///
+    addnotes("0 - no adjustment needed" ///
+        "1 - adj using total inward nonfinancial share" ///
+        "2 - adj using host country nonfinancial output share" ///
+        "3 - adj using home country nonfinancial output share")
 *************************
 ** Eurostat outward
 *************************
@@ -321,16 +281,11 @@ drop if anyData == 0
 
 ** step 0 : simple subtraction
 foreach x in n_ent n_emp rev {
-    gen es_out_flag_`x'_totXfin = es_out_flag_`x'_tot if es_out_flag_`x'_tot ///
-        == es_out_flag_`x'_fin & es_out_`x'_tot<. & es_out_`x'_fin<.
     gen es_out_`x'_totXfin = es_out_`x'_tot - es_out_`x'_fin
 }
 local countVarList "es_out_n_ent_totXfin es_out_n_emp_totXfin es_out_rev_totXfin"
 egen nonmiss0 = rownonmiss(`countVarList')
 gen exclude_fin_adj = 0 if nonmiss0 > 0
-estpost tabulate nonmiss0, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in Eurostat outward activities after step 0: simple subtraction") varlabels(`e(labels)')
 ** step 1: use nonfinancial share of total outward MP
 merge m:1 iso3_o year using `WRX_out_nonfin_share', keep(master match) nogen
 foreach x in n_ent n_emp rev {
@@ -338,9 +293,6 @@ foreach x in n_ent n_emp rev {
         if nonmiss0 == 0
 }
 egen nonmiss1 = rownonmiss(`countVarList')
-estpost tabulate nonmiss1, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in Eurostat outward activities after step 1: use nonfinancial share of total outward MP") varlabels(`e(labels)')
 replace exclude_fin_adj = 1 if nonmiss1 > nonmiss0
 drop WRX_out_nonfin_share*
 ** step 2: use host country's share of nonfinancial output
@@ -352,9 +304,6 @@ foreach x in n_ent n_emp rev {
         if nonmiss1 == 0
 }        
 egen nonmiss2 = rownonmiss(`countVarList')
-estpost tabulate nonmiss2, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in Eurostat outward activities after step 2: use nonfinancial output share of the host country") varlabels(`e(labels)')
 replace exclude_fin_adj = 2 if nonmiss2 > nonmiss1
 drop nonfin_output_share
 ** step 3: use home country's share of nonfinancial output
@@ -366,9 +315,6 @@ foreach x in n_ent n_emp rev {
         if nonmiss2 == 0
 }        
 egen nonmiss3 = rownonmiss(`countVarList')
-estpost tabulate nonmiss3, missing
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Number of nonmissing values among n_ent n_emp and rev in Eurostat outward activities after step 3: use nonfinancial output share of the home country") varlabels(`e(labels)')
 replace exclude_fin_adj = 3 if nonmiss3 > nonmiss2
 drop nonfin_output_share
 
@@ -379,31 +325,13 @@ label define lab_exclude_fin_adj 0 "no adjustment needed" ///
     3 "adj using home country nonfinancial output share" 
 label values exclude_fin_adj lab_exclude_fin_adj
 
-estpost tabulate exclude_fin_adj year, missing elabel
-esttab . using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle ///
-                title("Cases excluding financial sector in different steps (Eurostat outward)") varlabels(`e(labels)')
-keep iso3* year es_out_*_totXfin
-tempfile es_out
-save `es_out', replace
+estpost tabulate year exclude_fin_adj, missing
+esttab . using "$tableDir/exclude_fin_es_out.tex", replace cell(b) unstack ///
+    noobs nonumber nomtitle nodepvars nostar varlabels(`e(labels)') collabels(none) ///
+    title("Cases excluding financial sector in different steps (Eurostat outward)") booktabs ///
+    addnotes("0 - no adjustment needed" ///
+        "1 - adj using total inward nonfinancial share" ///
+        "2 - adj using host country nonfinancial output share" ///
+        "3 - adj using home country nonfinancial output share")
 
-****************************
-** merge and update
-****************************
-use "processed_data/activity_OECD_eurostat_consol_emp.dta", clear
-keep iso3_o iso3_d year *totXfin
-foreach f in es_out oecd_in oecd_out {
-    capture label drop _all
-    merge 1:1 iso3_o iso3_d year using ``f'', update
-    estpost tabulate year _merge, elabels
-    esttab using "`outputPath'", append cell(b) unstack noobs nonumber nomtitle varlabels(`e(labels)') ///
-        title("Merge update with `f' - financial sector excluded") ///
-        eqlabels(, lhs("year \ merge"))
-    drop _merge
 
-}
-
-keep iso3* year *totXfin*
-compress
-save "processed_data/nonfin_OECD_eurostat_activity.dta", replace
-
-log close _all

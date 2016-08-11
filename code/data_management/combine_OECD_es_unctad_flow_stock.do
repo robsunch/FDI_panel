@@ -13,13 +13,6 @@ capture rm "`outputPath'"
 ** Eurostat FDI stats
 ********************************
 
-*** Euro exchange rate
-use year euroExchRate using "processed_data/exchRate.dta", clear
-drop if missing(euroExchRate)
-duplicates drop
-tempfile euroExchRate
-save `euroExchRate', replace
-
 *** dictionary files for country name (eurostat)
 foreach x in geo {
     insheet `x' `x'_des using "source_data/eurostat/dic/`x'.dic", tab clear
@@ -67,28 +60,24 @@ foreach x in o d {
     replace iso2="GR" if iso2=="EL" // Greece
     merge m:1 iso2 using `geo_dic', keep(master match) nogen
     merge m:1 iso2 using "processed_data/isoStandard.dta", keep(master match) keepusing(iso3)
-    estpost tabulate countryName if _merge==1, elabels quietly sort
-    esttab . using "`outputPath'", append cell(b) noobs nonumber nomtitle ///
-        title("non-standard iso2 for direction `x' in Eurostat FDI stats") ///
-        varlabels(`e(labels)')
+    quietly count if _merge==1
+    if `r(N)' > 0   {
+        estpost tabulate countryName if _merge==1, elabels quietly sort
+        esttab . using "`outputPath'", append cell(b) noobs nonumber nomtitle ///
+            title("non-standard iso2 for direction `x' in Eurostat FDI stats") ///
+            varlabels(`e(labels)')
+    }
     ren (iso2 iso3) (iso2_`x' iso3_`x')
     keep if _merge == 3
     drop _merge countryName iso2_`x'
 }
 
-** millions of EUR/ECU to USD
-merge m:1 year using `euroExchRate', keep(master match) nogen
-foreach x of varlist es_* {
-    replace `x' = `x' * euroExchRate
-}    
-drop euroExchRate
 tempfile es_fdi
 save `es_fdi', replace
 
 ***********************
 ** OECD FDI flow/stock
 ***********************
-
 *** standardized country code for OECD
 import excel using "processed_data/isoStandard.xlsx", sheet("OECD_output") clear firstrow
 drop if missing(_merge) // drop notes

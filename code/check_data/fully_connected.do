@@ -28,7 +28,7 @@ tempfile TintelnotSample
 save `TintelnotSample'
 
 ** sample countries
-use "processed_data/extrap_bilat_activities.dta", clear
+use "processed_data/extrap_bilat_in_rev.dta", clear
 
 foreach x in o d {
     ren iso3_`x' iso3

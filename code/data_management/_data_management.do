@@ -35,9 +35,10 @@ capture mkdir $logDir
 ** do "$codeDir/UNCTAD_clean.do"
 
 ** ** combine different sources
-do "$codeDir/combine_OECD_es_unctad_flow_stock.do"
-do "$codeDir/OECD_combine_isic3_isic4.do"
-do "$codeDir/combine_OECD_eurostat_activities.do"
+** do "$codeDir/combine_OECD_es_unctad_flow_stock.do"
+** do "$codeDir/OECD_combine_isic3_isic4.do"
+** do "$codeDir/combine_OECD_eurostat_activities.do"
+** do "$codeDir/consolidate_emp.do"
 
 ** ** additional aggregate data
 ** do "$codeDir/world_klems.do" // total output data from World Klems
@@ -45,11 +46,12 @@ do "$codeDir/combine_OECD_eurostat_activities.do"
 ** do "$codeDir/nonfin_output_share.do" // calculate nonfin output share
 ** do "$codeDir/gdp.do" // construct current price GDP for each country
 ** do "$codeDir/agg_extrap.do" // extrapolate aggregate output and employment
+** do "$codeDir/nonfin_gdp_share.do" // calculate nonfinancial share in GDP in case nonfin output share is missing
 
 ** do "$codeDir/exclude_fin.do" // exclude financial activities from OECD-Eurostat data
 
-** do "$codeDir/extrap_bilat_activities.do" // extrapolate missing values
-do "$codeDir/extrap_tot_in_activities.do" // extrapolate missing values
+do "$codeDir/extrap_bilat_activities.do" // extrapolate missing values
+** do "$codeDir/extrap_tot_in_activities.do" // extrapolate missing values
 
 ** remove temporary files
 ** !rmdir "processed_data/temp" /q /s // to delete nonempty folders need to use shell commands

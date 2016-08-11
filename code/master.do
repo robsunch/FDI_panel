@@ -12,6 +12,7 @@ cd $cdDir
 !mkdir output
 */
 
-** do "code/data_management/_data_management.do"
-** do "code/check_data/_check_data.do"
-do "code/analysis/_analysis.do" 
+do "code/data_management/_data_management.do"
+do "code/check_data/_check_data.do"
+** do "code/analysis/_analysis.do" 
+** do "code/writing/_writing.do" 
